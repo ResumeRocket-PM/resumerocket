@@ -1,0 +1,15 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
+.AppBackground {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  background: #F1F1F1;
+  align-items: center;
+}
+
