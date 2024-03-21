@@ -66,7 +66,7 @@ export default function Navbar() {
         <div id="logo_name">
           <Link to="/" id="logo_name">
             <img id="logo" src={microchipImage} alt="logo" />
-            <h1 id="brand_name">DevExpo</h1>
+            <h1 id="brand_name">Resume Rocket</h1>
           </Link>
         </div>
         <div id="nav_buttons">
