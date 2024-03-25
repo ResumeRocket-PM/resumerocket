@@ -7,9 +7,10 @@
     background: rgba(255, 255, 255, 0.40);
     border-bottom: 1px solid black;
     align-items: center;
+    justify-content: space-between;
   }
 
-#nav_buttons{
+#account_buttons{
     display: flex;
     justify-content: flex-end; /* Align items from right to left */
     align-items: center;
@@ -21,7 +22,7 @@
 #logo_name{
     display: flex;
     align-items: center;
-    margin-right: auto;
+    /* margin-right: auto; */
 }
 
 #logo {
@@ -78,6 +79,49 @@
     /* top: 50%;
     left: 50%; */
 }
+
+
+/* ---------- new ---------- */
+#nav_links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 25%;
+}
+
+.nav_link {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the default text color */
+}
+
+.nav_link:last-child {
+    margin-right: 0;
+}
+
+.nav_link img {
+    width: 2em;
+    height: 2em;
+    padding-bottom: 5px;
+}
+
+.nav_link p {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+    color: #000;
+}
+
+
   
 
   
