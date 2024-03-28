@@ -58,7 +58,7 @@ const handleNavLinkClick = (link) => {
 useEffect(() => {
   console.log('activeNavLink set to null');
   // if pathname does not include /resume or /portfolio or /networking, set activeNavLink to null
-  if (location.pathname.includes('/resume')) setActiveNavLink('/resume');
+  if (location.pathname.includes('/resume-list')) setActiveNavLink('/resume-list');
   else if (location.pathname.includes('/portfolio')) setActiveNavLink('/portfolio');
   else if (location.pathname.includes('/networking')) setActiveNavLink('/networking');
   else setActiveNavLink(null);
@@ -86,15 +86,13 @@ useEffect(() => {
     <>
       <nav id="navbar">
 
-        <div id="logo_name">
-          <Link to="/" id="logo_name" >
-            <img id="logo" src={rocket} alt="logo" />
-            <h1 id="brand_name">Resume Rocket</h1>
-          </Link>
-        </div>
+        <Link to="/" id="logo_name">
+          <img id="logo" src={rocket} alt="logo" />
+          <h1 id="brand_name">Resume Rocket</h1>
+        </Link>
 
         <div id="nav_links">
-          <Link to="/resume" className="nav_link" onClick={() => handleNavLinkClick('/resume')}>
+          <Link to="/resume-list" className="nav_link" onClick={() => handleNavLinkClick('/resume-list')}>
             <img src={activeNavLink === '/resume' ? fileIconOrange : fileIcon} alt="resume" />
             <p>Resume</p>
           </Link>
