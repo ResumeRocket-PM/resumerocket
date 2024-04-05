@@ -1,4 +1,4 @@
-import {Card, CardContent} from '@mui/material/';
+import {Card, Button} from '@mui/material/';
 import openAI_Icon from '../assets/openAI.jpg';
 import linkIcon from '../assets/link.png';
 import penToSquareIcon from '../assets/pen-to-square-solid.svg';
@@ -16,80 +16,83 @@ export default function LeftBarPortfolio() {
             width: 'fit-content',
             }}
         >
-            <CardContent
+            <Button
+                variant='text'
+                startIcon={<img src={penToSquareIcon} alt="Add section" />}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    gap: '10px',
                     padding: '10px 15px',
-                    borderBottom: '1px solid black'
+                    color: 'black',
+                    textTransform: 'none',
                 }}
             >
-                <img src={penToSquareIcon} alt="Add section" />
-                <p>Add section</p>
-            </CardContent>
-            <CardContent
+                Add section
+            </Button>
+            <Button
+                variant='text'
+                startIcon={<img src={arrangeIcon} alt="Rearange" />}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    gap: '10px',
                     padding: '10px 15px',
-                    borderBottom: '1px solid black'
+                    color: 'black',
+                    textTransform: 'none',
                 }}
             >
-                <img src={arrangeIcon} alt="Rearrange" />
-                <p>Rearange</p>
-            </CardContent>
-            <CardContent
+                Rearange                
+            </Button>
+            <Button
+                variant='text'
+                startIcon={<img src={templatesIcon} alt="Templates" />}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    gap: '10px',
                     padding: '10px 15px',
-                    borderBottom: '1px solid black'
+                    borderBottom: '1px solid black',
+                    color: 'black',
+                    textTransform: 'none',
                 }}
             >
-                <img src={templatesIcon} alt="Templates" />
-                <p>Templates</p>
-            </CardContent>                                    
-            <CardContent
+                Templates
+            </Button>                                    
+            <Button
+                variant='text'
+                startIcon={<img src={openAI_Icon} alt="AI assistant" />}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    gap: '10px',
                     padding: '10px 15px',
-                    borderBottom: '1px solid black'
+                    borderBottom: '1px solid black',
+                    color: 'black',
+                    textTransform: 'none',
                 }}
             >
-                <img src={openAI_Icon} alt="openAI logo" />
-                <p>AI assistant</p>
-            </CardContent>
-            <CardContent
+                AI assistant
+            </Button>
+            <Button
+                variant='text'
+                startIcon={<img src={linkIcon} alt="Share" />}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    gap: '10px',
-                    padding: '10px 15px 10px 15px',
-                    // paddingTop: '10px',
-                    // paddingRight: '15px',
-                    // paddingBottom: '10px',
-                    // paddingLeft: '15px'
-                }}
-                id='sharePortfolio'                
+                    padding: '10px 15px',
+                    color: 'black',
+                    textTransform: 'none',
+                }}                
             >
-                <img src={linkIcon} alt="share resume" />
-                <p>Share</p>
-            </CardContent>
+                Share
+            </Button>
         </Card>
     )
 }
