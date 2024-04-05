@@ -9,7 +9,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ResumeRocket/ResumeRocket.csproj", "ResumeRocket/"]
+COPY ["./ResumeRocket.csproj", "ResumeRocket/"]
 RUN dotnet restore "./ResumeRocket/ResumeRocket.csproj"
 COPY . .
 WORKDIR "/src/ResumeRocket"
