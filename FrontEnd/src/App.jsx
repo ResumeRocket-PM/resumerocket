@@ -6,6 +6,7 @@ import HomePage from './components/pages/HomePage.jsx'
 import ResumeListPage from "./components/pages/ResumeListPage.jsx";
 import PortfolioPage from "./components/pages/PortfolioPage.jsx";
 import NetworkingPage from "./components/pages/NetworkingPage.jsx";
+import CreateResume from "./components/pages/CreateResume.jsx";
 import Navbar from './components/Navbar.jsx'
 import './styles/App.css'
 
@@ -15,15 +16,19 @@ function App() {
     <BrowserRouter>
       <div className="AppBackground">
         <Navbar/>
+        <div className="MainContent">
           <Routes>
-            <Route index element={<HomePage />} />
-            {/* <Route path="/signin" element={<SignIn />} />
-            <Route path="/create-profile" element={<CreateProfile />} />
-            <Route path="/:username" element={<Profile />} />  */}
-            <Route path="/resume-list" element={<ResumeListPage />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
-            <Route path="/networking" element={<NetworkingPage />} />
+              <Route index element={<HomePage />} />
+              {/* <Route path="/signin" element={<SignIn />} />
+              <Route path="/create-profile" element={<CreateProfile />} />
+              <Route path="/:username" element={<Profile />} />  */}
+              <Route path="/resume-list" element={<ResumeListPage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/networking" element={<NetworkingPage />} />
+              <Route path="/create-resume" element={<CreateResume />} />
           </Routes>
+        </div>
+
       </div>
     </BrowserRouter>
   )
