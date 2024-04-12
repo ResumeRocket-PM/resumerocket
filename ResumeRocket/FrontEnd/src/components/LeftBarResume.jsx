@@ -22,7 +22,7 @@ export default function LeftBarResume() {
                     borderBottom: '1px solid black'
                 }}
             >
-                <img src={openAI_Icon} alt="openAI logo" />
+                <img className="resume-left_menu_button" src={openAI_Icon} alt="openAI logo" />
                 <p>AI assistant</p>
             </CardContent>
             <CardContent
@@ -35,7 +35,7 @@ export default function LeftBarResume() {
                     borderBottom: '1px solid black'
                 }}                
             >
-                <img src={linkIcon} alt="share resume" />
+                <img className="resume-left_menu_button" src={linkIcon} alt="share resume" />
                 <p>Share</p>
             </CardContent>
             <CardContent
@@ -48,7 +48,7 @@ export default function LeftBarResume() {
                     borderBottom: '1px solid black'
                 }}
             >
-                <img src={versionIcon} alt="version control" />
+                <img className="resume-left_menu_button" src={versionIcon} alt="version control" />
                 <p>Version History</p>
             </CardContent>
         </Card>
