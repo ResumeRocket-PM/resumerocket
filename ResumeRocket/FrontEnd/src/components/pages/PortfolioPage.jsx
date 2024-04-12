@@ -8,20 +8,15 @@ import arrangeIcon from '../../assets/arrange.png';
 import templatesIcon from '../../assets/templates.png';
 import { useState } from 'react';
 import AddSectionContent from "../portfolio-menu_content/AddSectionContent";
-import TemplatesContent from "../portfolio-menu_content/TemplatesContent";
+import TemplatesContent from "../portfolio-menu_content/LayoutsContent";
 import BasicLayout from "../portfolio-layouts/BasicLayout";
+import Layout2 from "../portfolio-layouts/Layout2";
+import Layout3 from "../portfolio-layouts/Layout3";
 
-
-function LeftMenu() {
+function LeftMenu({onTemplateSelected}) {
 
     const [showPopout, setShowPopout] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
-
-    const [selectedTemplate, setSelectedTemplate] = useState(null);
-
-    const handleTemplateSelected = (template) => {
-        setSelectedTemplate(template);
-    };
 
     const menuButtonClicked = (buttonID) => {
         if (showPopout) {
@@ -65,7 +60,7 @@ function LeftMenu() {
             )}
             {showPopout && selectedButton === "templates" && (
             <div id="portfolio-popout_section" >
-                <TemplatesContent onTemplateSelected={handleTemplateSelected} />
+                <TemplatesContent onTemplateSelected={onTemplateSelected} />
             </div>
             )}
         </>
@@ -82,6 +77,8 @@ export default function PortfolioPage() {
         setSelectedTemplate(template);
     };
 
+
+
     console.log("selectedTemplate: ", selectedTemplate)
 
     return (
@@ -91,16 +88,16 @@ export default function PortfolioPage() {
             </div>
             <div id="portfolio-backdrop">
                 <div id="portfolio-actual">
-                    {selectedTemplate === "template_basic_button" && (
+                    {selectedTemplate === "layout_basic_button" && (
                         <BasicLayout />
                     )}
-                    {selectedTemplate === "template_2_button" && (
-                        <div>Template 2 layout</div>
+                    {selectedTemplate === "layout_2_button" && (
+                        <Layout2 />
                     )}
-                    {selectedTemplate === "template_3_button" && (
-                        <div>Template 3 layout</div>
+                    {selectedTemplate === "layout_3_button" && (
+                        <Layout3 />
                     )}
-                    {selectedTemplate === "template_custom_button" && (
+                    {selectedTemplate === "layout_custom_button" && (
                         <div>Custom template layout</div>
                     )}
                 </div>
