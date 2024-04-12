@@ -8,43 +8,64 @@ import arrangeIcon from '../../assets/arrange.png';
 import templatesIcon from '../../assets/templates.png';
 import { useState } from 'react';
 import AddSectionContent from "../portfolio-menu_content/AddSectionContent";
+import TemplatesContent from "../portfolio-menu_content/TemplatesContent";
 import BasicLayout from "../portfolio-layouts/BasicLayout";
 
 
 function LeftMenu() {
 
     const [showPopout, setShowPopout] = useState(false);
-    const togglePopout = () => setShowPopout(!showPopout);
+    const [selectedButton, setSelectedButton] = useState(null);
+
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
+
+    const handleTemplateSelected = (template) => {
+        setSelectedTemplate(template);
+    };
+
+    const menuButtonClicked = (buttonID) => {
+        if (showPopout) {
+            setShowPopout(false);
+        } else {    
+            setShowPopout(true);
+        }
+        setSelectedButton(buttonID);
+    }
+
+
 
     return (
         <>
             <div id="portfolio-left_menu_buttons_container">
-                <Button onClick={togglePopout} className="portfolio-left_button" sx={{ color:'black', textTransform:'none', padding: '0'}}>
+                <Button onClick={() => menuButtonClicked("add")} id="add_section_button" className="portfolio-left_button" sx={{ color:'black', textTransform:'none', padding: '0'}}>
                     <img src={penToSquareIcon} alt="Add section" />
                     <p>Add section</p>
                 </Button>
-                <Button onClick={togglePopout} className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
+                <Button onClick={() => menuButtonClicked("arrange")} id="arrange_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
                     <img src={arrangeIcon} alt="Rearange" />
                     <p>Rearange</p>
                 </Button>
-                <Button onClick={togglePopout} className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
+                <Button onClick={() => menuButtonClicked("templates")} id="templates_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
                     <img src={templatesIcon} alt="Templates" />
                     <p>Templates</p>
                 </Button>
-                <Button onClick={togglePopout} className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
+                <Button onClick={() => menuButtonClicked("ai")} id="ai_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
                     <img src={openAI_Icon} alt="OpenAI" />
                     <p>AI assistant</p>
                 </Button>
-                <Button onClick={togglePopout} className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
+                <Button onClick={() => menuButtonClicked("link")} id="share_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
                     <img src={linkIcon} alt="Share" />
                     <p>Share</p>
                 </Button>
             </div>
-            {showPopout && (
+            {showPopout && selectedButton === "add" && (
             <div id="portfolio-popout_section" >
-                {/* <Button onClick={togglePopout}>Toggle Content</Button> */}
-
                 <AddSectionContent />
+            </div>
+            )}
+            {showPopout && selectedButton === "templates" && (
+            <div id="portfolio-popout_section" >
+                <TemplatesContent onTemplateSelected={handleTemplateSelected} />
             </div>
             )}
         </>
@@ -54,16 +75,34 @@ function LeftMenu() {
 
 
 export default function PortfolioPage() {
+
+
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const handleTemplateSelected = (template) => {
+        setSelectedTemplate(template);
+    };
+
+    console.log("selectedTemplate: ", selectedTemplate)
+
     return (
         <div id='PortfolioPage_content'>
             <div id='portfolio_left_menu_section'>
-                <LeftMenu />
+                <LeftMenu onTemplateSelected={handleTemplateSelected}/>
             </div>
-            <div id="portfolio_backdrop">
-                <div id="portfolio_actual">
-                    <BasicLayout>
-                        
-                    </BasicLayout>
+            <div id="portfolio-backdrop">
+                <div id="portfolio-actual">
+                    {selectedTemplate === "template_basic_button" && (
+                        <BasicLayout />
+                    )}
+                    {selectedTemplate === "template_2_button" && (
+                        <div>Template 2 layout</div>
+                    )}
+                    {selectedTemplate === "template_3_button" && (
+                        <div>Template 3 layout</div>
+                    )}
+                    {selectedTemplate === "template_custom_button" && (
+                        <div>Custom template layout</div>
+                    )}
                 </div>
             </div>
         </div>

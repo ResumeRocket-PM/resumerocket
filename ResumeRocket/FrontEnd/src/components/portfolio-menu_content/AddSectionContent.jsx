@@ -1,38 +1,96 @@
-import "../../styles/AddSectionContent.css";
+import "../../styles/Portfolio-LeftMenuContent.css";
+import { useState, useRef, useEffect } from "react";
+
 
 
 export default function AddSectionContent() {
-    // const [selectedButton, setSelectedButton] = useState("");
-    const buttonClicked = (e) => {
-        if (e.target.id === "introduction_button") {
-            console.log("Introduction button clicked");
-        }else if (e.target.id === "projects_button") {
-            console.log("Projects button clicked");
-        }else if (e.target.id === "contact_button") {
-            console.log("Contact button clicked");
-        }else if (e.target.id === "jupyter_button") {
-            console.log("Jupyer button clicked");
+    const [selectedButton, setSelectedButton] = useState(null);
+    const [isMouseDown, setIsMouseDown] = useState(false);
+    const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+    const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+    const imageRef = useRef(null);
+  
+    useEffect(() => {
+        if (isMouseDown) {
+          const onMouseMove = (e) => {
+            setImagePosition({ // this centers the image on the mouse
+              x: e.pageX - imageSize.width / 2,
+              y: e.pageY - imageSize.height / 2
+            });
+          };
+          const onMouseUp = () => {
+            setIsMouseDown(false);
+            setSelectedButton(null);
+            document.body.style.userSelect = ""; // Re-enable text selection
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mouseup", onMouseUp);
+          };
+          document.body.style.userSelect = "none"; // Disable text selection
+          window.addEventListener("mousemove", onMouseMove);
+          window.addEventListener("mouseup", onMouseUp);
+          return () => { // this will only be called when the component unmounts or isMouseDown or imageSize changes
+            document.body.style.userSelect = ""; // Re-enable text selection
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mouseup", onMouseUp);
+          };
         }
-
-        // when clicked I want a pale image of the section to follow the mouse while the mouse is down
-        // once mouse is up we'll create the section in the new location
-    }
+      }, [isMouseDown, imageSize]);
+  
+    const buttonDown = (e) => {
+        const button = e.target;
+        setSelectedButton(button.id);
+        setIsMouseDown(true);
+        const buttonRect = button.getBoundingClientRect();
+        setImageSize({
+          width: buttonRect.width,
+          height: buttonRect.height
+        });
+        console.log('button down');
+        // Reset image position when a button is clicked
+        setImagePosition({
+            x: e.pageX - buttonRect.width / 2,
+            y: e.pageY - buttonRect.height / 2
+        });
+    };
+    
 
 
     return (
     <>
-        <div id="introduction_button"className="AddSection-box" onClick={buttonClicked}>
+        <div id="introduction_button"className="portfolio-LeftMenuBox" onMouseDown={buttonDown}>
             Introduction 
         </div>
-        <div id="projects_button" className="AddSection-box" onClick={buttonClicked}>
+        <div id="projects_button" className="portfolio-LeftMenuBox" onMouseDown={buttonDown}>
             Projects
         </div>
-        <div id="contact_button" className="AddSection-box" onClick={buttonClicked}>
+        <div id="contact_button" className="portfolio-LeftMenuBox" onMouseDown={buttonDown}>
             Contact
         </div>
-        <div id="jupyter_button" className="AddSection-box" onClick={buttonClicked}>
+        <div id="jupyter_button" className="portfolio-LeftMenuBox" onMouseDown={buttonDown}>
             Jupyter Notebook
         </div>
+        {selectedButton && isMouseDown && (
+        <div
+          ref={imageRef}
+          className="portfolio-LeftMenuBox"
+          style={{
+            position: "absolute",
+            top: imagePosition.y,
+            left: imagePosition.x,
+            width: imageSize.width,
+            height: imageSize.height,
+            opacity: "0.5", /* 50% transparency */
+            boxShadow: "none",
+            borderRadius: "0",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {selectedButton.replace("_button", "")}
+        </div>
+        )}
     </>
     )
 
