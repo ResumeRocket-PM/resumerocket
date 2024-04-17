@@ -3,38 +3,47 @@ import { useState, useRef, useEffect } from "react";
 
 
 
-export default function AddSectionContent() {
+export default function AddSectionContent({handlePortfolioContentChange}) {
     const [selectedButton, setSelectedButton] = useState(null);
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
     const imageRef = useRef(null);
+
+
   
     useEffect(() => {
-        if (isMouseDown) {
-          const onMouseMove = (e) => {
-            setImagePosition({ // this centers the image on the mouse
-              x: e.pageX - imageSize.width / 2,
-              y: e.pageY - imageSize.height / 2
-            });
-          };
-          const onMouseUp = () => {
-            setIsMouseDown(false);
-            setSelectedButton(null);
-            document.body.style.userSelect = ""; // Re-enable text selection
-            window.removeEventListener("mousemove", onMouseMove);
-            window.removeEventListener("mouseup", onMouseUp);
-          };
-          document.body.style.userSelect = "none"; // Disable text selection
-          window.addEventListener("mousemove", onMouseMove);
-          window.addEventListener("mouseup", onMouseUp);
-          return () => { // this will only be called when the component unmounts or isMouseDown or imageSize changes
-            document.body.style.userSelect = ""; // Re-enable text selection
-            window.removeEventListener("mousemove", onMouseMove);
-            window.removeEventListener("mouseup", onMouseUp);
-          };
-        }
-      }, [isMouseDown, imageSize]);
+      const createNewPortfolioContent = () => {
+          handlePortfolioContentChange({
+            component: {type: selectedButton.replace("_button", "")},
+          });
+      };
+
+      if (isMouseDown) {
+        const onMouseMove = (e) => {
+          setImagePosition({ // this centers the image on the mouse
+            x: e.pageX - imageSize.width / 2,
+            y: e.pageY - imageSize.height / 2
+          });
+        };
+        const onMouseUp = () => {
+          setIsMouseDown(false);
+          createNewPortfolioContent();
+          setSelectedButton(null);
+          document.body.style.userSelect = ""; // Re-enable text selection
+          window.removeEventListener("mousemove", onMouseMove);
+          window.removeEventListener("mouseup", onMouseUp);
+        };
+        document.body.style.userSelect = "none"; // ;Disable text selection
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mouseup", onMouseUp);
+        return () => { // this will only be called when the component unmounts or isMouseDown or imageSize changes
+          document.body.style.userSelect = ""; // Re-enable text selection
+          window.removeEventListener("mousemove", onMouseMove);
+          window.removeEventListener("mouseup", onMouseUp);
+        };
+      }
+    }, [isMouseDown, imageSize, selectedButton, handlePortfolioContentChange])
   
     const buttonDown = (e) => {
         const button = e.target;
@@ -45,7 +54,6 @@ export default function AddSectionContent() {
           width: buttonRect.width,
           height: buttonRect.height
         });
-        console.log('button down');
         // Reset image position when a button is clicked
         setImagePosition({
             x: e.pageX - buttonRect.width / 2,
@@ -53,8 +61,6 @@ export default function AddSectionContent() {
         });
     };
     
-
-
     return (
     <>
         <div id="introduction_button"className="portfolio-LeftMenuBox" onMouseDown={buttonDown}>

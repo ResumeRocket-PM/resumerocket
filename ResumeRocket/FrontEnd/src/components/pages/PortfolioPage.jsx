@@ -8,12 +8,11 @@ import arrangeIcon from '../../assets/arrange.png';
 import templatesIcon from '../../assets/templates.png';
 import { useState } from 'react';
 import AddSectionContent from "../portfolio-menu_content/AddSectionContent";
-import TemplatesContent from "../portfolio-menu_content/LayoutsContent";
-import BasicLayout from "../portfolio-layouts/BasicLayout";
-import Layout2 from "../portfolio-layouts/Layout2";
-import Layout3 from "../portfolio-layouts/Layout3";
+import LayoutsContent from "../portfolio-menu_content/LayoutsContent";
+import PortfolioContent from "../PortfolioContent";
+import * as ph from "../../utils/portfolioHelpers"
 
-function LeftMenu({onTemplateSelected}) {
+function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
 
     const [showPopout, setShowPopout] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
@@ -40,9 +39,9 @@ function LeftMenu({onTemplateSelected}) {
                     <img src={arrangeIcon} alt="Rearange" />
                     <p>Rearange</p>
                 </Button>
-                <Button onClick={() => menuButtonClicked("templates")} id="templates_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
-                    <img src={templatesIcon} alt="Templates" />
-                    <p>Templates</p>
+                <Button onClick={() => menuButtonClicked("layouts")} id="layouts_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
+                    <img src={templatesIcon} alt="Layouts" />
+                    <p>Layouts</p>
                 </Button>
                 <Button onClick={() => menuButtonClicked("ai")} id="ai_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
                     <img src={openAI_Icon} alt="OpenAI" />
@@ -55,12 +54,17 @@ function LeftMenu({onTemplateSelected}) {
             </div>
             {showPopout && selectedButton === "add" && (
             <div id="portfolio-popout_section" >
-                <AddSectionContent />
+                <AddSectionContent 
+                    handlePortfolioContentChange={handlePortfolioContentChange}
+                />
             </div>
             )}
-            {showPopout && selectedButton === "templates" && (
+            {showPopout && selectedButton === "layouts" && (
             <div id="portfolio-popout_section" >
-                <TemplatesContent onTemplateSelected={onTemplateSelected} />
+                <LayoutsContent 
+                    handleLayoutSelected={handleLayoutSelected} 
+                    handlePortfolioContentChange={handlePortfolioContentChange}
+                />
             </div>
             )}
         </>
@@ -72,34 +76,49 @@ function LeftMenu({onTemplateSelected}) {
 export default function PortfolioPage() {
 
 
-    const [selectedTemplate, setSelectedTemplate] = useState(null);
-    const handleTemplateSelected = (template) => {
-        setSelectedTemplate(template);
+    const [selectedLayout, setSelectedLayout] = useState(null);
+    const handleLayoutSelected = (layout) => {
+        setSelectedLayout(layout);
     };
+    const [portfolioContent, setPortfolioContent] = useState({});
+    const handlePortfolioContentChange = (content) => {
+        setPortfolioContent(prevContent => {
+            content = ph.formatNewContent(prevContent, content);
+            return {
+                ...prevContent,
+                ...content
+            };
+        });
+    };
+    
 
-
-
-    console.log("selectedTemplate: ", selectedTemplate)
-
+    // console.log(selectedLayout)
+    // console.log(newPortfolioContent)
+    console.log(portfolioContent)
+    
     return (
         <div id='PortfolioPage_content'>
             <div id='portfolio_left_menu_section'>
-                <LeftMenu onTemplateSelected={handleTemplateSelected}/>
+                <LeftMenu 
+                    handleLayoutSelected={handleLayoutSelected} 
+                    handlePortfolioContentChange={handlePortfolioContentChange}
+                />
             </div>
             <div id="portfolio-backdrop">
                 <div id="portfolio-actual">
-                    {selectedTemplate === "layout_basic_button" && (
+                    {/* {selectedLayout === "layout_basic_button" && (
                         <BasicLayout />
                     )}
-                    {selectedTemplate === "layout_2_button" && (
+                    {selectedLayout === "layout_2_button" && (
                         <Layout2 />
                     )}
-                    {selectedTemplate === "layout_3_button" && (
+                    {selectedLayout === "layout_3_button" && (
                         <Layout3 />
                     )}
-                    {selectedTemplate === "layout_custom_button" && (
-                        <div>Custom template layout</div>
-                    )}
+                    {selectedLayout === "layout_custom_button" && (
+                        <div>Custom layout</div>
+                    )} */}
+                    <PortfolioContent portfolioContent={portfolioContent} />
                 </div>
             </div>
         </div>

@@ -1,15 +1,19 @@
 import "../../styles/Portfolio-LeftMenuContent.css";
-import PortfolioData from "../..";
+import * as wPD from '../../utils/writePortfolioData';
 import { useState } from "react";
 
-export default function LayoutsContent({onTemplateSelected}) {
+export default function LayoutsContent({handleLayoutSelected, handlePortfolioContentChange}) {
 
     const buttonClicked = (e) => {
         const buttonID = e.target.id;
-        onTemplateSelected(buttonID);
-        if (onTemplateSelected) {
-            onTemplateSelected(buttonID);
-        }
+        handleLayoutSelected(buttonID);
+        const layoutName = buttonID.split("_")[1];
+        // wPD.updateLayout(layoutName);
+        handlePortfolioContentChange({layout: layoutName});
+        // wPD.updateLayout(layoutName);
+        // if (rPD.getLayout() === null) {
+        //     wPD.removeLayout();
+        // }
     };
 
     return ( 
