@@ -11,15 +11,16 @@ import '../styles/LeftBarResume.css'
 
 
 
-export default function LeftBarResume({handleShareDialogOpen}) {
+export default function LeftBarResume({handleShareDialogOpen, handleChatOpen}) {
 
-    const onClick = () => {
+    const onShareClick = () => {
         handleShareDialogOpen();
     }
 
     return (
         <Card className='leftBarResume' sx={{
             width: 'fit-content',
+            marginLeft: "20px"
             }}
         >
             <Button
@@ -34,9 +35,10 @@ export default function LeftBarResume({handleShareDialogOpen}) {
                     color: 'black',
                     textTransform: 'none',
                     borderBottom: '1px solid black',
+                    width: '100%',
                 }}
             >
-                Add section
+                Edit
             </Button>
             {/* <Button
                 variant='text'
@@ -72,6 +74,7 @@ export default function LeftBarResume({handleShareDialogOpen}) {
             <Button
                 variant='text'
                 startIcon={<img src={openAI_Icon} alt="AI assistant" />}
+                onClick={handleChatOpen}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -81,6 +84,7 @@ export default function LeftBarResume({handleShareDialogOpen}) {
                     borderBottom: '1px solid black',
                     color: 'black',
                     textTransform: 'none',
+                    width: '100%',
                 }}
             >
                 AI assistant
@@ -97,6 +101,7 @@ export default function LeftBarResume({handleShareDialogOpen}) {
                     borderBottom: '1px solid black',
                     color: 'black',
                     textTransform: 'none',
+                    width: '100%',
                 }}
             >
                 Version history
@@ -104,7 +109,7 @@ export default function LeftBarResume({handleShareDialogOpen}) {
             <Button
                 variant='text'
                 startIcon={<img src={linkIcon} alt="Share" />}
-                onClick={onClick}
+                onClick={onShareClick}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -113,6 +118,7 @@ export default function LeftBarResume({handleShareDialogOpen}) {
                     padding: '10px 15px',
                     color: 'black',
                     textTransform: 'none',
+                    width: '100%',
                 }}                
             >
                 Share
