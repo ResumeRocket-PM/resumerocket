@@ -2,6 +2,7 @@ import BasicLayout from "./portfolio-layouts/BasicLayout";
 import Layout2 from "./portfolio-layouts/Layout2";
 import Layout3 from "./portfolio-layouts/Layout3";
 import Introduction from "./portfolio-content/Introduction";
+import JupyterNotebook from "./portfolio-content/JupyterNotebook";
 
 
 function Layout({layout, children}) {
@@ -27,14 +28,18 @@ function Layout({layout, children}) {
 }
 
 function Component({key, component}) {
+    console.log("component.styles:", component.styles)
+    console.log("component.type:", component.type)
     return (
         <>
             {component && component.type === "introduction" && (
-                <Introduction />
+                <Introduction component={component}/>
            )}
+            {component && component.type === "jupyter" && (
+                <JupyterNotebook component={component}/>
+           )}           
         </>
     )
-
 }
 
 
@@ -47,9 +52,8 @@ export default function PortfolioContent({portfolioContent}) {
                 <Layout layout={portfolioContent.layout}>
                     {portfolioContent.section1.components && (
                         portfolioContent.section1.components.map((component) => {
-                            console.log('component.component.type:', component.component.type)
                             return (
-                                <Component key={component.component.key} component={component.component} />
+                                <Component component={component.component} />
                             ) 
                         })
                     )}

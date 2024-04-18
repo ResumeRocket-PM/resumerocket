@@ -15,7 +15,10 @@ export default function AddSectionContent({handlePortfolioContentChange}) {
     useEffect(() => {
       const createNewPortfolioContent = () => {
           handlePortfolioContentChange({
-            component: {type: selectedButton.replace("_button", "")},
+            component: {
+              type: selectedButton.replace("_button", ""),
+              position: { x: imagePosition.x, y: imagePosition.y },
+            },
           });
       };
 
@@ -43,7 +46,7 @@ export default function AddSectionContent({handlePortfolioContentChange}) {
           window.removeEventListener("mouseup", onMouseUp);
         };
       }
-    }, [isMouseDown, imageSize, selectedButton, handlePortfolioContentChange])
+    }, [isMouseDown, imageSize, selectedButton, handlePortfolioContentChange, imagePosition])
   
     const buttonDown = (e) => {
         const button = e.target;

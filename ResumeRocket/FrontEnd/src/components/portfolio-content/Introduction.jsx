@@ -1,11 +1,28 @@
+import { useState, useEffect } from 'react';
+import { TextField } from '@mui/material';
+
+export default function Introduction({component}) {
+    const [text, setText] = useState(component.text);
+    // const handleTextChange = (e) => {
+    //     setText(e.target.value);
+    // }
 
 
 
-export default function Introduction() {
     return (
-        <div id='portfolio-introduction'>
+        <div id='portfolio-introduction' style={component.styles}>
             <h1>Introduction</h1>
-            <p>Hi, Im a full-stack developer with a passion for creating and learning. I have experience with React, Node.js, Express, MongoDB, and more. Im always looking for new opportunities to grow and expand my skills.</p>
+            {/* <p>{text}</p> */}
+            <TextField
+                id="outlined-multiline-static"
+                multiline
+                rows={4}
+                defaultValue={text}
+                value={text}
+                variant="outlined"
+                fullWidth
+                onChange={(e) => setText(e.target.value)}
+            />
         </div>
     )
 }
