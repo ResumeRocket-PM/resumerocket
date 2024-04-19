@@ -48,26 +48,6 @@ const LoginForm = () => {
   });
 
 
-  const [loginButtonY, setLoginButtonY] = useState(0);
-  const [createButtonY, setCreateButtonY] = useState(0);
-
-  const loginButtonSpring = useSpring({
-    to: { transform: `translateY(${loginButtonY}px)` },
-    from: { transform: 'translateY(0px)' },
-    marginBottom: 50
-  });
-
-  const createButtonSpring = useSpring({
-    to: { transform: `translateY(${createButtonY}px)` },
-    from: { transform: 'translateY(0px)' },
-    marginBottom: showLogin ? 20 : 0,
-  });
-
-  const swapButtons = () => {
-    setLoginButtonY(loginButtonY === 0 ? 100 : -20); // These values depend on your button height + desired spacing
-    setCreateButtonY(createButtonY === 0 ? -120 : 0);
-  };
-
   return (
     <div>
         <div className="login-form-container">
@@ -147,6 +127,10 @@ const LoginForm = () => {
                     />
                     </div>
 
+                    <div className="form-actions internal-block">
+                      <Button className="button loginButton" onClick={handleCreateAccount}>Create Account</Button>
+                    </div>
+
 
                 </>)}
                 {showLogin && (<>
@@ -202,24 +186,25 @@ const LoginForm = () => {
                     />
                     </div>
 
+                    <div className="form-actions internal-block">
+                      <Button className="button loginButton" onClick={handleLogin}>Login</Button>
+                    </div>
 
                 </>)}
                 </animated.div>
 
                 <div className="form-actions">
-                    <animated.div style={loginButtonSpring}>
-                        <Button className="button loginButton" onClick={handleLogin}>Login</Button>
-                    </animated.div>
+                
+                    { !(showLogin || showCreateAccount ) && <Button  className="button loginButton" onClick={handleLogin}>Login</Button>} 
 
                     <div className="dividerContainer">
-                            <hr className="divider" />
-                            <span className="dividerText">or</span>
-                            <hr className="divider" />
-                        </div>
+                        <hr className="divider" />
+                        <span className="dividerText">or</span>
+                        <hr className="divider" />
+                    </div>
 
-                    <animated.div style={createButtonSpring}>
-                        <Button className="button createButton" onClick={handleCreateAccount}>Create Account</Button>
-                    </animated.div>
+                  <Button className="button createButton" onClick={!showCreateAccount ? handleCreateAccount : handleLogin}>{showCreateAccount ? "Login" : "Create Account"}</Button>
+
                 </div>
             
             </div>
