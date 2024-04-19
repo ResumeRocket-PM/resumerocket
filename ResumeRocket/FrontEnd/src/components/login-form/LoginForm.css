@@ -25,6 +25,10 @@ body {
     gap: 10px; /* This creates vertical space between elements */
   }
 
+  .internal-block {
+    margin-bottom: 3em;
+  }
+
   .form-actions button {
     padding: 1em 2em;
     width: 100%;
