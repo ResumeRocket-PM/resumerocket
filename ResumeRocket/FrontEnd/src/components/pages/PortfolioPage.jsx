@@ -12,7 +12,7 @@ import LayoutsContent from "../portfolio-menu_content/LayoutsContent";
 import PortfolioContent from "../PortfolioContent";
 import * as ph from "../../utils/portfolioHelpers"
 
-function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
+function LeftMenu({handleLayoutSelected, handlePortfolioContentChange, isMouseDown, setIsMouseDown}) {
 
     const [showPopout, setShowPopout] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
@@ -56,6 +56,8 @@ function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
             <div id="portfolio-popout_section" >
                 <AddSectionContent 
                     handlePortfolioContentChange={handlePortfolioContentChange}
+                    isMouseDown={isMouseDown}
+                    setIsMouseDown={setIsMouseDown}
                 />
             </div>
             )}
@@ -80,10 +82,20 @@ export default function PortfolioPage() {
     const handleLayoutSelected = (layout) => {
         setSelectedLayout(layout);
     };
+
+    const [sectionSelected, setSectionSelected] = useState(null);
+    const handleSectionSelected = (section) => {
+        setSectionSelected(section);
+    };
+
+    const [isMouseDown, setIsMouseDown] = useState(false);
+
     const [portfolioContent, setPortfolioContent] = useState({});
     const handlePortfolioContentChange = (content) => {
         setPortfolioContent(prevContent => {
             content = ph.formatNewContent(prevContent, content);
+            console.log("from portfolio page, new content:", content)
+            console.log("from portfolio page, prev content:", prevContent)
             return {
                 ...prevContent,
                 ...content
@@ -94,7 +106,7 @@ export default function PortfolioPage() {
 
     // console.log(selectedLayout)
     // console.log(newPortfolioContent)
-    console.log(portfolioContent)
+    // console.log(portfolioContent)
     
     return (
         <div id='PortfolioPage_content'>
@@ -102,23 +114,18 @@ export default function PortfolioPage() {
                 <LeftMenu 
                     handleLayoutSelected={handleLayoutSelected} 
                     handlePortfolioContentChange={handlePortfolioContentChange}
+                    isMouseDown={isMouseDown}
+                    setIsMouseDown={setIsMouseDown}
                 />
             </div>
             <div id="portfolio-backdrop">
                 <div id="portfolio-actual">
-                    {/* {selectedLayout === "layout_basic_button" && (
-                        <BasicLayout />
-                    )}
-                    {selectedLayout === "layout_2_button" && (
-                        <Layout2 />
-                    )}
-                    {selectedLayout === "layout_3_button" && (
-                        <Layout3 />
-                    )}
-                    {selectedLayout === "layout_custom_button" && (
-                        <div>Custom layout</div>
-                    )} */}
-                    <PortfolioContent portfolioContent={portfolioContent} />
+                    <PortfolioContent 
+                        portfolioContent={portfolioContent}
+                        sectionSelected={handleSectionSelected}
+                        isMouseDown={isMouseDown}
+                        setIsMouseDown={setIsMouseDown}
+                    />
                 </div>
             </div>
         </div>

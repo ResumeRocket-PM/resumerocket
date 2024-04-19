@@ -3,9 +3,9 @@ import { useState, useRef, useEffect } from "react";
 
 
 
-export default function AddSectionContent({handlePortfolioContentChange}) {
+export default function AddSectionContent({handlePortfolioContentChange, isMouseDown, setIsMouseDown}) {
     const [selectedButton, setSelectedButton] = useState(null);
-    const [isMouseDown, setIsMouseDown] = useState(false);
+    // const [isMouseDown, setIsMouseDown] = useState(false);
     const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
     const imageRef = useRef(null);
@@ -46,7 +46,7 @@ export default function AddSectionContent({handlePortfolioContentChange}) {
           window.removeEventListener("mouseup", onMouseUp);
         };
       }
-    }, [isMouseDown, imageSize, selectedButton, handlePortfolioContentChange, imagePosition])
+    }, [isMouseDown, setIsMouseDown, imageSize, selectedButton, handlePortfolioContentChange, imagePosition])
   
     const buttonDown = (e) => {
         const button = e.target;

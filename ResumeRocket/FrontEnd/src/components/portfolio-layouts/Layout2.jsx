@@ -1,16 +1,28 @@
 import "./PortfolioLayouts.css";
+import Component from "../Component";
 
 
-export default function BasicLayout() {
+export default function Layout2({sectionSelected, portfolioContent, isMouseDown, setIsMouseDown}) {
     return (
-        <div id='portfolio-layout2'>
-            <div className="column" style={{width: "50%"}}>
-                
+        <div id="portfolio-layout2">
+            <div id="section1" className="column" style={{width: "50%"}}>
+                {portfolioContent.section1 && portfolioContent.section1.components && (
+                    portfolioContent.section1.components.map((component) => {
+                        return (
+                            <Component component={component.component} />
+                        ) 
+                    })
+                )}
             </div>
-            <div className="column" style={{width: "50%"}}>
-                
-            </div>
+            <div id="section2" className="column" style={{width: "50%"}}>
+                {portfolioContent.section2 && portfolioContent.section2.components && (
+                    portfolioContent.section2.components.map((component) => {
+                        return (
+                            <Component component={component.component} />
+                        ) 
+                    })
+                )}
+            </div>        
         </div>
-
     )
 }
