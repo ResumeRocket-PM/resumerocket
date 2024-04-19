@@ -50,6 +50,7 @@ export default function PortfolioContent({portfolioContent}) {
         <>
             {portfolioContent.layout && (
                 <Layout layout={portfolioContent.layout}>
+
                     {portfolioContent.section1.components && (
                         portfolioContent.section1.components.map((component) => {
                             return (
