@@ -12,7 +12,7 @@ import LayoutsContent from "../portfolio-menu_content/LayoutsContent";
 import PortfolioContent from "../PortfolioContent";
 import * as ph from "../../utils/portfolioHelpers"
 
-function LeftMenu({handleLayoutSelected, handlePortfolioContentChange, isMouseDown, setIsMouseDown}) {
+function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
 
     const [showPopout, setShowPopout] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
@@ -56,8 +56,6 @@ function LeftMenu({handleLayoutSelected, handlePortfolioContentChange, isMouseDo
             <div id="portfolio-popout_section" >
                 <AddSectionContent 
                     handlePortfolioContentChange={handlePortfolioContentChange}
-                    isMouseDown={isMouseDown}
-                    setIsMouseDown={setIsMouseDown}
                 />
             </div>
             )}
@@ -83,13 +81,6 @@ export default function PortfolioPage() {
         setSelectedLayout(layout);
     };
 
-    const [sectionSelected, setSectionSelected] = useState(null);
-    const handleSectionSelected = (section) => {
-        setSectionSelected(section);
-    };
-
-    const [isMouseDown, setIsMouseDown] = useState(false);
-
     const [portfolioContent, setPortfolioContent] = useState({});
     const handlePortfolioContentChange = (content) => {
         setPortfolioContent(prevContent => {
@@ -114,17 +105,12 @@ export default function PortfolioPage() {
                 <LeftMenu 
                     handleLayoutSelected={handleLayoutSelected} 
                     handlePortfolioContentChange={handlePortfolioContentChange}
-                    isMouseDown={isMouseDown}
-                    setIsMouseDown={setIsMouseDown}
                 />
             </div>
             <div id="portfolio-backdrop">
                 <div id="portfolio-actual">
                     <PortfolioContent 
                         portfolioContent={portfolioContent}
-                        sectionSelected={handleSectionSelected}
-                        isMouseDown={isMouseDown}
-                        setIsMouseDown={setIsMouseDown}
                     />
                 </div>
             </div>

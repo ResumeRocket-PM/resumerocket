@@ -2,7 +2,7 @@ import "./PortfolioLayouts.css";
 import Component from "../Component";
 
 
-export default function Layout3({sectionSelected, portfolioContent, isMouseDown, setIsMouseDown}) {
+export default function Layout3({portfolioContent}) {
     return (
         <div id="portfolio-layout3">
             <div id="section1" className="column" style={{width: "30%"}}>

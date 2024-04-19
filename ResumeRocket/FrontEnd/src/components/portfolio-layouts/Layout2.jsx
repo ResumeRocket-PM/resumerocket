@@ -2,7 +2,7 @@ import "./PortfolioLayouts.css";
 import Component from "../Component";
 
 
-export default function Layout2({sectionSelected, portfolioContent, isMouseDown, setIsMouseDown}) {
+export default function Layout2({portfolioContent}) {
     return (
         <div id="portfolio-layout2">
             <div id="section1" className="column" style={{width: "50%"}}>
