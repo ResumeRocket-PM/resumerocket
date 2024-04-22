@@ -1,23 +1,60 @@
 #CreateResume_content {
+    height: 100%;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; /* Three columns of equal width */
     align-items: center;
-    margin-top: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
     background-color: aqua;
+}
+
+#CreateResume_content.versionHistoryOpen {
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+#CreateResume_content.chatOpen {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#CreateResume_content.versionHistoryOpen_chatOpen {
+    grid-template-columns: 1fr 1.75fr 1fr;
 }
 
 #col3 {
     background-color: brown;
     width : 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.version_block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 15rem;
+    height: fit-content;
+    padding: 1rem;
+    background-color: burlywood;
+    border-radius: 5px;
+}
+
+.version_block:hover {
+    background-color: darkorange;
+    cursor: pointer;
 }
 
 
 #left_menu_section {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
     gap: 1.5rem;
     width: 100%;
@@ -27,11 +64,23 @@
 
 #resume_section {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
+    gap: 1rem;
     width: 100%;
     height: 100%;
     background-color: blueviolet;
+}
+
+.ResumeFull {
+    height: 70rem;
+    width: 54.09rem;
+}
+
+.ResumeSmaller {
+    height: 45rem;
+    width: 34.7727rem;
 }
 
 #share_dialog_content {
@@ -50,11 +99,12 @@
 #chat_outermost {
     display: flex; /* Use flexbox to make children fill all available space */
     flex-direction: column; /* Arrange children in a column */
-    height: 80%;
-    width: 25rem;
+    height: 35rem;
+    width: 20rem;
     background-color: white;
     border-radius: 10px; /* Rounded corners */
     outline: 2px solid black; /* White outline */
+    margin-left: 1rem;
 }
 
 #chat_outermost h1 {
@@ -100,6 +150,7 @@
     width: fit-content;
     max-width: 45%;
     border-radius: 7.5px; /* Rounded corners */;
+    word-wrap: break-word;
 }
 
 .AiMessage {
@@ -109,4 +160,5 @@
     width: fit-content;
     max-width: 45%;
     border-radius: 7.5px; /* Rounded corners */
+    word-wrap: break-word;
 }

@@ -3,6 +3,7 @@ import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button} from '
 import addIcon from '../../assets/add.png';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 
@@ -12,6 +13,8 @@ export default function ResumeListPage() {
     const [listingURL, setListingURL] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const [openSavedResumes, setOpenSavedResumes] = useState(false);
+
     const handleChooseResumeButtonClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -20,6 +23,7 @@ export default function ResumeListPage() {
         switch (action) {
             case 'from saved resumes':
                 // Handle "From saved resumes" action
+                setOpenSavedResumes(true);
                 break;
             case 'upload resume': {
                 const input = document.createElement('input');
@@ -32,11 +36,12 @@ export default function ResumeListPage() {
                 };
                 input.click();
                 break;
+            
             }
             default:
+                setAnchorEl(null);
                 break;
         }
-        setAnchorEl(null);
     };
 
     const handleCreateResumeButtonClick = () => {
@@ -81,6 +86,29 @@ export default function ResumeListPage() {
             position: 'Position D',
             status: 'Offer Extended',
             resume: 'Link to Resume D'
+        }
+    ];
+
+    const resumes = [
+        {
+            id: 1,
+            name: 'Resume A',
+            content: 'Content of Resume A'
+        },
+        {
+            id: 2,
+            name: 'Resume B',
+            content: 'Content of Resume B'
+        },
+        {
+            id: 3,
+            name: 'Resume C',
+            content: 'Content of Resume C'
+        },
+        {
+            id: 4,
+            name: 'Resume D',
+            content: 'Content of Resume D'
         }
     ];
 
@@ -176,8 +204,23 @@ export default function ResumeListPage() {
                                 'aria-labelledby': 'basic-button',
                                 }}
                             >        
-                                <MenuItem onClick={() => handleChooseResumeClose('from saved resumes')}>From saved resumes</MenuItem>
-                                <MenuItem onClick={() => handleChooseResumeClose('upload resume')}>Upload resume</MenuItem>
+                                {!openSavedResumes &&
+                                <>
+                                    <MenuItem onClick={() => handleChooseResumeClose('from saved resumes')}>From saved resumes</MenuItem>
+                                    <MenuItem onClick={() => handleChooseResumeClose('upload resume')}>Upload resume</MenuItem>
+                                </>
+                                }
+
+                                {openSavedResumes &&
+                                <>
+                                    <MenuItem onClick={() => setOpenSavedResumes(false)}>
+                                        <ArrowBackIcon />
+                                    </MenuItem>
+                                    {resumes.map((resume) => (
+                                        <MenuItem key={resume.id} onClick={() => handleChooseResumeClose('resume selected')}>{resume.name}</MenuItem>
+                                    ))}
+                                </>
+                                }
                             </Menu>                                             
                         </div>
                         <TextField

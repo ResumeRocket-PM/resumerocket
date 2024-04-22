@@ -46,7 +46,7 @@ export default function AddSectionContent({handlePortfolioContentChange}) {
           window.removeEventListener("mouseup", onMouseUp);
         };
       }
-    }, [isMouseDown, imageSize, selectedButton, handlePortfolioContentChange, imagePosition])
+    }, [isMouseDown, setIsMouseDown, imageSize, selectedButton, handlePortfolioContentChange, imagePosition])
   
     const buttonDown = (e) => {
         const button = e.target;

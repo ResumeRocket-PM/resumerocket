@@ -80,10 +80,13 @@ export default function PortfolioPage() {
     const handleLayoutSelected = (layout) => {
         setSelectedLayout(layout);
     };
+
     const [portfolioContent, setPortfolioContent] = useState({});
     const handlePortfolioContentChange = (content) => {
         setPortfolioContent(prevContent => {
             content = ph.formatNewContent(prevContent, content);
+            console.log("from portfolio page, new content:", content)
+            console.log("from portfolio page, prev content:", prevContent)
             return {
                 ...prevContent,
                 ...content
@@ -94,7 +97,7 @@ export default function PortfolioPage() {
 
     // console.log(selectedLayout)
     // console.log(newPortfolioContent)
-    console.log(portfolioContent)
+    // console.log(portfolioContent)
     
     return (
         <div id='PortfolioPage_content'>
@@ -106,19 +109,9 @@ export default function PortfolioPage() {
             </div>
             <div id="portfolio-backdrop">
                 <div id="portfolio-actual">
-                    {/* {selectedLayout === "layout_basic_button" && (
-                        <BasicLayout />
-                    )}
-                    {selectedLayout === "layout_2_button" && (
-                        <Layout2 />
-                    )}
-                    {selectedLayout === "layout_3_button" && (
-                        <Layout3 />
-                    )}
-                    {selectedLayout === "layout_custom_button" && (
-                        <div>Custom layout</div>
-                    )} */}
-                    <PortfolioContent portfolioContent={portfolioContent} />
+                    <PortfolioContent 
+                        portfolioContent={portfolioContent}
+                    />
                 </div>
             </div>
         </div>

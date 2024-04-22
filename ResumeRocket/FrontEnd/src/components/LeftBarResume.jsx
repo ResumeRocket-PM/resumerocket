@@ -11,16 +11,12 @@ import '../styles/LeftBarResume.css'
 
 
 
-export default function LeftBarResume({handleShareDialogOpen, handleChatOpen}) {
+export default function LeftBarResume({handleShareDialogOpen, handleChatOpen, handleVersionHistoryOpen}) {
 
-    const onShareClick = () => {
-        handleShareDialogOpen();
-    }
 
     return (
-        <Card className='leftBarResume' sx={{
-            width: 'fit-content',
-            marginLeft: "20px"
+        <Card className='leftBarResume' 
+            sx={{marginLeft: '1rem',
             }}
         >
             <Button
@@ -92,6 +88,7 @@ export default function LeftBarResume({handleShareDialogOpen, handleChatOpen}) {
             <Button
                 variant='text'
                 startIcon={<img src={versionIcon} alt="Version History" />}
+                onClick={handleVersionHistoryOpen}  
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -109,7 +106,7 @@ export default function LeftBarResume({handleShareDialogOpen, handleChatOpen}) {
             <Button
                 variant='text'
                 startIcon={<img src={linkIcon} alt="Share" />}
-                onClick={onShareClick}
+                onClick={handleShareDialogOpen}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',

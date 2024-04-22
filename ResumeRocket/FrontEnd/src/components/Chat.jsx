@@ -16,8 +16,6 @@ export default function Chat() {
         }
     };
 
-
-
     return (
         <div id="chat_outermost">
             <h1>AI assistant</h1>

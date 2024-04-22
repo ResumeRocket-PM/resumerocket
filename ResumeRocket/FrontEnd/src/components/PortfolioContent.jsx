@@ -1,43 +1,27 @@
 import BasicLayout from "./portfolio-layouts/BasicLayout";
 import Layout2 from "./portfolio-layouts/Layout2";
 import Layout3 from "./portfolio-layouts/Layout3";
-import Introduction from "./portfolio-content/Introduction";
-import JupyterNotebook from "./portfolio-content/JupyterNotebook";
 
 
-function Layout({layout, children}) {
+
+function Layout({layout, portfolioContent}) {
     return (
         <>
             {layout && layout === "basic" && (
-                <BasicLayout>
-                    {children}
-                </BasicLayout>
+                <BasicLayout 
+                    portfolioContent={portfolioContent}
+                />
             )}           
             {layout && layout === "2" && (
-                <Layout2>
-                    {children}
-                </Layout2>
+                <Layout2 
+                    portfolioContent={portfolioContent}                 
+                />
             )}  
             {layout && layout === "3" && (
-                <Layout3>
-                    {children}
-                </Layout3>
+                <Layout3 
+                    portfolioContent={portfolioContent}                
+                />
             )}                                               
-        </>
-    )
-}
-
-function Component({key, component}) {
-    console.log("component.styles:", component.styles)
-    console.log("component.type:", component.type)
-    return (
-        <>
-            {component && component.type === "introduction" && (
-                <Introduction component={component}/>
-           )}
-            {component && component.type === "jupyter" && (
-                <JupyterNotebook component={component}/>
-           )}           
         </>
     )
 }
@@ -49,16 +33,10 @@ export default function PortfolioContent({portfolioContent}) {
     return (
         <>
             {portfolioContent.layout && (
-                <Layout layout={portfolioContent.layout}>
-
-                    {portfolioContent.section1.components && (
-                        portfolioContent.section1.components.map((component) => {
-                            return (
-                                <Component component={component.component} />
-                            ) 
-                        })
-                    )}
-                </Layout>
+                <Layout 
+                    layout={portfolioContent.layout} 
+                    portfolioContent={portfolioContent} 
+                />
             )}
         </>
     )
