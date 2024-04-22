@@ -4,8 +4,12 @@ import { useSpring, animated } from 'react-spring';
 
 import {AccountCircle, Lock, VisibilityOff, Visibility} from '@mui/icons-material';
 import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button, InputAdornment, IconButton} from '@mui/material/';
+import { useNavigate } from 'react-router-dom';
+import {useAuth} from './AuthProvider'
 
 const LoginForm = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
 
   const [values, setValues] = useState({
@@ -31,12 +35,59 @@ const LoginForm = () => {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
 
   const handleCreateAccount = async (event) => {
-    console.log("create"); 
+    if(showCreateAccount)
+    {
+      const response = await fetch('https://localhost:44392/api/account', {
+        method: 'POST', // Method type
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "emailAddress": username,
+          "password": values.password
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save account');
+      }
+    
+      response.json().then(x => {
+        login(x.result.jsonWebToken)
+        navigate('/landing', { replace: true });
+      })
+    }
+
     setShowLogin(false); 
     setShowCreateAccount(true); 
+
 }
   
   const handleLogin = async (event) => {
+
+    if(showLogin)
+    {
+      const response = await fetch('https://localhost:44392/api/authenticate', {
+        method: 'POST', // Method type
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "emailAddress": username,
+          "password": values.password
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to Login');
+      }
+      
+      response.json().then(x => {
+        login(x.result.jsonWebToken)
+        navigate('/landing', { replace: true });
+      })
+    }
+
     console.log("log in"); 
     setShowLogin(true); 
     setShowCreateAccount(false); 

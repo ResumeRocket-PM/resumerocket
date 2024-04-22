@@ -1,6 +1,6 @@
 // import MenuItem from "@mui/material/MenuItem";
 // import { useAuth } from '../AuthHooks.jsx';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../styles/Navbar.css";
 import rocket from "../assets/rocket-solid.svg";
@@ -13,8 +13,8 @@ import usersIconOrange from "../assets/users-solid-orange.svg";
 import IconButton from "@mui/material/IconButton";
 import ForumIcon from "@mui/icons-material/Forum";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Menu from "@mui/material/Menu";
-
+import { Menu, MenuItem } from "@mui/material";
+import {useAuth} from './login-form/AuthProvider'
 // import { fetchCurrentUserData } from '../utils/apiCalls';
 
 
@@ -25,7 +25,8 @@ export default function Navbar() {
 //   const navigate = useNavigate();
   const [activeNavLink, setActiveNavLink] = useState(null);
   const location = useLocation();
-
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   //setup----------
   // const userData = fetchCurrentUserData();
   // updateCurrentUser(userData);
@@ -39,16 +40,11 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-//   const handleSignOut = () => {
-//     // Remove the token
-//     sessionStorage.removeItem('authToken');
-//     // Remove the user data from the AuthContext
-//     updateCurrentUser(null);
-//     // Navigate to the home page
-//     navigate('/');
-
-//     handleAccountMenuClose();
-//   }
+  const handleSignOut = () => {
+    logout()
+    navigate('/', { replace: true });
+    handleAccountMenuClose();
+  }
 
 const handleNavLinkClick = (link) => {
   console.log('link set to: ', link);
@@ -135,24 +131,7 @@ useEffect(() => {
             }}
             getcontentanchorel={null}
           >
-            {/* {currentUser && (
-              <MenuItem onClick={handleAccountMenuClose}>
-                <Link to={`/${currentUser.username}`} style={{ textDecoration: "none", color: "inherit" }}>
-                  View Profile
-                </Link>
-              </MenuItem>
-            )}
-            {!currentUser && (
-              <MenuItem onClick={handleAccountMenuClose}>
-                <Link
-                  to="/signin"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Sign In
-                </Link>
-              </MenuItem>
-            )}
-            {currentUser && (
+            {(
               <MenuItem onClick={handleSignOut}>
                 <Link
                   to="/"
@@ -161,7 +140,7 @@ useEffect(() => {
                   Sign Out
                 </Link>
               </MenuItem>
-            )} */}
+            )}
           </Menu>
         </div>
       </nav>
