@@ -11,6 +11,7 @@ import AddSectionContent from "../portfolio-menu_content/AddSectionContent";
 import LayoutsContent from "../portfolio-menu_content/LayoutsContent";
 import PortfolioContent from "../PortfolioContent";
 import * as ph from "../../utils/portfolioHelpers"
+import { useApi } from "../../hooks";
 
 function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
 
@@ -74,7 +75,7 @@ function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
 
 
 export default function PortfolioPage() {
-
+    const api = useApi();
 
     const [selectedLayout, setSelectedLayout] = useState(null);
     const handleLayoutSelected = (layout) => {
@@ -83,8 +84,17 @@ export default function PortfolioPage() {
 
     const [portfolioContent, setPortfolioContent] = useState({});
     const handlePortfolioContentChange = (content) => {
+        content = ph.formatNewContent(portfolioContent, content);
+        api.post(
+            "/portfolio", 
+            { 
+                ...portfolioContent,
+                ...content 
+            }
+        );
+
         setPortfolioContent(prevContent => {
-            content = ph.formatNewContent(prevContent, content);
+            // content = ph.formatNewContent(prevContent, content);
             console.log("from portfolio page, new content:", content)
             console.log("from portfolio page, prev content:", prevContent)
             return {
