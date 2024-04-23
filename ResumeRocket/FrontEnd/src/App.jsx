@@ -8,7 +8,7 @@ import NetworkingPage from "./components/pages/NetworkingPage.jsx";
 import CreateResume from "./components/pages/CreateResume.jsx";
 import Navbar from './components/Navbar.jsx';
 import './styles/App.css';
-import { AuthProvider } from './components/login-form/AuthProvider.jsx';
+import { AuthProvider } from './context/AuthProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
 
 function App() {

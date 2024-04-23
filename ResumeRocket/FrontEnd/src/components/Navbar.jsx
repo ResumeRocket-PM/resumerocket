@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import ForumIcon from "@mui/icons-material/Forum";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Menu, MenuItem } from "@mui/material";
-import {useAuth} from './login-form/AuthProvider'
+import {useAuth} from '../context/AuthProvider'
 // import { fetchCurrentUserData } from '../utils/apiCalls';
 
 

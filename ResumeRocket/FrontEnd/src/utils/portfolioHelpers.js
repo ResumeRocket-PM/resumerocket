@@ -1,12 +1,14 @@
+import { useApi } from "../hooks";
+
 export function formatNewContent(portfolioContent, content) {   
     if(content.layout){
         const newContent = formatLayoutContent(portfolioContent, content);
-        // console.log("layout newContent: ", newContent)
+        console.log("layout newContent: ", newContent)
         return newContent;
     }
     if(content.component){
         const newContent = formatComponentsContent(portfolioContent, content);
-        // console.log("component newContent: ", newContent)
+        console.log("component newContent: ", newContent)
         return newContent;
     }
 }

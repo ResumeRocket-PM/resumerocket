@@ -1,0 +1,62 @@
+const api = (token) => {
+    const baseUrl = "http://127.0.0.1:8000";
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+  
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+  
+    const get = (url) => (
+      fetch(baseUrl + url, { method: "GET", headers, })
+    );
+  
+    const post = (url, body) => {
+      console.log("baseUrl", baseUrl)
+      console.log("url", url);
+      console.log("baseurl + url", baseUrl + url);
+      return fetch(
+        baseUrl + url,
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+          headers,
+        }
+      );
+    };
+    
+
+    // const postMessage = (url, body) => (
+    //   fetch(
+    //     baseUrl + url,
+    //     {
+    //       method: "POST",
+    //       body: JSON.stringify(body),
+    //       headers,
+    //     },
+    //   )
+    // );
+  
+    const postForm = (url, body) => (
+      console.log(body),
+      fetch(
+        baseUrl + url,
+        {
+          method: "POST",
+          body: new URLSearchParams(body),
+          headers: {
+            ...headers,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        },
+      )
+    );
+  
+    return { get, post, postForm };
+  };
+  
+  export default api;
+  
+  

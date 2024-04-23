@@ -5,7 +5,7 @@ import { useSpring, animated } from 'react-spring';
 import {AccountCircle, Lock, VisibilityOff, Visibility} from '@mui/icons-material';
 import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button, InputAdornment, IconButton} from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
-import {useAuth} from './AuthProvider'
+import {useAuth} from '../../context/AuthProvider'
 
 const LoginForm = () => {
   const { login } = useAuth();
