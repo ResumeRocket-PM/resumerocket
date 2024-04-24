@@ -6,6 +6,7 @@ import arrangeIcon from '../assets/arrange.png';
 import templatesIcon from '../assets/templates.png';
 
 
+
 import '../styles/LeftBarPortfolio.css'
 
 

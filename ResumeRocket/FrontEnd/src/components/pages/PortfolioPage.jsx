@@ -3,6 +3,7 @@ import "../../styles/PortfolioPage.css";
 import { Button } from '@mui/material/';
 import openAI_Icon from '../../assets/openAI.jpg';
 import linkIcon from '../../assets/link.png';
+import SaveIcon from '@mui/icons-material/Save'; // Import the Save icon component
 import penToSquareIcon from '../../assets/pen-to-square-solid.svg';
 import arrangeIcon from '../../assets/arrange.png';
 import templatesIcon from '../../assets/templates.png';
@@ -13,12 +14,18 @@ import PortfolioContent from "../PortfolioContent";
 import * as ph from "../../utils/portfolioHelpers"
 import { useApi } from "../../hooks";
 
-function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
+function LeftMenu({handleLayoutSelected, handlePortfolioContentChange, handleSavePortfolioContent}) {
 
     const [showPopout, setShowPopout] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
 
     const menuButtonClicked = (buttonID) => {
+
+        if(buttonID === "save") {
+            handleSavePortfolioContent();
+            return;
+        }
+
         if (showPopout) {
             setShowPopout(false);
         } else {    
@@ -52,6 +59,10 @@ function LeftMenu({handleLayoutSelected, handlePortfolioContentChange}) {
                     <img src={linkIcon} alt="Share" />
                     <p>Share</p>
                 </Button>
+                <Button onClick={() => menuButtonClicked("save")} id="save_button" className="portfolio-left_button" sx={{color:'black', textTransform:'none', padding: '0'}}>
+                    <SaveIcon />
+                    <p>Save</p>
+                </Button>
             </div>
             {showPopout && selectedButton === "add" && (
             <div id="portfolio-popout_section" >
@@ -83,15 +94,35 @@ export default function PortfolioPage() {
     };
 
     const [portfolioContent, setPortfolioContent] = useState({});
-
+    const handleSavePortfolioContent = () => {
+        const content = portfolioContent
+        // console.log("final content from handlePortfolioContentChange, stringified:", JSON.stringify(content))
+        api.post(
+            "/portfolio", 
+            {"content": JSON.stringify(content)}
+        ).then(response => {
+            if (response.ok) {
+                response.json().then((data) => {
+                    console.log("data from handlePortfolioContentChange:", data)
+                    // setPortfolioContent(data.result.content);
+                });
+            } else {
+                console.error("Failed to update portfolio content:", response);
+            }
+        })        
+    }
     // I think there's a better way to do this, with the .then callback and whatnot
     // (Austin)-> see pony express chats page for example, or devexpo listing users 
     useEffect(() => {
         const fetchPortfolioContent = async () => {
             try {
                 const response = await api.get("/portfolio/details");
-                if (response.succeeded) {
-                    setPortfolioContent(response.result.content);
+                if (response.ok) {
+                    response.json().then((data) => {
+                        console.log("data from fetchPortfolioContent:", data)
+                        console.log("data.result.content:", JSON.parse(data.result.content))
+                        setPortfolioContent(JSON.parse(data.result.content));
+                    });
                 } else {
                     console.error("Failed to fetch portfolio content:", response);
                 }
@@ -106,15 +137,27 @@ export default function PortfolioPage() {
 
     const handlePortfolioContentChange = (content) => {
         content = ph.formatNewContent(portfolioContent, content);
-        const body = {
-            ...portfolioContent,
-            ...content
-        }
-        console.log("from portfolio page, body:", body)
-        api.post(
-            "/portfolio", 
-            body
-        );
+        // console.log("new content from handlePortfolioContentChange:", content)
+        // console.log("old content from handlePortfolioContentChange:", portfolioContent)
+        // content = {
+        //     ...portfolioContent,
+        //     ...content
+        // }
+        // console.log("final content from handlePortfolioContentChange:", content)
+        // // console.log("final content from handlePortfolioContentChange, stringified:", JSON.stringify(content))
+        // api.post(
+        //     "/portfolio", 
+        //     {"content": JSON.stringify(content)}
+        // ).then(response => {
+        //     if (response.ok) {
+        //         response.json().then((data) => {
+        //             console.log("data from handlePortfolioContentChange:", data)
+        //             // setPortfolioContent(data.result.content);
+        //         });
+        //     } else {
+        //         console.error("Failed to update portfolio content:", response);
+        //     }
+        // })
 
         setPortfolioContent(prevContent => {
             // content = ph.formatNewContent(prevContent, content);
@@ -138,6 +181,7 @@ export default function PortfolioPage() {
                 <LeftMenu 
                     handleLayoutSelected={handleLayoutSelected} 
                     handlePortfolioContentChange={handlePortfolioContentChange}
+                    handleSavePortfolioContent={handleSavePortfolioContent}
                 />
             </div>
             <div id="portfolio-backdrop">

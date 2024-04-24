@@ -58,9 +58,9 @@ function formatComponentsContent(portfolioContent, content) {
     }
     content.component.styles = {
         display: "flex",
-        "flex-direction": "column",
-        "align-items": "center",
-        "justify-content": "center",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "justifyContent": "center",
         height: "fit-content",
         width: "50%",
         padding: "10px 20px",
