@@ -64,7 +64,8 @@ function formatComponentsContent(portfolioContent, content) {
         height: "fit-content",
         width: "50%",
         padding: "10px 20px",
-        backgroundColor: "tomato"
+        backgroundColor: "tomato",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" /* Add a subtle box shadow */
     };
     if (content.component.type === "introduction") {
         content.component.text = "Write your introduction here";

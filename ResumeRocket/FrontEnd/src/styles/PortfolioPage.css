@@ -78,4 +78,5 @@
     max-width: calc((100vw - 100px) * 0.70);
     height: 80%;
     background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle box shadow */
 }
