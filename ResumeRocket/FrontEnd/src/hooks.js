@@ -14,12 +14,9 @@ const useApiWithoutToken = () => {
 
 const useAuth = () => useContext(AuthContext);
 
-// const useUser = () => useContext(UserContext);
-
 export {
   useApi,
   useApiWithoutToken,
-  useAuth,
-//   useUser,
+  useAuth
 };
 

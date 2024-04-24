@@ -1,12 +1,15 @@
 import "../../styles/CreateResume.css";
 import PropTypes from 'prop-types';
-import { useState, version } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import LeftBarResume from '../LeftBarResume.jsx';
 import { Card, CardContent, Dialog} from '@mui/material/';
 import Chat from '../Chat.jsx';
-
+import { useApi } from "../../hooks";
+import Bubble from "../Effects/Bubble.jsx"
 
 function ShareDialog(props) {
+
     const { onClose, open } = props;
 
     const handleClose = () => {
@@ -29,6 +32,51 @@ ShareDialog.propTypes = {
 
 
 export default function CreateResume() {
+
+    let { id } = useParams();
+    const api = useApi();
+
+    const [pdf, setpdf] = useState(null);
+    const iframeRef = useRef(null);
+    const [targetRect, setTargetRect] = useState(null);
+
+    
+    const handleResize = () => {
+        if (iframeRef.current) {
+          setTargetRect(iframeRef.current.getBoundingClientRect());
+        }
+      };
+      
+    const loadPage = () => 
+    {
+        if(id !== undefined)
+        {
+            api.get(`/job/postings/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                setpdf(data.result);
+
+                setTimeout(() => {
+                    handleResize();
+                  }, 100); 
+            })
+            .catch(error => {
+                console.error("Failed to fetch data:", error);
+                setError(error.message);
+                setIsLoading(false);
+            });
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize()
+    
+        return () => window.removeEventListener('resize', handleResize);
+    }
+
+    useEffect(() => {
+        loadPage()
+    }, []); 
+
     const [shareDialogOpen, setShareDialogOpen] = useState(false);
     const [chatOpen, setChatOpen] = useState(false);
     const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
@@ -64,12 +112,26 @@ export default function CreateResume() {
                 />
                 {chatOpen && <Chat/>}
             </div>
+
             <div id='resume_section'>
+
                 {!versionHistoryOpen &&
                     <Card className="ResumeFull" sx={{}}>
-                        <CardContent>
-                            pretend this is a resume okay
-                        </CardContent>
+                        {pdf && <CardContent>
+                            <iframe id="resumePDFViewer" ref={iframeRef}
+                                src={`data:application/pdf;base64,${pdf["resumeContent"]["FileBytes"]}#toolbar=0&navpanes=0`}
+                                width="100%"
+                                height="1058px"
+                                style={{ border: 'none' }}
+                                title="PDF Viewer"
+                                scrolling="no"
+                            />
+
+                            { pdf["resumeContent"]["Reccomendations"].split('\n').slice(0,5).map((result, index) => (
+                                <Bubble key={ pdf.ResumeId + '_index' + index} content={result} index={index+1} targetRect={iframeRef} />
+                            ))}
+
+                        </CardContent> }
                     </Card>                
                 }
 
