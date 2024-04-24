@@ -84,7 +84,8 @@ export default function PortfolioPage() {
 
     const [portfolioContent, setPortfolioContent] = useState({});
 
-    // I think there's a better way to do this 
+    // I think there's a better way to do this, with the .then callback and whatnot
+    // (Austin)-> see pony express chats page for example, or devexpo listing users 
     useEffect(() => {
         const fetchPortfolioContent = async () => {
             try {

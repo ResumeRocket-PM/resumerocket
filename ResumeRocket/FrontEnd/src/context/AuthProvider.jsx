@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null);
 
   const login = (token) => {
+    // console.log("in login, token", token)
     setAuthToken(token);
   };
 

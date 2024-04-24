@@ -56,9 +56,11 @@ const LoginForm = () => {
         "password": values.password
       }).then(response => {
         if (response.ok) {
-          response.json().then(login).then(() => {
+          response.json().then(data => {
+            console.log("data", data);
+            login(data.result.jsonWebToken);
             navigate('/landing', { replace: true });
-          })
+          });
         }
         else if (response.status === 400) {
           response.json().then(x => {

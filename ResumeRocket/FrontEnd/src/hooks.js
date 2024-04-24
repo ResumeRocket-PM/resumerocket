@@ -4,8 +4,9 @@ import { AuthContext } from "./context/AuthProvider";
 import api from "./utils/api";
 
 const useApi = () => {
-  const { token } = useAuth();
-  return api(token);
+    const { authToken } = useAuth();
+    console.log("in useApi, token", authToken);
+    return api(authToken);
 }
 
 const useApiWithoutToken = () => {

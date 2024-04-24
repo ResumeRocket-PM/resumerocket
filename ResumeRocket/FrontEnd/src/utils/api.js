@@ -6,11 +6,12 @@ const api = (token) => {
     };
   
     if (token) {
-      headers["Authorization"] = "Bearer " + token;
+        headers["Authorization"] = "Bearer " + token;
     }
   
     const get = (url) => (
-      fetch(baseUrl + url, { method: "GET", headers, })
+        console.log("in GET, token", token),
+        fetch(baseUrl + url, { method: "GET", headers, })
     );
   
     const post = (url, body) => {
