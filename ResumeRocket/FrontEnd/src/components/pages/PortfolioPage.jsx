@@ -26,11 +26,25 @@ function LeftMenu({handleLayoutSelected, handlePortfolioContentChange, handleSav
             return;
         }
 
-        if (showPopout) {
-            setShowPopout(false);
-        } else {    
-            setShowPopout(true);
+        if (buttonID === "add" || buttonID === "layouts") {
+            if(showPopout){
+                if(selectedButton === buttonID){
+                    setShowPopout(false);
+                    setSelectedButton(null);
+                    return;
+                }
+                setSelectedButton(buttonID);
+                return;
+            }
+            setShowPopout(!showPopout); // Toggle the showPopout state
+            // if (showPopout) {
+            //     setShowPopout(false);
+            // } else {    
+            //     setShowPopout(true);
+            // }
         }
+
+
         setSelectedButton(buttonID);
     }
 
