@@ -6,11 +6,14 @@ import {AccountCircle, Lock, VisibilityOff, Visibility} from '@mui/icons-materia
 import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button, InputAdornment, IconButton} from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import {useAuth} from '../../hooks.js'
+import { useApiWithoutToken } from '../../hooks.js';
 
 const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
+  const api = useApiWithoutToken();
+
 
   const [values, setValues] = useState({
     password: '',
@@ -37,25 +40,46 @@ const LoginForm = () => {
   const handleCreateAccount = async (event) => {
     if(showCreateAccount)
     {
-      const response = await fetch('https://localhost:44392/api/account', {
-        method: 'POST', // Method type
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "emailAddress": username,
-          "password": values.password
-        })
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to save account');
-      }
-    
-      response.json().then(x => {
-        login(x.result.jsonWebToken)
-        navigate('/landing', { replace: true });
+      // const response = await fetch('https://localhost:44392/api/account', {
+      //   method: 'POST', // Method type
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     "emailAddress": username,
+      //     "password": values.password
+      //   })
+      // });
+
+      api.postForm('/account', {
+        "emailAddress": username,
+        "password": values.password
+      }).then(response => {
+        if (response.ok) {
+          response.json().then(login).then(() => {
+            navigate('/landing', { replace: true });
+          })
+        }
+        else if (response.status === 400) {
+          response.json().then(x => {
+            console.log(x);
+          })
+        }
+        else {
+          console.log("Failed to save account");
+        }
       })
+
+      // console.log("response", response)
+  
+      // if (!response.ok) {
+      //   throw new Error('Failed to save account');
+      // }
+    
+      // response.json().then(x => {
+      //   login(x.result.jsonWebToken)
+      //   navigate('/landing', { replace: true });
+      // })
     }
 
     setShowLogin(false); 

@@ -6,7 +6,7 @@ import linkIcon from '../../assets/link.png';
 import penToSquareIcon from '../../assets/pen-to-square-solid.svg';
 import arrangeIcon from '../../assets/arrange.png';
 import templatesIcon from '../../assets/templates.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddSectionContent from "../portfolio-menu_content/AddSectionContent";
 import LayoutsContent from "../portfolio-menu_content/LayoutsContent";
 import PortfolioContent from "../PortfolioContent";
@@ -83,20 +83,42 @@ export default function PortfolioPage() {
     };
 
     const [portfolioContent, setPortfolioContent] = useState({});
+
+    // I think there's a better way to do this 
+    useEffect(() => {
+        const fetchPortfolioContent = async () => {
+            try {
+                const response = await api.get("/portfolio/details");
+                if (response.succeeded) {
+                    setPortfolioContent(response.result.content);
+                } else {
+                    console.error("Failed to fetch portfolio content:", response);
+                }
+            } catch (error) {
+                console.error("Failed to fetch portfolio content:", error);
+            }
+        };
+
+        fetchPortfolioContent();
+    }, []); // Empty dependency array to only run once on mount
+
+
     const handlePortfolioContentChange = (content) => {
         content = ph.formatNewContent(portfolioContent, content);
+        const body = {
+            ...portfolioContent,
+            ...content
+        }
+        console.log("from portfolio page, body:", body)
         api.post(
             "/portfolio", 
-            { 
-                ...portfolioContent,
-                ...content 
-            }
+            body
         );
 
         setPortfolioContent(prevContent => {
             // content = ph.formatNewContent(prevContent, content);
-            console.log("from portfolio page, new content:", content)
-            console.log("from portfolio page, prev content:", prevContent)
+            // console.log("from portfolio page, new content:", content)
+            // console.log("from portfolio page, prev content:", prevContent)
             return {
                 ...prevContent,
                 ...content

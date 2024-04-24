@@ -18,7 +18,7 @@ function App() {
         <div className="AppBackground">
           <Routes>
             {/* The index route is the Login page which will not render the Navbar */}
-            {/* <Route path="/" element={<LoginPage />} />  */}
+            <Route path="/" element={<LoginPage />} /> 
             
             {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>

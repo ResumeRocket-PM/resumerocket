@@ -14,9 +14,9 @@ const api = (token) => {
     );
   
     const post = (url, body) => {
-      console.log("baseUrl", baseUrl)
-      console.log("url", url);
-      console.log("baseurl + url", baseUrl + url);
+    //   console.log("baseUrl", baseUrl)
+    //   console.log("url", url);
+    //   console.log("baseurl + url", baseUrl + url);
       return fetch(
         baseUrl + url,
         {
@@ -41,16 +41,13 @@ const api = (token) => {
   
     const postForm = (url, body) => (
       console.log(body),
-      fetch(
-        baseUrl + url,
-        {
-          method: "POST",
-          body: new URLSearchParams(body),
-          headers: {
-            ...headers,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        },
+      fetch(baseUrl + url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
       )
     );
   
