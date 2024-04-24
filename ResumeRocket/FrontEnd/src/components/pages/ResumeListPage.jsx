@@ -1,9 +1,10 @@
 import "../../styles/ResumeListPage.css";
 import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button} from '@mui/material/';
 import addIcon from '../../assets/add.png';
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useApi } from "../../hooks";
 
 
 
@@ -15,9 +16,16 @@ export default function ResumeListPage() {
     const open = Boolean(anchorEl);
     const [openSavedResumes, setOpenSavedResumes] = useState(false);
 
+    const [data, setData] = useState([]); // Store fetched data
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
+
+    const api = useApi();
+
     const handleChooseResumeButtonClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
+
     const handleChooseResumeClose = (action) => {
 
         switch (action) {
@@ -53,6 +61,23 @@ export default function ResumeListPage() {
         return navigate('/create-resume');
 
     }
+
+    useEffect(() => {
+        api.get("/job/postings")
+            .then(response => response.json())
+            .then(data => {
+                setData(data);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error("Failed to fetch data:", error);
+                setError(error.message);
+                setIsLoading(false);
+            });
+    }, []); 
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     const dummyData = [
         {
@@ -122,41 +147,20 @@ export default function ResumeListPage() {
                     <h2>Status</h2>
                     <h2>Resume</h2>
                 </div>
-                {dummyData.map((result) => (
-                    //map over results and display each result in a card
-                    <Card
-                        sx={{
-                            // width: { xs: '400px', sm: '400px', md: '400px', lg: '400px' }
-                        }}
-                        key={result.username}
-                        style={{ cursor: 'pointer' }} // Add this style for cursor change
-                    >
+                {data.map((result) => (
+                    <Card key={result.id} style={{ cursor: 'pointer' }}>
                         <CardContent
                             sx={{
-                                // display: 'flex',
-                                // flexDirection: 'row',
-                                // justifyContent: 'space-evenly'
                                 display: 'grid',
                                 gridTemplateColumns: 'repeat(5, 1fr)',
                             }}
                         >
-                            <Typography align='center'>
-                                {result.appliedDate}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.company}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.position}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.status}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.resume}
-                            </Typography>
+                            <Typography align='center'>{result.appliedDate}</Typography>
+                            <Typography align='center'>{result.company}</Typography>
+                            <Typography align='center'>{result.position}</Typography>
+                            <Typography align='center'>{result.status}</Typography>
+                            <Typography align='center'>{result.resume}</Typography>
                         </CardContent>
-
                     </Card>
                 ))}
                 <Card sx={{marginTop:'3em'}}> 
