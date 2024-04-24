@@ -22,11 +22,11 @@ function App() {
             
             {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
-              <Route path="landing" element={<HomePage />} />
-              <Route path="resume-list" element={<ResumeListPage />} />
-              <Route path="portfolio" element={<PortfolioPage />} />
-              <Route path="networking" element={<NetworkingPage />} />
-              <Route path="create-resume" element={<CreateResume />} />
+              <Route path="/landing" element={<HomePage />} />
+              <Route path="/resume-list" element={<ResumeListPage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/networking" element={<NetworkingPage />} />
+              <Route path="/create-resume/:id?" element={<CreateResume />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>

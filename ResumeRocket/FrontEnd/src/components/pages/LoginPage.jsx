@@ -13,8 +13,6 @@ const LoginPage = () => {
         crossorigin="anonymous"
         /> */}
 
-
-
         <div className="login-page">
             <div className="content-container">
                 <div className="image-container">

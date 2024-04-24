@@ -1,23 +1,111 @@
 import "../../styles/ResumeListPage.css";
 import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button} from '@mui/material/';
+import { Link } from 'react-router-dom';
 import addIcon from '../../assets/add.png';
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import { useApi } from "../../hooks";
+import { ClipLoader } from 'react-spinners'; 
 
 
 export default function ResumeListPage() {
 
     const navigate = useNavigate(); // note, there is another thing called redirect that is supposdely better for loaders
-    const [listingURL, setListingURL] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const [openSavedResumes, setOpenSavedResumes] = useState(false);
 
+    const [data, setData] = useState([]); // Store fetched data
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
+
+    const api = useApi();
+
+    const [isValidForm, setIsValidForm] = useState(false);
+    const [isValidFile, setIsValidFile] = useState(false);
+    const [file, setFile] = useState(null);
+    const [uploadResumeButtonContent, setUploadResumeButtonContent] = useState('Choose Resume')
+    const [isValidUrl, setIsValidUrl] = useState(false);
+    const [listingURL, setListingURL] = useState('');
+
+    const validateUrl = (url) => {
+        const re = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        return re.test(String(url).toLowerCase());
+    };
+
+    // Function to handle email input changes
+    const handleUrlChange = (event) => {
+        const newUrl = event.target.value;
+        setListingURL(newUrl);
+        setIsValidUrl(validateUrl(newUrl));
+
+        if(isValidUrl && isValidFile)
+        {
+            setIsValidForm(true)
+        }
+        else
+        {
+            setIsValidForm(false)
+        }
+    };
+
+    const handleFileChange = (file) =>
+    {
+        setFile(file)
+        setIsValidFile(true);
+
+        if(isValidUrl && isValidFile)
+        {
+            setIsValidForm(true)
+        }
+        else
+        {
+            setIsValidForm(false)
+        }
+    }
+
+
+    const handleSubmit = (event) => {
+        const formData = new FormData();
+        formData.append('File', file);
+        formData.append('Data', JSON.stringify({ Url: listingURL }));
+
+        setIsLoading(true);
+        console.log('formData', formData)
+        api.postFileForm("/job/postings", formData)
+        .then(response => {
+            loadJobs();
+          })
+    }
+
+    const loadJobs = () => {
+        setIsLoading(true)
+
+        api.get("/job/postings")
+        .then(response => response.json())
+        .then(data => {
+            setData(data.result);
+            setIsLoading(false);
+
+            setUploadResumeButtonContent('Choose Resume')
+            setListingURL('')
+            setFile(null)
+            setIsValidUrl(false)
+            setIsValidFile(false);
+            setIsValidForm(false);
+        })
+        .catch(error => {
+            console.error("Failed to fetch data:", error);
+            setError(error.message);
+            setIsLoading(false);
+        });
+    }
+
     const handleChooseResumeButtonClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
+
     const handleChooseResumeClose = (action) => {
 
         switch (action) {
@@ -31,10 +119,12 @@ export default function ResumeListPage() {
                 input.accept = '.pdf,.doc,.docx,.txt';
                 input.onchange = (e) => {
                     const file = e.target.files[0];
-                    // Handle the uploaded file, e.g., send it to a server
+                    handleFileChange(file)
+                    setUploadResumeButtonContent(file.name)
                     console.log('Uploaded file:', file);
                 };
                 input.click();
+                setAnchorEl(null);
                 break;
             
             }
@@ -54,40 +144,17 @@ export default function ResumeListPage() {
 
     }
 
-    const dummyData = [
-        {
-            id: 1,
-            appliedDate: '2022-01-01',
-            company: 'Company A',
-            position: 'Position A',
-            status: 'Applied',
-            resume: 'Link to Resume A'
-        },
-        {
-            id: 2,
-            appliedDate: '2022-01-02',
-            company: 'Company B',
-            position: 'Position B',
-            status: 'Under Review',
-            resume: 'Link to Resume B'
-        },
-        {
-            id: 3,
-            appliedDate: '2022-01-03',
-            company: 'Company C',
-            position: 'Position C',
-            status: 'Rejected',
-            resume: 'Link to Resume C'
-        },
-        {
-            id: 4,
-            appliedDate: '2022-01-04',
-            company: 'Company D',
-            position: 'Position D',
-            status: 'Offer Extended',
-            resume: 'Link to Resume D'
-        }
-    ];
+    useEffect(() => {
+        loadJobs()
+    }, []); 
+
+    if (isLoading) {
+        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <ClipLoader size={150} color={"#123abc"} loading={isLoading} />
+        </div>;
+    };
+
+    if (error) return <div>Error: {error}</div>;
 
     const resumes = [
         {
@@ -122,43 +189,25 @@ export default function ResumeListPage() {
                     <h2>Status</h2>
                     <h2>Resume</h2>
                 </div>
-                {dummyData.map((result) => (
-                    //map over results and display each result in a card
-                    <Card
-                        sx={{
-                            // width: { xs: '400px', sm: '400px', md: '400px', lg: '400px' }
-                        }}
-                        key={result.username}
-                        style={{ cursor: 'pointer' }} // Add this style for cursor change
-                    >
+                {data.map((result) => (
+                    <Card key={result.id} style={{ cursor: 'pointer' }}>
                         <CardContent
                             sx={{
-                                // display: 'flex',
-                                // flexDirection: 'row',
-                                // justifyContent: 'space-evenly'
                                 display: 'grid',
                                 gridTemplateColumns: 'repeat(5, 1fr)',
                             }}
                         >
-                            <Typography align='center'>
-                                {result.appliedDate}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.company}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.position}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.status}
-                            </Typography>
-                            <Typography align='center'>
-                                {result.resume}
-                            </Typography>
+                            <Typography align='center'>{new Date(result.applyDate).toLocaleDateString()}</Typography>
+                            <Typography align='center'>{result.companyName}</Typography>
+                            <Typography align='center'>{result.position}</Typography>
+                            <Typography align='center'>{result.status}</Typography>
+                            <Link to={`/create-resume/${result.resumeID}`}  align='center'>
+                                { result.resumeContent['FileName']}
+                            </Link>
                         </CardContent>
-
                     </Card>
                 ))}
+                
                 <Card sx={{marginTop:'3em'}}> 
                     <CardContent
                         sx={{
@@ -193,7 +242,7 @@ export default function ResumeListPage() {
                                 onClick={handleChooseResumeButtonClick}
                                 sx={{padding:'0'}}
                             >
-                                Choose Resume
+                                {uploadResumeButtonContent}
                             </Button>   
                             <Menu
                                 id="basic-menu"
@@ -226,12 +275,21 @@ export default function ResumeListPage() {
                         <TextField
                         label="Enter job listing URL"
                         variant="standard"
-                        value={listingURL}
-                        onChange={(e) => setListingURL(e.target.value)}
+                        onInput={handleUrlChange}
+                        onPaste={handleUrlChange}
                         marginTop='0px'
                         sx={{width: '40%'}}
                         />  
+
+                        <Button
+                            disabled={!isValidForm}
+                            id="Submit"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button> 
                     </CardContent>
+  
                 </Card>            
             </div>
         </div>

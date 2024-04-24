@@ -4,13 +4,13 @@ import { TextField } from "@mui/material"
 export default function Chat() {
     const [inputText, setInputText] = useState('');
     // const [response, setResponse] = useState('');
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([{ai: "As a AI Language Model, I can provide you feed back on your resume."}]);
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             const newMessage = inputText.trim();
             if (newMessage !== '') {
-                setMessages([...messages, {user: newMessage}, {ai: "your mom"}]);
+                setMessages([...messages, {user: newMessage}, {ai: "Great Question! Here is how....."}]);
                 setInputText('');
             }
         }
