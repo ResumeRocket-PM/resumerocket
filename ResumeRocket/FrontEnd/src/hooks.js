@@ -5,7 +5,6 @@ import api from "./utils/api";
 
 const useApi = () => {
     const { authToken } = useAuth();
-    console.log("in useApi, token", authToken);
     return api(authToken);
 }
 

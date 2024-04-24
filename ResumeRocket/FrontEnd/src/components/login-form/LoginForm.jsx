@@ -57,7 +57,6 @@ const LoginForm = () => {
       }).then(response => {
         if (response.ok) {
           response.json().then(data => {
-            console.log("data", data);
             login(data.result.jsonWebToken);
             navigate('/landing', { replace: true });
           });

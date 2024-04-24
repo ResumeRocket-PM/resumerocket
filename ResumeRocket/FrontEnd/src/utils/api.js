@@ -10,7 +10,6 @@ const api = (token) => {
     }
   
     const get = (url) => (
-        console.log("in GET, token", token),
         fetch(baseUrl + url, { method: "GET", headers, })
     );
   
