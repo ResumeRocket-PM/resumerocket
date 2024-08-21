@@ -10,6 +10,7 @@ import Navbar from './components/Navbar.jsx';
 import './styles/App.css';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
+import AccountPage from './components/pages/AccountPage.jsx';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="/networking" element={<NetworkingPage />} />
               <Route path="/create-resume/:id?" element={<CreateResume />} />
+              <Route path="/account" element={<AccountPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
