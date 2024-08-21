@@ -119,7 +119,7 @@ export default function PortfolioPage() {
                 response.json().then((data) => {
                     console.log("data from handlePortfolioContentChange:", data)
                     // setPortfolioContent(data.result.content);
-                    alert("Resume saved successfully!"); // Show an alert
+                    alert("Portfolio saved successfully!"); // Show an alert
                 });
             } else {
                 console.error("Failed to update portfolio content:", response);

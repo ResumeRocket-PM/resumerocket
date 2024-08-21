@@ -15,7 +15,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="AppBackground">
+        <div className="AppBackground"> {/*TODO: you don't need app background, just use body in index.css*/ }
           <Routes>
             {/* The index route is the Login page which will not render the Navbar */}
             <Route path="/" element={<LoginPage />} /> 
