@@ -1,0 +1,66 @@
+#networking-page-root {
+    background-color: #F1F1F1;
+    /* width: 100%; */
+    /* min-height: 100vh; */
+    display: flex;
+    flex-direction: column; /* Ensure children are stacked vertically */
+    justify-content: start;
+    align-items: center;
+    /* overflow-x: hidden; */
+    /* min-height: 100%;
+    max-height: 100%; */
+    padding-top: 2rem;
+    flex-grow: 1;
+}
+
+#networking-page-content {
+    /* height: 100%; */
+    /* height: fit-content; */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    flex-grow: 1;
+    
+}
+
+/* For screens larger than 1200px */
+@media (min-width: 1200px) {
+    #networking-page-content {
+      width: calc(1200px * 0.80); /* 80% of 1200px */
+    }
+  }
+  
+  /* For screens between 768px and 1199px */
+  @media (min-width: 768px) and (max-width: 1199px) {
+    #networking-page-content {
+      width: calc(1000px * 0.75); /* 75% of 1000px, for example */
+    }
+  }
+  
+  /* For screens smaller than 768px */
+  @media (max-width: 767px) {
+    #networking-page-content {
+      width: calc(600px * 0.70); /* 70% of 600px, for example */
+    }
+  }
+
+#networking-page-user-results {
+    /* height: 100%; */
+    /* display: flex;
+    flex-direction: column;
+    justify-content: start; */
+    width: 30%;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#networking-page-user-results-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

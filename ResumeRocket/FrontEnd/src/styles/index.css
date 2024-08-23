@@ -1,17 +1,23 @@
 body {
   margin: 0;
   height: 100vh;
-  width: 100vw;
 }
 
-/* #root {
+/* #root { */
   /* max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center; */
 
   /* overflow-y: auto; */
-} */
+/* } */
+
+/* think of this like the view window.... no bigger */
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
 
 

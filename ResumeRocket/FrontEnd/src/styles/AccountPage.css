@@ -1,12 +1,17 @@
 #account-page-root {
     padding-top: 3rem;
     background-color: #F1F1F1;
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* min-height: 100vh; */
+    display: flex;
+    flex-direction: column; /* Ensure children are stacked vertically */
+    justify-content: center;
+    align-items: center;
 }
 
 #account-page-content {
-
+    /* height: 100%; */
+    
 }
 
 /* For screens larger than 1200px */

@@ -98,7 +98,7 @@ const AccountPage = () => {
                 </div>
             }
             { !isLoading &&
-                <div id='account-page-root v-center'>
+                <div id='account-page-root'>
                     <div id='account-page-content'>
                         <div id='account-page-main-header-section'>
                             <img id='account-page-profile-picture' src={userDetails.profilePhotoUrl} alt="profile picture" />

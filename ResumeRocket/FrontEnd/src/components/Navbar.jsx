@@ -99,6 +99,10 @@ useEffect(() => {
             <img src={activeNavLink === '/networking' ? usersIconOrange : usersIcon} alt="networking" />
             <p>Networking</p>
           </Link>
+          <Link to='/account' className="nav_link" onClick={() => handleNavLinkClick('/account')}>  
+            <img src={usersIcon} alt="account" />
+            <p>Account</p>
+          </Link>
         </div>
 
         <div id="account_buttons">

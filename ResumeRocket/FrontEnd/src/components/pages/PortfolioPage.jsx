@@ -191,7 +191,7 @@ export default function PortfolioPage() {
     // console.log(portfolioContent)
     
     return (
-        <div id='PortfolioPage_content'>
+        <div id='PortfolioPage-root'>
             <div id='portfolio_left_menu_section'>
                 <LeftMenu 
                     handleLayoutSelected={handleLayoutSelected} 
