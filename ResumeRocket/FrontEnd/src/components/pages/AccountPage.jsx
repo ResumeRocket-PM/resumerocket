@@ -5,6 +5,7 @@ import editIcon from "../../assets/pen-to-square-solid.svg";
 // import {IconButton, SvgIcon} from "@mui/material";
 import { ClipLoader } from 'react-spinners'; 
 import { exampleUserDetails } from "../../example_responses/networking.js";
+import { Dialog, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
 
 
 
@@ -71,6 +72,257 @@ const EducationEntry = ({schoolName, degree, major, minor, graduationDate, cours
     );
 };
 
+const AddExperienceDialog = ({ dialogOpen, setDialogOpen }) => {
+    const [formData, setFormData] = useState({
+        company: '',
+        position: '',
+        type: '',
+        description: '',
+        startDate: '',
+        endDate: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Process form data here
+        console.log(formData);
+        // Close the dialog
+        setDialogOpen('none');
+    };
+
+    return (
+        <Dialog
+            open={dialogOpen === 'addExperience'}
+            onClose={() => setDialogOpen('none')}
+        >
+            <DialogTitle>Add Experience</DialogTitle>
+            <DialogContent>
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        label='Company'
+                        name='company'
+                        value={formData.company}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Position'
+                        name='position'
+                        value={formData.position}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Type'
+                        name='type'
+                        value={formData.type}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Description'
+                        name='description'
+                        value={formData.description}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Start Date'
+                        name='startDate'
+                        type='date'
+                        value={formData.startDate}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        label='End Date'
+                        name='endDate'
+                        type='date'
+                        value={formData.endDate}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <Button type='submit' variant='contained' color='primary'>
+                        Add
+                    </Button>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+const AddEducationDialog = ({ dialogOpen, setDialogOpen }) => {
+    const [formData, setFormData] = useState({
+        schoolName: '',
+        degree: '',
+        major: '',
+        minor: '',
+        graduationDate: '',
+        courses: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Process form data here
+        console.log(formData);
+        // Close the dialog
+        setDialogOpen('none');
+    };
+
+    return (
+        <Dialog
+            open={dialogOpen === 'addEducation'}
+            onClose={() => setDialogOpen('none')}
+        >
+            <DialogTitle>Add Education</DialogTitle>
+            <DialogContent>
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        label='School Name'
+                        name='schoolName'
+                        value={formData.schoolName}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Degree'
+                        name='degree'
+                        value={formData.degree}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Major'
+                        name='major'
+                        value={formData.major}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Minor'
+                        name='minor'
+                        value={formData.minor}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Graduation Date'
+                        name='graduationDate'
+                        type='date'
+                        value={formData.graduationDate}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        label='Courses'
+                        name='courses'
+                        value={formData.courses}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <Button type='submit' variant='contained' color='primary'>
+                        Add
+                    </Button>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+const AddSkillDialog = ({ dialogOpen, setDialogOpen }) => {
+    const [formData, setFormData] = useState({
+        skillName: '',
+        proficiency: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Process form data here
+        console.log(formData);
+        // Close the dialog
+        setDialogOpen('none');
+    };
+
+    return (
+        <Dialog
+            open={dialogOpen === 'addSkills'}
+            onClose={() => setDialogOpen('none')}
+        >
+            <DialogTitle>Add Skill</DialogTitle>
+            <DialogContent>
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        label='Skill Name'
+                        name='skillName'
+                        value={formData.skillName}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <TextField
+                        label='Proficiency'
+                        name='proficiency'
+                        value={formData.proficiency}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                    />
+                    <Button type='submit' variant='contained' color='primary'>
+                        Add
+                    </Button>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+
+
 const AccountPage = () => {
     // you should fetch the data when the page loads,
     // set variables in a context just for this page, and update when needed
@@ -84,6 +336,7 @@ const AccountPage = () => {
     // const [loggedInUserLocation, setLoggedInUserLocation] = useState("San Francisco, CA");
 
     const [userDetails, setUserDetails] = useState(exampleUserDetails);
+    const [dialogOpen, setDialogOpen] = useState('none');
 
 
     // you'll need to conditionally render whether or not editing is enabled based on 
@@ -109,17 +362,17 @@ const AccountPage = () => {
                             </div>
                         </div>
                         {}
-                        <AccountSectionCard title='Experience' onEditClick={() => {}} onAddClick={() => {}}>
+                        <AccountSectionCard title='Experience' onAddClick={() => setDialogOpen('addExperience')} onEditClick={() => setDialogOpen('editExperience')} >
                             {userDetails.experience.map((entry, index) => (
                                 <ExperienceEntry key={index} {...entry} />
                             ))}
                         </AccountSectionCard>
-                        <AccountSectionCard title='Education' onEditClick={() => {}} onAddClick={() => {}}>
+                        <AccountSectionCard title='Education' onAddClick={() => setDialogOpen('addEducation')} onEditClick={() => setDialogOpen('editEducation')}>
                             {userDetails.education.map((entry, index) => (
                                 <EducationEntry key={index} {...entry} />
                             ))}
                         </AccountSectionCard>
-                        <AccountSectionCard title='Skills' onEditClick={() => {}} onAddClick={() => {}}>
+                        <AccountSectionCard title='Skills' onAddClick={() => setDialogOpen('addSkills')} onEditClick={() => setDialogOpen('editSkills')}>
                             <ul>
                                 {userDetails.skills.map((skill, index) => (
                                     <li key={index}>{skill}</li>
@@ -127,6 +380,20 @@ const AccountPage = () => {
                             </ul>
                         </AccountSectionCard>
                     </div>
+
+                    <AddExperienceDialog 
+                        dialogOpen={dialogOpen} 
+                        setDialogOpen={setDialogOpen}
+                    />
+                    <AddEducationDialog 
+                        dialogOpen={dialogOpen} 
+                        setDialogOpen={setDialogOpen}
+                    />
+                    <AddSkillDialog 
+                        dialogOpen={dialogOpen} 
+                        setDialogOpen={setDialogOpen}
+                    />
+
                 </div>
             }        
         </>
