@@ -1,0 +1,47 @@
+.filter-button {
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 4rem; */
+}
+
+/*/////// MUI stuff ///////*/
+
+.filter-button .MuiInputBase-root {
+    position: relative;
+    background-color: #A1D7F5;
+    border-radius: 16px; /* Increase the border radius value for more rounded corners */
+    font-size: 16px;
+    font-weight: bold;
+    /* min-width: 120px; */
+    margin-top: 0;
+}
+
+.filter-button .MuiInputBase-root:focus {
+    border-color: yellow;
+    /* box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25); */
+    border-radius: 16px; /* Increase the border radius value for more rounded corners */
+}
+
+.filter-button .MuiSelect-icon {
+    color: #F69EA3;
+    font-size: 2rem;
+}
+
+.internal-menu-item {
+    /* other styles */
+  }
+  
+.internal-menu-item:hover {
+    background-color: lightgreen; /* or you can use the hex code #90EE90 */
+}
+  
+
+/* .radio-menu-item .Mui-focusVisible{
+
+} */

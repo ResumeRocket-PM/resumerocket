@@ -15,8 +15,17 @@ const AuthProvider = ({ children }) => {
     setAuthToken(null);
   };
 
+  const isLoggedIn = !!authToken;
+
   return (
-    <AuthContext.Provider value={{ authToken, login, logout }}>
+    <AuthContext.Provider 
+      value=
+      {{  authToken,
+          login,
+          logout, 
+          isLoggedIn
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

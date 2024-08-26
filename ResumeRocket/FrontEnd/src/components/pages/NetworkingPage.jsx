@@ -1,7 +1,11 @@
 import "../../styles/NetworkingPage.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { exampleNetworkingGetUserResults } from "../../example_responses/networking.js";
 import userSolidOrange from "../../assets/user-solid-orange.svg"
+import FilterButton from "../Filterbutton.jsx"
+import TextField from "@mui/material/TextField";
+import { projects, colleges, skills, distances } from "../../example_responses/filters.js";
+
 
 
 export default function NetworkingPage() {
@@ -9,6 +13,20 @@ export default function NetworkingPage() {
     const [usersDetails, setUsersDetails] = useState(exampleNetworkingGetUserResults);
     const [selectedUserDetails, setSelectedUserDetails] = useState(exampleNetworkingGetUserResults[0]);
     const [selectedUserIndex, setSelectedUserIndex] = useState(0);
+
+    //filters state
+    const [searchName, setSearchName] = useState('');
+    const [selectedProjects, setSelectedProjects] = useState([]);
+    const [selectedColleges, setSelectedColleges] = useState([]);
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    const [selectedDistance, setSelectedDistance] = useState(25);
+
+
+
+    useEffect(() => {
+        // select the first result card by default
+        document.getElementsByClassName('networking-page-user-result-card')[selectedUserIndex].classList.add('selected');
+    }, []);
 
     const handleUserResultClick = (index) => {
         // add the class 'selected' to the clicked user result card
@@ -25,6 +43,48 @@ export default function NetworkingPage() {
 
     return (
         <div id='networking-page-root'>
+                <div id='networking-page-search-bar'>
+                    <div id='networking-page-name-search-bar-container'>
+                        <TextField
+                            id='networking-page-name-search-bar-input'
+                            label='name search'
+                            variant='outlined'
+                            size='medium'
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                        />
+                    </div>
+                    <div className="filters-container">
+                        <FilterButton 
+                            label='Projects' 
+                            variant='list' 
+                            possibleValues={projects} 
+                            selectedValues={selectedProjects}
+                            setSelectedValues={setSelectedProjects}
+                        />    
+                        <FilterButton 
+                            label='Colleges' 
+                            variant='list' 
+                            possibleValues={colleges} 
+                            selectedValues={selectedColleges}
+                            setSelectedValues={setSelectedColleges}
+                        />
+                        <FilterButton 
+                            label='Skills' 
+                            variant='list' 
+                            possibleValues={skills} 
+                            selectedValues={selectedSkills}
+                            setSelectedValues={setSelectedSkills}    
+                        />    
+                        <FilterButton
+                            label='Distance'
+                            variant='slider'
+                            possibleValues={distances}
+                            selectedValues={selectedDistance}
+                            setSelectedValues={setSelectedDistance}
+                        />
+                    </div>
+                </div>
             <div id='networking-page-content'>
                 <div id='networking-page-user-results'>
                     <div id='networking-page-user-results-content'>

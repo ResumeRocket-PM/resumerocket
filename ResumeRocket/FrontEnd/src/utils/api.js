@@ -15,33 +15,18 @@ const api = (token) => {
     );
   
     const post = (url, body) => {
-    //   console.log("baseUrl", baseUrl)
-    //   console.log("url", url);
-    //   console.log("baseurl + url", baseUrl + url);
+      console.log('post', baseUrl + url, body)
       return fetch(
         baseUrl + url,
         {
           method: "POST",
-          body: JSON.stringify(body),
           headers,
+          body: JSON.stringify(body),
         }
       );
     };
-    
-
-    // const postMessage = (url, body) => (
-    //   fetch(
-    //     baseUrl + url,
-    //     {
-    //       method: "POST",
-    //       body: JSON.stringify(body),
-    //       headers,
-    //     },
-    //   )
-    // );
   
     const postForm = (url, body) => (
-      console.log(body),
       fetch(baseUrl + url, {
             method: 'POST',
             headers: {

@@ -26,7 +26,7 @@ export default function Navbar() {
   const [activeNavLink, setActiveNavLink] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, isLoggedIn } = useAuth();
   //setup----------
   // const userData = fetchCurrentUserData();
   // updateCurrentUser(userData);
@@ -143,6 +143,14 @@ useEffect(() => {
                 >
                   Sign Out
                 </Link>
+                { isLoggedIn && 
+                  <Link
+                    to="/account"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    Account
+                  </Link>
+                }
               </MenuItem>
             )}
           </Menu>
