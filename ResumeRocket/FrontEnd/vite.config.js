@@ -7,4 +7,9 @@ export default defineConfig({
   server: {
     port: 5174,
   },
+  // resolve: {
+  //   alias: {
+  //     'react-jupyter-notebook': 'react-jupyter-notebook', // Adjust the path as necessary
+  //   },
+  // },
 })
