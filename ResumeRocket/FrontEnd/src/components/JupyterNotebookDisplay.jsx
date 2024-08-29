@@ -1,18 +1,18 @@
 // JupyterNotebookDisplay.jsx
-import JupyterViewer from 'react-jupyter-notebook/dist/JupyterViewer.d.ts';
-import { ClipLoader } from 'react-spinners';
+// import { Notebook, Jupyter } from "@datalayer/jupyter-react";
+// import { ClipLoader } from 'react-spinners';
 
 
-const JupyterNotebookDisplay = ({ notebookData }) => {
-  if (!notebookData) {
-    return <div>{ClipLoader}</div>;
-  }
+// const JupyterNotebookDisplay = ({ notebookData }) => {
+//   if (!notebookData) {
+//     return <div>{ClipLoader}</div>;
+//   }
 
-  return (
-    <div>
-      <JupyterViewer rawIpynb={notebookData} />
-    </div>
-  );
-};
+//   return (
+//     <Jupyter>
+//       <Notebook path="ping.ipynb" />
+//     </Jupyter>
+//   )
+// };
 
-export default JupyterNotebookDisplay;
+// export default JupyterNotebookDisplay;
