@@ -62,3 +62,17 @@ p {
   justify-content: center;
   /* align-items: center; */
 }
+
+.v-center-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.v-center-start {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}

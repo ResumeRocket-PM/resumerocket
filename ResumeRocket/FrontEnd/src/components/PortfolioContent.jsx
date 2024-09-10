@@ -1,6 +1,10 @@
 import BasicLayout from "./portfolio-layouts/BasicLayout";
 import Layout2 from "./portfolio-layouts/Layout2";
 import Layout3 from "./portfolio-layouts/Layout3";
+import AboutBody from "./portfolio-content/body/AboutBody";
+import ProjectsPreviewBody from "./portfolio-content/body/ProjectsPreviewBody";
+import ExperienceBody from "./portfolio-content/body/ExperienceBody";
+import { useState } from "react";
 
 
 
@@ -27,15 +31,37 @@ function Layout({layout, portfolioContent}) {
 }
 
 
-export default function PortfolioContent({portfolioContent}) {
-    console.log("portfolioContent:", portfolioContent);
+export default function PortfolioContent({portfolioContent, setPortfolioContent, selectedPage, editMode}) {
+    console.log("portfolioContent:", portfolioContent);    
+    console.log("selectedPage:", selectedPage);
 
     return (
         <>
-            {portfolioContent.layout && (
+            {/* {portfolioContent.layout && (
                 <Layout 
                     layout={portfolioContent.layout} 
                     portfolioContent={portfolioContent} 
+                />
+            )} */}
+            {selectedPage === "About" && (
+                <>
+                    <AboutBody 
+                        userAbout={portfolioContent.pages.about}
+                        editMode={editMode}
+                        setPortfolioContent={setPortfolioContent}
+                    />
+                    <ProjectsPreviewBody 
+                        userProjectsPreview={portfolioContent.pages.projectsPreview}
+                        editMode={editMode}
+                        setPortfolioContent={setPortfolioContent}
+                    />
+                </>
+            )}
+            {selectedPage === "Experience" && (
+                <ExperienceBody 
+                    userExperience={portfolioContent.pages.experience}
+                    editMode={editMode}
+                    setPortfolioContent={setPortfolioContent}
                 />
             )}
         </>
