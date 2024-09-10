@@ -17,7 +17,7 @@ const LoginForm = () => {
 
   const [values, setValues] = useState({
     password: '',
-    confirmPassowrd: '',
+    confirmPassword: '',
     showPassword: false,
   });
 
@@ -34,22 +34,23 @@ const LoginForm = () => {
   };
 
 
+
   const [showLogin, setShowLogin] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState(false);
+  const [invalidPassword, setInvalidPassword] = useState(false);
+  const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleCreateAccount = async (event) => {
     if(showCreateAccount)
     {
-      // const response = await fetch('https://localhost:44392/api/account', {
-      //   method: 'POST', // Method type
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     "emailAddress": username,
-      //     "password": values.password
-      //   })
-      // });
 
       api.postForm('/account', {
         "emailAddress": username,
@@ -57,8 +58,14 @@ const LoginForm = () => {
       }).then(response => {
         if (response.ok) {
           response.json().then(data => {
-            login(data.result.jsonWebToken);
-            navigate('/landing', { replace: true });
+
+            if(data.result.isAuthenticated === true)
+            {
+              console.log('data', data)
+              login(data.result.jsonWebToken);
+              navigate('/landing', { replace: true });
+            }
+            
           });
         }
         else if (response.status === 400) {
@@ -70,62 +77,69 @@ const LoginForm = () => {
           console.log("Failed to save account");
         }
       })
-
-      // console.log("response", response)
-  
-      // if (!response.ok) {
-      //   throw new Error('Failed to save account');
-      // }
-    
-      // response.json().then(x => {
-      //   login(x.result.jsonWebToken)
-      //   navigate('/landing', { replace: true });
-      // })
     }
 
     setShowLogin(false); 
     setShowCreateAccount(true); 
-
-}
+  }
   
   const handleLogin = async (event) => {
 
     if(showLogin)
-    {
-      const response = await fetch('https://localhost:44392/api/authenticate', {
-        method: 'POST', // Method type
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "emailAddress": username,
-          "password": values.password
-        })
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to Login');
-      }
-      
-      response.json().then(x => {
-        login(x.result.jsonWebToken)
-        navigate('/landing', { replace: true });
+    {    
+      api.postForm('/authenticate', {
+        "emailAddress": username,
+        "password": values.password
+      }).then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if(data.result.isAuthenticated)
+            {
+              setIncorrectPassword(false);
+              login(data.result.jsonWebToken);
+              navigate('/landing', { replace: true });
+            }
+            else
+            {
+              setIncorrectPassword(true);
+            }
+          });
+
+        }
+        else if (response.status === 400) {
+          response.json().then(x => {
+            console.log(x);
+          })
+        }
+        else {
+          console.log("Failed to save account");
+        }
       })
     }
 
-    console.log("log in"); 
     setShowLogin(true); 
     setShowCreateAccount(false); 
-};
+  };
 
   const formSpring = useSpring({
     opacity: showCreateAccount || showLogin  ? 1 : 0,
     transform: (showCreateAccount || showLogin) ? 'translateY(0)' : 'translateY(-50px)',
   });
 
-
   return (
     <div>
+      <form onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent default form submission behavior
+          if (showLogin) {
+            handleLogin(); // Trigger login
+          } else if (showCreateAccount) {
+            handleCreateAccount(); // Trigger create account
+          }
+        }
+      }}>
+
+
         <div className="login-form-container">
 
                 <div className="login-form" > <animated.div style={formSpring}>
@@ -148,7 +162,12 @@ const LoginForm = () => {
                          id="username" 
                         placeholder="austin@resumerocket.com"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => {
+                          setUsername(e.target.value);
+                          setInvalidEmail(!validateEmail(e.target.value));
+                        }}
+                        error={invalidEmail} // Set error state
+                        helperText={invalidEmail ? "Must be a valid EmailAddress" : ""}
                         variant="standard"/>
                     </div>
 
@@ -161,7 +180,13 @@ const LoginForm = () => {
                         required
                         type={values.showPassword ? 'text' : 'password'}
                         value={values.password}
-                        onChange={handleChange('password')}
+                        onChange={(e) => {
+                          handleChange('password')(e);
+                          setInvalidPassword(e.target.value.length <= 6); // Validate password length
+                        }}
+                        error={invalidPassword} // Set error state
+                        helperText={invalidPassword ? "Password must be longer than 6 characters" : ""}
+
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -186,13 +211,19 @@ const LoginForm = () => {
                     <div className="form-group">
                     <TextField
                         fullWidth
-                        id="confirmPassowrd"
+                        id="confirmPassword"
                         variant="standard"
                         required
                         placeholder="confirm password"
                         type={values.showPassword ? 'text' : 'password'}
-                        value={values.confirmPassowrd}
-                        onChange={handleChange('confirmPassowrd')}
+                        value={values.confirmPassword}
+                        onChange={(e) => {
+                          handleChange('confirmPassword')(e);
+                          setPasswordsDoNotMatch(e.target.value !== values.password); // Validate if passwords match
+                        }}
+                        error={passwordsDoNotMatch} // Set error state
+                        helperText={passwordsDoNotMatch ? "Passwords do not match" : ""} 
+                        
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -227,7 +258,12 @@ const LoginForm = () => {
                          id="username" 
                         placeholder="austin@resumerocket.com"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => {
+                          setUsername(e.target.value);
+                          setInvalidEmail(!validateEmail(e.target.value));
+                        }}
+                        error={invalidEmail} // Set error state
+                        helperText={invalidEmail ? "Must be a valid EmailAddress" : ""}
                         variant="standard"/>
                     </div>
 
@@ -240,7 +276,12 @@ const LoginForm = () => {
                         required
                         type={values.showPassword ? 'text' : 'password'}
                         value={values.password}
-                        onChange={handleChange('password')}
+                        onChange={ (e) => {
+                          handleChange('password')(e);
+                          setIncorrectPassword(false); 
+                        }}
+                        error={incorrectPassword}
+                        helperText={incorrectPassword ? "Invalid password, please try again." : ""}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -285,6 +326,7 @@ const LoginForm = () => {
             
             </div>
         </div>
+        </form>
     </div>
 );};
 
