@@ -61,7 +61,7 @@ const portfolioContentDefault = {
     "navbar": {
         "links": [
             {
-                "url": "/portfolio/preview",
+                "url": "#",
                 "label": "About"
             },
         ],
@@ -70,7 +70,6 @@ const portfolioContentDefault = {
                 "display": "flex",
                 "justify-content": "flex-end",
                 "align-items": "flex-start",
-
                 "gap": ".5rem",
             },
             "links": {
@@ -81,14 +80,21 @@ const portfolioContentDefault = {
         }
     },
     "pages": {
-        "about": aboutExample,
-        "projectsPreview": projectsPreviewExample,
-        "projects": [
-            {},
-            {}
-        ],
-        "experience": experienceExample,
-        "education": educationExample
+        "about": {
+            "name": "",
+            "title": "",
+            "personalSummary": "",
+            "profilePicture": "",
+            "backgroundPicture": "", //../assets/code-background.jpg
+            "contactInfo": {
+            },
+            "styles": {
+                "contactLogos": {
+                    "width": "2rem",
+                    "height": "2rem",
+                }
+            }
+        },
     }
 };
 

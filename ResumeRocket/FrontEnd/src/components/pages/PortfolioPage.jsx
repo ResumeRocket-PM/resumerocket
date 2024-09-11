@@ -8,16 +8,17 @@ import penToSquareIcon from '../../assets/pen-to-square-solid.svg';
 import arrangeIcon from '../../assets/arrange.png';
 import templatesIcon from '../../assets/templates.png';
 import siteMapIcon from '../../assets/sitemap-solid.svg';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import AddSectionContent from "../portfolio-menu_content/AddSectionContent";
 import LayoutsContent from "../portfolio-menu_content/LayoutsContent";
 import PagesContent from "../portfolio-menu_content/PagesContent";
 import PortfolioContent from "../PortfolioContent";
 import * as ph from "../../utils/portfolioHelpers"
 import { useApi } from "../../hooks";
-import {portfolioContentExample} from "../../example_responses/portfolioContent";
+import {portfolioContentExample, portfolioContentDefault} from "../../example_responses/portfolioContent";
 import Switch from '@mui/material/Switch';
 import { useNavigate } from 'react-router-dom';
+import { UserInfoContext } from "../../context/UserInfoProvider";
 
 
 
@@ -27,6 +28,8 @@ function LeftMenu({
     handlePortfolioContentChange, 
     handleSavePortfolioContent,
     setSelectedPage,
+    portfolioContent,
+    setPortfolioContent
 }) {
 
     const [showPopout, setShowPopout] = useState(false);
@@ -109,6 +112,8 @@ function LeftMenu({
                             <PagesContent
                                 handlePortfolioContentChange={handlePortfolioContentChange} 
                                 setSelectedPage={setSelectedPage}
+                                portfolioPages={portfolioContent.pages}
+                                setPortfolioContent={setPortfolioContent}
                             />
                         </div>
                     )}
@@ -136,6 +141,12 @@ function LeftMenu({
 
 
 export default function PortfolioPage() {
+    const {
+        userDetails,
+        userPortfolioContent,
+        setUserPortfolioContent
+    } = useContext(UserInfoContext);
+
     const api = useApi();
     const navigate = useNavigate();
 
@@ -147,7 +158,7 @@ export default function PortfolioPage() {
     const [selectedPage, setSelectedPage] = useState("About");
     const [editMode, setEditMode] = useState(true);
 
-    const [portfolioContent, setPortfolioContent] = useState(portfolioContentExample);
+    const [portfolioContent, setPortfolioContent] = useState();
     const handleSavePortfolioContent = () => {
         const content = portfolioContent
         // console.log("final content from handlePortfolioContentChange, stringified:", JSON.stringify(content))
@@ -187,6 +198,22 @@ export default function PortfolioPage() {
         };
 
         fetchPortfolioContent();
+        if (!portfolioContent) {
+            api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        console.log("data from set default portfolio content:", data)
+                        // setPortfolioContent(data.result.content);
+                    });
+                } else {
+                    console.error("Failed to set default portfolio content:", response);
+                }
+            })
+            .catch(error => {
+                console.error("Failed to set default portfolio content:", error);
+            });
+        }
     }, []); // Empty dependency array to only run once on mount
 
 
@@ -241,8 +268,11 @@ export default function PortfolioPage() {
                     handlePortfolioContentChange={handlePortfolioContentChange}
                     handleSavePortfolioContent={handleSavePortfolioContent}
                     setSelectedPage={setSelectedPage}
+                    portfolioContent={portfolioContent}
+                    setPortfolioContent={setPortfolioContent}
                 />
             </div>
+
             <div id="portfolio-backdrop">
                 {/* <FormControl
                     orientation="horizontal"
@@ -281,7 +311,7 @@ export default function PortfolioPage() {
                 {/* </FormControl> */}
                 <div id="portfolio-actual">
                     <PortfolioContent 
-                        portfolioContent={portfolioContentExample}
+                        portfolioContent={portfolioContent}
                         setPortfolioContent={setPortfolioContent}
                         selectedPage={selectedPage}
                         editMode={editMode}

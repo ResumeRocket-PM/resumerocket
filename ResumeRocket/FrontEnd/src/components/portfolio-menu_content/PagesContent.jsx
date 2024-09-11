@@ -78,15 +78,24 @@ const buttonStyles = {
 
 const possiblePages = ['Projects', 'Education', 'Experience', 'Custom'];
 
-const PagesContent = (handlePortfolioContentChange, setSelectedPage) => {
+const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioPages, setPortfolioContent}) => {
     const [pagesAccordionExpanded, setPagesAccordionExpanded] = useState(false);
-    const [userPages, setUserPages] = useState([]);
     const [addPageAnchorEl, setAddPageAnchorEl] = useState(null);
     const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
 
-    const handleAddPageClick = (event) => {
+    const handleAddPageButtonClick = (event) => {
         setAddPageAnchorEl(event.currentTarget);
     };
+
+    const handleAddPageToPortfolio = (page) => {
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                [page]: []
+            }
+        }));
+    }
 
     const handleAddPageClose = () => {
         setAddPageAnchorEl(null);
@@ -111,7 +120,7 @@ const PagesContent = (handlePortfolioContentChange, setSelectedPage) => {
             <Button 
                 startIcon={<AddIcon />} 
                 sx={{...buttonStyles}} 
-                onClick={handleAddPageClick}
+                onClick={handleAddPageButtonClick}
             >
                 Add Page
             </Button>
@@ -133,60 +142,56 @@ const PagesContent = (handlePortfolioContentChange, setSelectedPage) => {
                 disableAutoFocus
             >
                 <div id='portfolio-lm-pages-addpage-options'>
-                    <div className='portfolio-lm-pages-option' onClick={() => setUserPages([...userPages, 'Projects'])}>
+                    <div className='portfolio-lm-pages-option' onClick={() => handleAddPageToPortfolio('projects')}>
                         <p>Projects</p>
                     </div>
-                    <div className='portfolio-lm-pages-option' onClick={() => setUserPages([...userPages, 'Education'])}>
+                    <div className='portfolio-lm-pages-option' onClick={() => handleAddPageToPortfolio('education')}>
                         <p>Education</p>
                     </div>
-                    <div className='portfolio-lm-pages-option' onClick={() => setUserPages([...userPages, 'Experience'])}>
+                    <div className='portfolio-lm-pages-option' onClick={() => handleAddPageToPortfolio('experience')}>
                         <p>Experience</p>
                     </div>
-                    <div className='portfolio-lm-pages-option' onClick={() => setUserPages([...userPages, 'Custom'])}>
+                    <div className='portfolio-lm-pages-option' onClick={() => handleAddPageToPortfolio('custom')}>
                         <p>Custom</p>
                     </div>                                        
                 </div>
             </Popover>
 
-            <Card sx={{...cardStyles}}>
+            {/* <Card sx={{...cardStyles}}>
                 <div className='portfolio-lm-user-page'>
                     <Typography>About</Typography>
                 </div>
-            </Card>
+            </Card> */}
 
-            <Accordion expanded={pagesAccordionExpanded} onChange={() => setPagesAccordionExpanded(!pagesAccordionExpanded)}>
-                <AccordionSummary aria-controls="pages-button-content" id="pages-button-header">
-                <Typography>Projects</Typography>
-                </AccordionSummary>
-                <MuiAccordionDetails>
-                {/* <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-                    sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                </Typography> */}
-                {projects.map((project, index) => {
-                    return (
-                        <div key={index} className='portfolio-lm-pages-project'>
-                            <Typography>{project}</Typography>
-                        </div>
-                    )
-                })}
-                </MuiAccordionDetails>
-            </Accordion> 
-
-            {userPages.map((page, index) => (
-                <Card onClick={() => setSelectedPage(page)} key={index} sx={{...cardStyles}}>
-                    <div className='portfolio-lm-user-page'>
-                        <Typography>{page}</Typography>
-                        <img 
-                            src={ellipsisIcon} 
-                            alt="options" 
-                            onClick={handleImageClick} 
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </div>
-                </Card>
+            {portfolioPages && Object.keys(portfolioPages).map((page, index) => (
+                <div key={index}>
+                    {page === 'projects' ? (
+                        <Accordion expanded={pagesAccordionExpanded} onChange={() => setPagesAccordionExpanded(!pagesAccordionExpanded)}>
+                            <AccordionSummary aria-controls="pages-button-content" id="pages-button-header">
+                                <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
+                            </AccordionSummary>
+                            <MuiAccordionDetails>
+                                {portfolioPages[page].map((item, idx) => (
+                                    <div key={idx} className='portfolio-lm-pages-project'>
+                                        <Typography>{JSON.stringify(item)}</Typography>
+                                    </div>
+                                ))}
+                            </MuiAccordionDetails>
+                        </Accordion>
+                    ) : (
+                        <Card onClick={() => setSelectedPage(page)} sx={{...cardStyles}}>
+                            <div className='portfolio-lm-user-page'>
+                                <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
+                                <img 
+                                    src={ellipsisIcon} 
+                                    alt="options" 
+                                    onClick={handleImageClick} 
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            </div>
+                        </Card>
+                    )}
+                </div>
             ))}
 
             <Popover

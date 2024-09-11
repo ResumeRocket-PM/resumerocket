@@ -41,14 +41,12 @@
     gap: .5rem;
 }
 
-#portfolio-about-name {
+.portfolio-textarea {
     border: 2px solid transparent;
     background-color: transparent;
     border-radius: 5px;
     font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
-    
-    font-size: 2rem;
-    font-weight: bold;
+
 
     text-align: center; /* Center text horizontally */
     padding: 0; /* Remove padding */
@@ -58,24 +56,24 @@
     box-sizing: border-box; /* Include padding and border in the element’s total width and height */
 }
 
-#portfolio-about-name:hover {
+.portfolio-textarea:hover {
     background-color: lightgrey;
     border-radius: 5px;
 }
 
-#portfolio-about-name:focus {
+.portfolio-textarea:focus {
     background-color: transparent; /* Keeps the background transparent on focus */
     outline: blue; 
     border: 2px solid blue;
     border-radius: 5px;
 }
 
-#portfolio-about-name::placeholder {
+.portfolio-textarea::placeholder {
     color: black;
     text-align: center; /* Center placeholder text */
 }
 
-#portfolio-about-name:focus::placeholder {
+.portfolio-textarea:focus::placeholder {
     color: grey;
 }
 

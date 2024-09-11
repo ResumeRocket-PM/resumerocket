@@ -3,8 +3,8 @@ import {portfolioContentExample} from '../../example_responses/portfolioContent'
 import {Link} from 'react-router-dom';
 import '../../styles/PortfolioNavbarDefault.css';
 
-const PortfolioNavbar = () => {
-    const [portfolioNavbar, setPortfolioNavbar] = useState(portfolioContentExample.navbar);
+const PortfolioNavbar = ({navContent}) => {
+    const [portfolioNavbar, setPortfolioNavbar] = useState(navContent);
     console.log("portfolioNavbar:", portfolioNavbar);
 
     return (

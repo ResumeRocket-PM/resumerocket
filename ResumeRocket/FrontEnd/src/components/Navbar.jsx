@@ -99,10 +99,6 @@ useEffect(() => {
             <img src={activeNavLink === '/networking' ? usersIconOrange : usersIcon} alt="networking" />
             <p>Networking</p>
           </Link>
-          <Link to='/account' className="nav_link" onClick={() => handleNavLinkClick('/account')}>  
-            <img src={usersIcon} alt="account" />
-            <p>Account</p>
-          </Link>
         </div>
 
         <div id="account_buttons">
@@ -135,7 +131,6 @@ useEffect(() => {
             }}
             getcontentanchorel={null}
           >
-            {(
               <MenuItem onClick={handleSignOut}>
                 <Link
                   to="/"
@@ -143,16 +138,18 @@ useEffect(() => {
                 >
                   Sign Out
                 </Link>
-                { isLoggedIn && 
+              </MenuItem>
+
+              { isLoggedIn && 
+                <MenuItem onClick={handleAccountMenuClose}>
                   <Link
                     to="/account"
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     Account
                   </Link>
-                }
-              </MenuItem>
-            )}
+                </MenuItem>
+              }
           </Menu>
         </div>
       </nav>

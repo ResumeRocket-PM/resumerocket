@@ -7,6 +7,8 @@ import {Card, CardContent, Typography, TextField, Menu, MenuItem, Button, InputA
 import { useNavigate } from 'react-router-dom';
 import {useAuth} from '../../hooks.js'
 import { useApiWithoutToken } from '../../hooks.js';
+import { portfolioContentDefault } from '../../example_responses/portfolioContent.js';
+
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -63,7 +65,7 @@ const LoginForm = () => {
             {
               console.log('data', data)
               login(data.result.jsonWebToken);
-              navigate('/landing', { replace: true });
+              navigate('/account', { replace: true });
             }
             
           });
@@ -78,6 +80,8 @@ const LoginForm = () => {
         }
       })
     }
+
+
 
     setShowLogin(false); 
     setShowCreateAccount(true); 
@@ -97,7 +101,7 @@ const LoginForm = () => {
             {
               setIncorrectPassword(false);
               login(data.result.jsonWebToken);
-              navigate('/landing', { replace: true });
+              navigate('/account', { replace: true });
             }
             else
             {

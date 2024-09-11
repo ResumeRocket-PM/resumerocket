@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import HomePage from './components/pages/HomePage.jsx';
 import NotFoundPage from './components/pages/NotFoundPage.jsx';
 import LoginPage from './components/pages/LoginPage.jsx';
@@ -8,20 +8,24 @@ import NetworkingPage from "./components/pages/NetworkingPage.jsx";
 import CreateResume from "./components/pages/CreateResume.jsx";
 import Navbar from './components/Navbar.jsx';
 import './styles/App.css';
-import { AuthProvider } from './context/AuthProvider.jsx';
+import { AuthContext } from './context/AuthProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
 import AccountPage from './components/pages/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
 import {portfolioContentExample} from './example_responses/portfolioContent';
+import { useContext } from 'react';
+
 
 
 function App() {
+  const { isLoggedIn } = useContext(AuthContext);
+
+
   return (
-    <AuthProvider>
       <BrowserRouter>
           <Routes>
             {/* The index route is the Login page which will not render the Navbar */}
-            <Route path="/" element={<LoginPage />} /> 
+            <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
             <Route 
                     path="/portfolio/preview" 
                     element={
@@ -46,7 +50,7 @@ function App() {
             />              
             {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
-              <Route path="/landing" element={<HomePage />} />
+              <Route path="/home" element={<HomePage />} />
               <Route path="/resume-list" element={<ResumeListPage />} />
               <Route path="/portfolio" element={<PortfolioPage />} />            
               <Route path="/networking" element={<NetworkingPage />} />
@@ -56,7 +60,6 @@ function App() {
             </Route>
           </Routes>
       </BrowserRouter>
-    </AuthProvider>
   );
 }
 
