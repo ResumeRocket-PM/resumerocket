@@ -63,7 +63,7 @@ const LoginForm = () => {
             {
               console.log('data', data)
               login(data.result.jsonWebToken);
-              navigate('/landing', { replace: true });
+              navigate('/account', { replace: true });
             }
             
           });
@@ -97,7 +97,7 @@ const LoginForm = () => {
             {
               setIncorrectPassword(false);
               login(data.result.jsonWebToken);
-              navigate('/landing', { replace: true });
+              navigate('/account', { replace: true });
             }
             else
             {
