@@ -1,0 +1,15 @@
+#portfolio-experience-root {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* border-top: 1px solid black;
+    margin-top: 5rem; */
+    padding-bottom: 5rem;
+    position: relative;
+}
+
+#portfolio-exp-header {
+    margin-top: 5rem;
+}

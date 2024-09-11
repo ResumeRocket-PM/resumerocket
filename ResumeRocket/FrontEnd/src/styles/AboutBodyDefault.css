@@ -1,0 +1,98 @@
+#portfolio-about-root {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: #F1F1F1; */
+    position: relative;
+}
+
+#portfolio-about-header {
+    /* color: white; */
+    width: 100%;
+}
+
+#portfolio-about-header-details {
+    margin-bottom: 2rem;
+}
+
+#portfolio-profile-picture-container {
+    margin: 2rem 0 2rem 0;
+}
+
+#portfolio-profile-picture {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+}
+
+#portfolio-about-summary {
+    width: 20rem;
+    margin-top: 1rem;
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+#portfolio-about-header-contact {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: .5rem;
+}
+
+#portfolio-about-name {
+    border: 2px solid transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
+    
+    font-size: 2rem;
+    font-weight: bold;
+
+    text-align: center; /* Center text horizontally */
+    padding: 0; /* Remove padding */
+    resize: none; /* Prevent manual resizing */
+    overflow: hidden; /* Hide scrollbars */
+    /* line-height: 5rem;  */
+    box-sizing: border-box; /* Include padding and border in the element’s total width and height */
+}
+
+#portfolio-about-name:hover {
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
+#portfolio-about-name:focus {
+    background-color: transparent; /* Keeps the background transparent on focus */
+    outline: blue; 
+    border: 2px solid blue;
+    border-radius: 5px;
+}
+
+#portfolio-about-name::placeholder {
+    color: black;
+    text-align: center; /* Center placeholder text */
+}
+
+#portfolio-about-name:focus::placeholder {
+    color: grey;
+}
+
+.disabled-textarea {
+    pointer-events: none; /* Prevents clicking and hovering */
+    /* background-color: #f0f0f0; */
+    /* color: #a0a0a0;  */
+    /* border: 1px solid #d0d0d0;  */
+}
+
+
+
+/* #test-background {
+    width: 100%;
+    height: 20rem;
+    background-image: url("https://amymhaddad.s3.amazonaws.com/morocco-blue.png");
+    background-size: cover;
+    background-position: center;
+} */
+

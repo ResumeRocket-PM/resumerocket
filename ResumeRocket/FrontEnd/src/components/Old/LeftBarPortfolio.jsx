@@ -4,6 +4,7 @@ import linkIcon from '../assets/link.png';
 import penToSquareIcon from '../assets/pen-to-square-solid.svg';
 import arrangeIcon from '../assets/arrange.png';
 import templatesIcon from '../assets/templates.png';
+import siteMapIcon from '../assets/sitemap-solid.svg';
 
 
 
@@ -17,6 +18,21 @@ export default function LeftBarPortfolio() {
             width: 'fit-content',
             }}
         >
+            <Button
+                variant='text'
+                startIcon={<img src={siteMapIcon} alt="Pages" />}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    padding: '10px 15px',
+                    color: 'black',
+                    textTransform: 'none',
+                }}
+            >
+                Pages
+            </Button>
             <Button
                 variant='text'
                 startIcon={<img src={penToSquareIcon} alt="Add section" />}
