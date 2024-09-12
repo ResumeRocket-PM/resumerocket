@@ -4,8 +4,9 @@
 // Response: the same information as the networking response, just for one user. 
 const exampleUserDetails =     
 {
-    "name": "John Doe",
-    "profilePhotoUrl": "",
+    "firstName": "John",
+    "lastName": "Doe",
+    "profilePhotoUrl": null,
     "title": "Software Engineer",
     "email": "JohnDoe@gmail.com",
     "location": "Salt Lake City, UT",

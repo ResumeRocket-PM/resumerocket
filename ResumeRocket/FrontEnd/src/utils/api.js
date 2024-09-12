@@ -1,6 +1,6 @@
 const api = (token) => {
     // change depending on what backend launch config you're using
-    const baseUrl = "https://localhost:5001/api"; 
+    const baseUrl = "https://localhost:44392/api"; 
 
     const headers = {
       "Content-Type": "application/json",
@@ -10,12 +10,13 @@ const api = (token) => {
         headers["Authorization"] = "Bearer " + token;
     }
 
+    console.log('token', token)
+
     const get = (url) => (
         fetch(baseUrl + url, { method: "GET", headers, })
     );
   
     const post = (url, body) => {
-      console.log('post', baseUrl + url, body)
       return fetch(
         baseUrl + url,
         {
@@ -26,16 +27,17 @@ const api = (token) => {
       );
     };
   
-    const postForm = (url, body) => (
-      fetch(baseUrl + url, {
+    const postForm = (url, body) => {
+
+      headers['Content-Type'] = 'application/json'
+
+      return fetch(baseUrl + url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(body),
         }
       )
-    );
+    };
 
     const postFileForm = (url, body, retries = 2, delay = 100) => {
 
