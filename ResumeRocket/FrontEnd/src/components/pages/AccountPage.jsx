@@ -781,7 +781,10 @@ const AccountPage = () => {
     const api = useApi()
 
     const updateAccount = () => {
-        setIsLoading(true)
+        // setIsLoading(true)
+
+
+
 
         api.get('/account/details').then(response => {
             if (response.ok) {
@@ -789,7 +792,17 @@ const AccountPage = () => {
     
                 console.log('data', data)
                 
-                setUserDetails(data.result)
+                // setUserDetails(data.result)
+
+                const clone = structuredClone(userDetails);
+
+                clone['firstName'] = data.result.firstName
+                clone['lastName'] = data.result.lastName
+                clone['title'] = data.result.title
+                clone['location'] = data.result.location
+
+                console.log(clone)
+                setUserDetails(clone)
                 setIsLoading(false)
               });
             }
