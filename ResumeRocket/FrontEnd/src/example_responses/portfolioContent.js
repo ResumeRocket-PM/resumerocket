@@ -12,24 +12,6 @@ import stockProfilePhoto from "../assets/user-solid-orange.svg";
 
 const portfolioContentExample = {
     "navbar": {
-        "links": [
-            {
-                "url": "/portfolio/preview",
-                "label": "About"
-            },
-            {
-                "url": "#",
-                "label": "Projects"
-            },
-            {
-                "url": "/portfolio/preview/experience",
-                "label": "Experience"
-            },
-            {
-                "url": "#",
-                "label": "Education"
-            }
-        ],
         "styles": {
             "container": {
                 "display": "flex",
@@ -48,10 +30,18 @@ const portfolioContentExample = {
     "pages": {
         "about": aboutExample,
         "projectsPreview": projectsPreviewExample,
-        "projects": [
-            {},
-            {}
-        ],
+        "projects": {
+            "projectsData": [
+                {},
+                {}
+            ],
+            "styles": {
+                "header": {
+                    // "color": "white",
+                    // "background-color": "black"
+                },
+            }
+        },
         "experience": experienceExample,
         "education": educationExample
     }
@@ -59,12 +49,6 @@ const portfolioContentExample = {
 
 const portfolioContentDefault = {
     "navbar": {
-        "links": [
-            {
-                "url": "#",
-                "label": "About"
-            },
-        ],
         "styles": {
             "container": {
                 "display": "flex",
@@ -98,5 +82,92 @@ const portfolioContentDefault = {
     }
 };
 
+const projectsDefault = {
+        "projectsData": [],
+        "styles": {
+            "header": {
+                // "color": "white",
+                // "background-color": "black"
+            },
+        }
+};
 
-export { portfolioContentExample, portfolioContentDefault };
+const projectDefault = {
+    "name": "",
+    "description": "",
+    "image": "",
+    "video": "",
+    "projectLink": "",
+    "githubLink": "",
+    "technologies": [],
+    "features": []
+};
+
+const projectsPreviewDefault = {
+    "projects": [],
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "background-color": "black"
+        },
+    }
+};
+
+const projectPreviewDefault = {
+    "name": "",
+    "description": "",
+    "image": "",
+    "link": ""
+};
+
+const experienceDefault = {
+    "experienceList": [],
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "background-color": "black"
+        },
+    }
+};
+
+const experienceItemDefault = {
+    "company": "",
+    "position": "",
+    "type": "",
+    "description": "",
+    "startDate": "",
+    "endDate": ""
+};
+
+const educationDefault = {
+    "educationList": [],
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "background-color": "black"
+        },
+    }
+};
+
+const educationItemDefault = {
+    "schoolName": "",
+    "degree": "",
+    "major": "",
+    "minor": "",
+    "graduationDate": "",
+    "courses": []   
+};
+
+
+export { 
+    portfolioContentExample, 
+    portfolioContentDefault, 
+    projectsDefault, 
+    projectsPreviewDefault, 
+    projectPreviewDefault, 
+    projectDefault,
+    experienceDefault,
+    experienceItemDefault,
+    educationDefault,
+    educationItemDefault,
+};

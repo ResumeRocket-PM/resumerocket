@@ -21,7 +21,7 @@ const addButtonStyles = {
     }
 }
 
-const AboutBody = ({userAbout, editMode, setPortfolioContent, navContent}) => {
+const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent}) => {
     const [about, setAbout] = useState(userAbout);
 
     const handleChange = (e) => {
@@ -58,7 +58,7 @@ const AboutBody = ({userAbout, editMode, setPortfolioContent, navContent}) => {
     return (
         <>
             <div id='portfolio-about-root'>
-                <PortfolioNavbar navContent={navContent}/>
+                <PortfolioNavbar portfolioContent={portfolioContent}/>
                 {editMode && (
                     <IconButton 
                         aria-label='add background picture'

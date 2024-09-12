@@ -7,6 +7,7 @@ const api = (token) => {
     };
   
     if (token) {
+        console.log('token', token)
         headers["Authorization"] = "Bearer " + token;
     }
 

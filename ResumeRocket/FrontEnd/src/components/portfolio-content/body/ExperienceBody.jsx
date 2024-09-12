@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import "../../../styles/ExperienceBodyDefault.css";
 import PortfolioNavbar from "../PortfolioNavbar";
 
-const ExperienceBody = ({ userExperience, editMode, setPortfolioContent, navContent }) => {
-    const [experience, setExperience] = useState(userExperience);
+const ExperienceBody = ({ editMode, portfolioContent, setPortfolioContent }) => {
+    const [experience, setExperience] = useState(portfolioContent.pages.experience);
 
     return (
         <>
             <div id='portfolio-experience-root'>
-                <PortfolioNavbar navContent={navContent}/>
+                <PortfolioNavbar portfolioContent={portfolioContent}/>
                 <h1 id='portfolio-exp-header' style={experience.styles} >Experience</h1>
                 <div className='v-center-start'>
                     {experience.map((job, index) => (

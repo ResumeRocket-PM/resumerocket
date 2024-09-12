@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks.js'; // Update the path as needed
-import UserInfoProvider from '../context/UserInfoProvider.jsx';
+import {UserInfoProvider} from '../context/UserInfoProvider.jsx';
 
 const PrivateRoute = ({ children }) => {
   const { login, authToken } = useAuth();

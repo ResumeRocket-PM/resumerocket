@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import '../../../styles/ProjectsPreviewBodyDefault.css';
+import DialogButton from '../../DialogButton';  
+import { TextField } from '@mui/material';
+import { projectDefault, projectsPreviewDefault } from '../../../example_responses/portfolioContent';
+import AddIcon from '@mui/icons-material/Add';
 
-const ProjectsPreviewBody = ({userProjectsPreview, editMode}) => {
-    const [projectsPreview, setProjectsPreview] = useState(userProjectsPreview);
 
 
+const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent}) => {
+
+    const [projectsPreview, setProjectsPreview] = useState(portfolioContent.pages.projectsPreview);
 
     return (
         <div id='portfolio-projects-preview-root'>
@@ -22,6 +27,23 @@ const ProjectsPreviewBody = ({userProjectsPreview, editMode}) => {
                         </CardContent>
                     </Card>
                 ))}
+                {editMode && (
+                    <DialogButton 
+                        text='Add Project'
+                        title='Project Details'
+                        startIcon={<AddIcon />}
+                        content={
+                            Object.keys(projectDefault).map((key, index) => (
+                                <TextField 
+                                    key={index}
+                                    label={key}
+                                    variant='outlined'
+                                />
+                            ))
+                        }
+                    />
+
+                )}
             </div>
 
         </div>

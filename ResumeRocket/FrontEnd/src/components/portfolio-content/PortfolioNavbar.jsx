@@ -3,19 +3,31 @@ import {portfolioContentExample} from '../../example_responses/portfolioContent'
 import {Link} from 'react-router-dom';
 import '../../styles/PortfolioNavbarDefault.css';
 
-const PortfolioNavbar = ({navContent}) => {
-    const [portfolioNavbar, setPortfolioNavbar] = useState(navContent);
-    console.log("portfolioNavbar:", portfolioNavbar);
+const PortfolioNavbarDefault = ({portfolioContent}) => {
+    console.log("portfolioContent:", portfolioContent); 
+
+    const [navContent, setNavContent] = useState(portfolioContent.navbar);
+    // const [pages, setPages] = useState(portfolioContent.pages);
+
+    // useState(() => {
+    //     setNavContent(portfolioContent.navbar);
+    //     setPages(portfolioContent.pages);
+    // }, [portfolioContent]);
+
+    console.log("navContent:", navContent);
+    // console.log("pages:", pages);
 
     return (
-        <div id='portfolio-nav-container' style={portfolioNavbar.styles.container}>
-            {portfolioNavbar.links.map((link, index) => (
-                <Link style={portfolioNavbar.styles.links} key={index} to={link.url}>
-                    {link.label}
-                </Link>
+        <div id='portfolio-nav-container' style={navContent.styles.container}>
+            {Object.keys(portfolioContent.pages).map((page, index) => (
+                page !== 'projectsPreview' && (
+                    <Link style={navContent.styles.links} key={index} to={`/preview/${page}`}>
+                        {page.charAt(0).toUpperCase() + page.slice(1)}
+                    </Link>
+                )
             ))}
         </div>
     );
 };
 
-export default PortfolioNavbar;
+export default PortfolioNavbarDefault;

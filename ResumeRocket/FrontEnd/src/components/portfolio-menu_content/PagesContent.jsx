@@ -7,12 +7,19 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';  
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Popover from '@mui/material/Popover';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ellipsisIcon from '../../assets/ellipsis-solid.svg';
+import { 
+    projectsDefault,
+    projectsPreviewDefault, 
+    experienceDefault, 
+    educationDefault
+} from '../../example_responses/portfolioContent';
 
 
 
@@ -83,25 +90,48 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
     const [addPageAnchorEl, setAddPageAnchorEl] = useState(null);
     const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
 
-    const handleAddPageButtonClick = (event) => {
-        setAddPageAnchorEl(event.currentTarget);
-    };
-
     const handleAddPageToPortfolio = (page) => {
+
+        let newPage = {};
+        let additionalPages = {};
+        switch (page) {
+            case 'projects':
+                newPage = projectsDefault;
+                additionalPages = {
+                    projectsPreview: projectsPreviewDefault,
+                };
+                break;
+            case 'education':
+                newPage = educationDefault;
+                break;
+            case 'experience':
+                newPage = experienceDefault;
+                break;
+            // case 'custom':
+            //     newPage = aboutDefault;
+            //     break;
+        }
+
+
         setPortfolioContent((prevContent) => ({
             ...prevContent,
             pages: {
                 ...prevContent.pages,
-                [page]: []
+                [page]: newPage,
+                ...additionalPages,
             }
         }));
     }
+
+    const handleAddPageButtonClick = (event) => {
+        setAddPageAnchorEl(event.currentTarget);
+    };
 
     const handleAddPageClose = () => {
         setAddPageAnchorEl(null);
     };
 
-    const handleImageClick = (event) => {
+    const handlePageOptionsClick = (event) => {
         setOptionsAnchorEl(event.currentTarget);
     };
 
@@ -171,7 +201,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                                 <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
                             </AccordionSummary>
                             <MuiAccordionDetails>
-                                {portfolioPages[page].map((item, idx) => (
+                                {Object.keys(page).map((item, idx) => (
                                     <div key={idx} className='portfolio-lm-pages-project'>
                                         <Typography>{JSON.stringify(item)}</Typography>
                                     </div>
@@ -179,17 +209,28 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                             </MuiAccordionDetails>
                         </Accordion>
                     ) : (
-                        <Card onClick={() => setSelectedPage(page)} sx={{...cardStyles}}>
-                            <div className='portfolio-lm-user-page'>
-                                <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
-                                <img 
-                                    src={ellipsisIcon} 
-                                    alt="options" 
-                                    onClick={handleImageClick} 
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            </div>
-                        </Card>
+                        page !== 'projectsPreview' && (
+                            <Card onClick={() => setSelectedPage(page)} sx={{...cardStyles}}>
+                                <div className='portfolio-lm-user-page'>
+                                    <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
+                                    {/* <img 
+                                        src={ellipsisIcon} 
+                                        alt="options" 
+                                        onClick={handleImageClick} 
+                                        style={{ cursor: 'pointer' }}
+                                    /> */}
+                                    <IconButton
+                                        sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+                                        onClick={handlePageOptionsClick}
+                                    >
+                                        <img 
+                                            src={ellipsisIcon} 
+                                            alt="options" 
+                                        />
+                                    </IconButton>
+                                </div>
+                            </Card>
+                        )
                     )}
                 </div>
             ))}
@@ -212,7 +253,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                 disableAutoFocus
             >
                 <List>
-                    <ListItem button>
+                    {/* <ListItem button>
                         <ListItemText primary="Option 1" />
                     </ListItem>
                     <ListItem button>
@@ -220,7 +261,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                     </ListItem>
                     <ListItem button>
                         <ListItemText primary="Delete" />
-                    </ListItem>
+                    </ListItem> */}
                 </List>
             </Popover>
         </div>

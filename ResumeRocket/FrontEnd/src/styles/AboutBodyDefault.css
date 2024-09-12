@@ -47,9 +47,11 @@
     border-radius: 5px;
     font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
 
+    /* height: calc(100% + 5px);  */
+
 
     text-align: center; /* Center text horizontally */
-    padding: 0; /* Remove padding */
+    padding: 0 0 5px 0;
     resize: none; /* Prevent manual resizing */
     overflow: hidden; /* Hide scrollbars */
     /* line-height: 5rem;  */

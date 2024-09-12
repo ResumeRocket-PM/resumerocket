@@ -168,7 +168,7 @@ export default function PortfolioPage() {
         ).then(response => {
             if (response.ok) {
                 response.json().then((data) => {
-                    console.log("data from handlePortfolioContentChange:", data)
+                    console.log("data from post /portfolio:", data)
                     // setPortfolioContent(data.result.content);
                     alert("Portfolio saved successfully!"); // Show an alert
                 });
@@ -184,11 +184,28 @@ export default function PortfolioPage() {
             try {
                 const response = await api.get("/portfolio/details");
                 if (response.ok) {
-                    response.json().then((data) => {
-                        console.log("data from fetchPortfolioContent:", data)
-                        console.log("data.result.content:", JSON.parse(data.result.content))
+                    const data = await response.json();
+                    if (data.result.content) {
+                        console.log("data from fetchPortfolioContent:", data);
+                        console.log("data.result.content:", JSON.parse(data.result.content));
                         setPortfolioContent(JSON.parse(data.result.content));
-                    });
+                    } else {
+                        // If no portfolio content, set default content
+                        api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) })
+                            .then(response => {
+                                if (response.ok) {
+                                    response.json().then((data) => {
+                                        console.log("data from set default portfolio content:", data);
+                                        setPortfolioContent(JSON.parse(data.result.content));
+                                    });
+                                } else {
+                                    console.error("Failed to set default portfolio content:", response);
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Failed to set default portfolio content:", error);
+                            });
+                    }
                 } else {
                     console.error("Failed to fetch portfolio content:", response);
                 }
@@ -198,22 +215,6 @@ export default function PortfolioPage() {
         };
 
         fetchPortfolioContent();
-        if (!portfolioContent) {
-            api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) })
-            .then(response => {
-                if (response.ok) {
-                    response.json().then((data) => {
-                        console.log("data from set default portfolio content:", data)
-                        // setPortfolioContent(data.result.content);
-                    });
-                } else {
-                    console.error("Failed to set default portfolio content:", response);
-                }
-            })
-            .catch(error => {
-                console.error("Failed to set default portfolio content:", error);
-            });
-        }
     }, []); // Empty dependency array to only run once on mount
 
 

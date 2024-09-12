@@ -9,6 +9,7 @@ import CreateResume from "./components/pages/CreateResume.jsx";
 import Navbar from './components/Navbar.jsx';
 import './styles/App.css';
 import { AuthContext } from './context/AuthProvider.jsx';
+import { UserInfoProvider} from './context/UserInfoProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
 import AccountPage from './components/pages/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
@@ -26,28 +27,31 @@ function App() {
           <Routes>
             {/* The index route is the Login page which will not render the Navbar */}
             <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
-            <Route 
-                    path="/portfolio/preview" 
-                    element={
-                        <PortfolioContent 
-                            portfolioContent={portfolioContentExample}
-                            setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
-                            selectedPage="About" // Set the default selected page
-                            editMode={false} // Set editMode to false for preview
-                        />
-                    } 
-            />  
-            <Route 
-                    path="/portfolio/preview/experience" 
-                    element={
-                        <PortfolioContent 
-                            portfolioContent={portfolioContentExample}
-                            setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
-                            selectedPage="Experience" // Set the default selected page
-                            editMode={false} // Set editMode to false for preview
-                        />
-                    } 
-            />              
+              <Route 
+                      path="/portfolio/preview" 
+                      element={
+                          <PortfolioContent 
+                              // portfolioContent={portfolioContentExample}
+                              // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
+                              selectedPage="About" // Set the default selected page
+                              editMode={false} // Set editMode to false for preview
+                              previewMode={true} // Set previewMode to true for preview
+                          />
+                      } 
+              />  
+              <Route 
+                      path="/portfolio/preview/experience" 
+                      element={
+                          <PortfolioContent 
+                              // portfolioContent={portfolioContentExample}
+                              // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
+                              selectedPage="Experience" // Set the default selected page
+                              editMode={false} // Set editMode to false for preview
+                              previewMode={true} // Set previewMode to true for preview
+                          />
+                      } 
+              />   
+           
             {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
               <Route path="/home" element={<HomePage />} />

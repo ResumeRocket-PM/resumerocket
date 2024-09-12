@@ -74,60 +74,78 @@ const projectExample =
 }
 
 const experienceExample = 
-[
-    {
-        "company": "Google",
-        "position": "Software Engineer",
-        "type": "Full-time",
-        "description": "I worked on the Google Search team, where I helped improve the search algorithm.",
-        "startDate": "01/01/2019",
-        "endDate": "01/01/2021"
-    },
-    {
-        "company": "Microsoft",
-        "position": "Software Engineer",
-        "type": "Full-time",
-        "description": "I developed features for Microsoft Azure, focusing on cloud storage solutions.",
-        "startDate": "02/01/2021",
-        "endDate": "12/31/2022"
-    },
-    {
-        "company": "Amazon",
-        "position": "Software Development Intern",
-        "type": "Internship",
-        "description": "I worked with the AWS team, contributing to the development of serverless computing services.",
-        "startDate": "05/01/2018",
-        "endDate": "08/31/2018"
+{
+    "experienceList": [
+        {
+            "company": "Google",
+            "position": "Software Engineer",
+            "type": "Full-time",
+            "description": "I worked on the Google Search team, where I helped improve the search algorithm.",
+            "startDate": "01/01/2019",
+            "endDate": "01/01/2021"
+        },
+        {
+            "company": "Microsoft",
+            "position": "Software Engineer",
+            "type": "Full-time",
+            "description": "I developed features for Microsoft Azure, focusing on cloud storage solutions.",
+            "startDate": "02/01/2021",
+            "endDate": "12/31/2022"
+        },
+        {
+            "company": "Amazon",
+            "position": "Software Development Intern",
+            "type": "Internship",
+            "description": "I worked with the AWS team, contributing to the development of serverless computing services.",
+            "startDate": "05/01/2018",
+            "endDate": "08/31/2018"
+        }
+    ], 
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "background-color": "black"
+        },
     }
-]
+}
+
 
 const educationExample = 
-[
-    {
-        "schoolName": "University of Utah",
-        "degree": "BS",
-        "major": "Computer Science",
-        "minor": "Music",
-        "graduationDate": "05/01/2019",
-        "courses": ["Data Structures", "Algorithms", "Computer Networks"]
-    },
-    {
-        "schoolName": "Stanford University",
-        "degree": "MS",
-        "major": "Computer Science",
-        "minor": "",
-        "graduationDate": "06/01/2021",
-        "courses": ["Machine Learning", "Advanced Algorithms", "Distributed Systems"]
-    },
-    {
-        "schoolName": "MIT",
-        "degree": "PhD",
-        "major": "Artificial Intelligence",
-        "minor": "Neuroscience",
-        "graduationDate": "08/01/2023",
-        "courses": ["Deep Learning", "Neural Networks", "Cognitive Computing"]
+{
+    "educationList": [
+        {
+            "schoolName": "University of Utah",
+            "degree": "BS",
+            "major": "Computer Science",
+            "minor": "Music",
+            "graduationDate": "05/01/2019",
+            "courses": ["Data Structures", "Algorithms", "Computer Networks"]
+        },
+        {
+            "schoolName": "Stanford University",
+            "degree": "MS",
+            "major": "Computer Science",
+            "minor": "",
+            "graduationDate": "06/01/2021",
+            "courses": ["Machine Learning", "Advanced Algorithms", "Distributed Systems"]
+        },
+        {
+            "schoolName": "MIT",
+            "degree": "PhD",
+            "major": "Artificial Intelligence",
+            "minor": "Neuroscience",
+            "graduationDate": "08/01/2023",
+            "courses": ["Deep Learning", "Neural Networks", "Cognitive Computing"]
+        }
+    ], 
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "background-color": "black"
+        },
     }
-]
+}
+
 
 export { aboutExample, projectsPreviewExample, projectExample, experienceExample, educationExample };
 

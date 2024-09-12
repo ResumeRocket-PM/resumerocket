@@ -1,6 +1,6 @@
 import { useState, createContext, useEffect } from 'react';
 
-export const UserInfoContext = createContext();
+const UserInfoContext = createContext();
 
 const UserInfoProvider = ({ children }) => {
     const [userDetails, setUserDetails] = useState(localStorage.getItem('userDetails') || []);
@@ -32,7 +32,7 @@ const UserInfoProvider = ({ children }) => {
     );
 };
 
-export default UserInfoProvider;
+export {UserInfoProvider, UserInfoContext};
 
 
 
