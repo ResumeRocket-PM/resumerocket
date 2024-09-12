@@ -191,20 +191,7 @@ export default function PortfolioPage() {
                         setPortfolioContent(JSON.parse(data.result.content));
                     } else {
                         // If no portfolio content, set default content
-                        api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) })
-                            .then(response => {
-                                if (response.ok) {
-                                    response.json().then((data) => {
-                                        console.log("data from set default portfolio content:", data);
-                                        setPortfolioContent(JSON.parse(data.result.content));
-                                    });
-                                } else {
-                                    console.error("Failed to set default portfolio content:", response);
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Failed to set default portfolio content:", error);
-                            });
+                        // handleCreatePortfolio();
                     }
                 } else {
                     console.error("Failed to fetch portfolio content:", response);
@@ -216,6 +203,23 @@ export default function PortfolioPage() {
 
         fetchPortfolioContent();
     }, []); // Empty dependency array to only run once on mount
+
+    const handleCreatePortfolio = () => {
+        api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        console.log("data from set default portfolio content:", data);
+                        setPortfolioContent(JSON.parse(data.result.content));
+                    });
+                } else {
+                    console.error("Failed to set default portfolio content:", response);
+                }
+            })
+            .catch(error => {
+                console.error("Failed to set default portfolio content:", error);
+            });
+    };
 
 
     const handlePortfolioContentChange = (content) => {
@@ -259,7 +263,7 @@ export default function PortfolioPage() {
 
     // console.log(selectedLayout)
     // console.log(newPortfolioContent)
-    // console.log(portfolioContent)
+    console.log('portfolioContent', portfolioContent)
     
     return (
         <div id='PortfolioPage-root'>
@@ -280,6 +284,15 @@ export default function PortfolioPage() {
                     sx={{ width: 300, justifyContent: 'space-between' }}    
                 > */}
                 <div id='portfolio-top-right-options'>
+                    { !portfolioContent && (
+                        <Button 
+                            variant="contained" 
+                            size="small"
+                            onClick={handleCreatePortfolio}
+                        >
+                            Create Portfolio
+                        </Button>
+                    )}
                     <Button
                         variant="contained"
                         size="small"

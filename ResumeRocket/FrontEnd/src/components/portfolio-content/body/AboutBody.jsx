@@ -78,6 +78,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
 
                 <div 
                     id='portfolio-about-header'
+                    className={`${!editMode ? 'hz-center' : ''}`}
                     style={{
                         backgroundImage: about.backgroundPicture
                             ? `url(${about.backgroundPicture})`
@@ -95,7 +96,8 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 src={about.profilePicture}
                                 alt="profile picture" 
                             />
-                        </div>
+                        </div>                        
+
                     ) : (
                         editMode && (
                             <div className='hz-center' id='portfolio-profile-picture-container'>
@@ -105,7 +107,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                     tabIndex={-1}
                                     variant='outlined' 
                                     startIcon={<AddIcon/>} 
-                                    sx={addButtonStyles}
+                                    sx={{...addButtonStyles, marginTop: '1rem'}}
                                 >
                                     Add Profile Picture
                                     <VisuallyHiddenInput 

@@ -14,6 +14,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ellipsisIcon from '../../assets/ellipsis-solid.svg';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; // **** THIS IS ELLIPSIS ICON ****
+import DeleteIcon from '@mui/icons-material/Delete';
 import { 
     projectsDefault,
     projectsPreviewDefault, 
@@ -139,6 +141,20 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
         setOptionsAnchorEl(null);
     };
 
+    const handlePageDelete = (page) => () => {
+        //remove page from portfolio    
+        setPortfolioContent((prevContent) => {
+            const newPages = {...prevContent.pages};
+            delete newPages[page];
+            return {
+                ...prevContent,
+                pages: newPages,
+            }
+        });
+        handleOptionsClose(); // Close the popover after deleting the page
+    }
+
+
     const addPageOpen = Boolean(addPageAnchorEl);
     const addPageId = addPageOpen ? 'add-page-popover' : undefined;
 
@@ -210,60 +226,63 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                         </Accordion>
                     ) : (
                         page !== 'projectsPreview' && (
-                            <Card onClick={() => setSelectedPage(page)} sx={{...cardStyles}}>
+                        <>
+                            <Card sx={{...cardStyles}}>
                                 <div className='portfolio-lm-user-page'>
                                     <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
-                                    {/* <img 
+                                    <img 
                                         src={ellipsisIcon} 
                                         alt="options" 
-                                        onClick={handleImageClick} 
+                                        onClick={handlePageOptionsClick} 
                                         style={{ cursor: 'pointer' }}
-                                    /> */}
-                                    <IconButton
+                                    />
+                                    {/* <IconButton
                                         sx={{ '&:hover': { backgroundColor: 'transparent' } }}
-                                        onClick={handlePageOptionsClick}
+                                        onClick={() => handlePageOptionsClick(page)}
                                     >
-                                        <img 
-                                            src={ellipsisIcon} 
-                                            alt="options" 
-                                        />
-                                    </IconButton>
+                                        <DeleteIcon />
+                                    </IconButton> */}
                                 </div>
                             </Card>
+
+                            <Popover
+                            id={optionsId}
+                            open={optionsOpen}
+                            anchorEl={optionsAnchorEl}
+                            onClose={handleOptionsClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            sx={{ marginTop: '10px' }}
+                            disableEnforceFocus
+                            disableAutoFocus
+                            >
+                                <List>
+                                    <ListItem button>
+                                        <ListItemText primary="Option 1" />
+                                    </ListItem>
+                                    <ListItem button>
+                                        <ListItemText primary="Option 2" />
+                                    </ListItem>
+                                    {page !== "about" && (
+                                        <ListItem button onClick={handlePageDelete(page)}>
+                                            <ListItemText primary="Delete" />
+                                        </ListItem>                                        
+                                    )}
+                                </List>
+                            </Popover>   
+                        </>
                         )
                     )}
                 </div>
             ))}
 
-            <Popover
-                id={optionsId}
-                open={optionsOpen}
-                anchorEl={optionsAnchorEl}
-                onClose={handleOptionsClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                sx={{ marginTop: '10px' }}
-                disableEnforceFocus
-                disableAutoFocus
-            >
-                <List>
-                    {/* <ListItem button>
-                        <ListItemText primary="Option 1" />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemText primary="Option 2" />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemText primary="Delete" />
-                    </ListItem> */}
-                </List>
-            </Popover>
+
         </div>
     );
 };

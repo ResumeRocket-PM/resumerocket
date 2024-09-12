@@ -28,7 +28,7 @@ function App() {
             {/* The index route is the Login page which will not render the Navbar */}
             <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
               <Route 
-                      path="/portfolio/preview" 
+                      path="/portfolio/preview/about" 
                       element={
                           <PortfolioContent 
                               // portfolioContent={portfolioContentExample}

@@ -21,7 +21,11 @@ const PortfolioNavbarDefault = ({portfolioContent}) => {
         <div id='portfolio-nav-container' style={navContent.styles.container}>
             {Object.keys(portfolioContent.pages).map((page, index) => (
                 page !== 'projectsPreview' && (
-                    <Link style={navContent.styles.links} key={index} to={`/preview/${page}`}>
+                    <Link 
+                        style={navContent.styles.links} 
+                        key={index} 
+                        to={`/portfolio/preview/${page.toLowerCase()}`}
+                    >
                         {page.charAt(0).toUpperCase() + page.slice(1)}
                     </Link>
                 )
