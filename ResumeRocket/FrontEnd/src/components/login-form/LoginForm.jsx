@@ -21,6 +21,8 @@ const LoginForm = () => {
     password: '',
     confirmPassword: '',
     showPassword: false,
+    firstName: null,
+    lastName: null
   });
 
   const handleMouseDownPassword = () => {
@@ -45,6 +47,9 @@ const LoginForm = () => {
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
 
+  const [incorrectFirstName, setIncorrectFirstName] = useState(false);
+  const [incorrectLastName, setIncorrectLastName] = useState(false);
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -56,7 +61,9 @@ const LoginForm = () => {
 
       api.postForm('/account', {
         "emailAddress": username,
-        "password": values.password
+        "password": values.password,
+        "firstName": values.firstName,
+        "lastName": values.lastName
       }).then(response => {
         if (response.ok) {
           response.json().then(data => {
@@ -237,6 +244,43 @@ const LoginForm = () => {
                           }}
                     />
                     </div>
+
+                    <div className="form-group">
+                    <TextField
+                        fullWidth
+                        id="firstName"
+                        variant="standard"
+                        required
+                        placeholder="first name"
+                        type='text'
+                        value={values.firstName}
+                        onChange={(e) => {
+                          handleChange('firstName')(e);
+                          setIncorrectFirstName(e.target.value.length === 0 || e.target.value.length > 25);
+                        }}
+                        error={incorrectFirstName} // Set error state
+                        helperText={incorrectFirstName ? "Must be less than 25 characters" : ""} 
+                    />
+                    </div>
+
+                    <div className="form-group">
+                    <TextField
+                        fullWidth
+                        id="lastName"
+                        variant="standard"
+                        required
+                        placeholder="last name"
+                        type='text'
+                        value={values.lastName}
+                        onChange={(e) => { 
+                          handleChange('lastName')(e);
+                          setIncorrectLastName(e.target.value.length === 0 || e.target.value.length > 25); // Validate if passwords match
+                        }}
+                        error={incorrectLastName} // Set error state
+                        helperText={incorrectLastName ? "must be less than 25 characters" : ""} 
+                    />
+                    </div>
+
 
                     <div className="form-actions internal-block">
                       <Button className="button loginButton" onClick={handleCreateAccount}>Create Account</Button>

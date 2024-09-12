@@ -48,6 +48,24 @@ const AccountSectionCard = ({title, children, buttonType, onButtonClick}) => {
 };
 
 const ExperienceEntry = ({company, position, type, description, startDate, endDate, onEditClick}) => {    
+
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date.getTime());
+    };
+    
+    const parseDate = (dateString) => {
+        const date = new Date(dateString);
+        return isValidDate(date) ? date : null;
+    };
+    
+    const formatDate = (date) => {
+        if (!isValidDate(date)) {
+            return ''; // Or any default value or error message you prefer
+        }
+        const options = { month: '2-digit', year: 'numeric' };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    };
+
     return (
         <>
             <div className='hz-space-btwn'>
@@ -57,7 +75,7 @@ const ExperienceEntry = ({company, position, type, description, startDate, endDa
             <div className='account-page-experience-entry v-center'>
                 <p>{position}</p>
                 <p>{type}</p>
-                <p>{startDate} - {endDate}</p>
+                <p>{formatDate(parseDate(startDate))} - {formatDate(parseDate(endDate))}</p>
                 <p>{description}</p>
             </div>        
         </>
@@ -86,7 +104,7 @@ const EducationEntry = ({schoolName, degree, major, minor, graduationDate, cours
     );
 };
 
-const AddExperienceDialog = ({ dialogOpen, setDialogOpen, userDetails, setUserDetails }) => {
+const AddExperienceDialog = ({ dialogOpen, setDialogOpen, userDetails, setUserDetails, onClose }) => {
     const api = useApi();
 
     const [formData, setFormData] = useState({
@@ -114,10 +132,27 @@ const AddExperienceDialog = ({ dialogOpen, setDialogOpen, userDetails, setUserDe
         // changeUserDetailsAsync(api, formData);
 
         // Update the user details
-        setUserDetails({
-            ...userDetails,
-            experience: [...userDetails.experience, formData]
-        });
+
+        const sanitizedData = {};
+        for (const key in formData) {
+            if (formData[key] === '') {
+                sanitizedData[key] = null;
+            } else {
+                sanitizedData[key] = formData[key];
+            }
+        }
+
+        api.post('/account/experience', sanitizedData).then(response => {
+            if (response.ok) {
+              response.json().then(data => {
+                onClose()
+              });
+            }
+            else {
+              console.log("Failed to save account");
+            }
+          })
+
         // Close the dialog
         setDialogOpen('none');
     };
@@ -195,7 +230,7 @@ const AddExperienceDialog = ({ dialogOpen, setDialogOpen, userDetails, setUserDe
     );
 };
 
-const AddEducationDialog = ({ dialogOpen, setDialogOpen }) => {
+const AddEducationDialog = ({ dialogOpen, setDialogOpen, onClose }) => {
     const [formData, setFormData] = useState({
         schoolName: '',
         degree: '',
@@ -345,7 +380,7 @@ const AddEducationDialog = ({ dialogOpen, setDialogOpen }) => {
 //     );
 // };
 
-const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience }) => {
+const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience, onClose }) => {
     // parse dialogOpen to get the index of the experience entry to edit
     const openType = dialogOpen.split('-')[0];
     const index = !isNaN(parseInt(dialogOpen.split('-')[1])) ? parseInt(dialogOpen.split('-')[1]) : null;
@@ -358,16 +393,30 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience }) => {
     
     const [formData, setFormData] = useState({});
 
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date.getTime());
+    };
+    
+    const parseDate = (dateString) => {
+        const date = new Date(dateString);
+        return isValidDate(date) ? date : null;
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === 'startDate' || name === 'endDate') {
-            // Convert the date string to a Date object
-            const dateParts = value.split('/');
-            const formattedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
-            setFormData({
-                ...formData,
-                [name]: formattedDate.toISOString().split('T')[0] // Format as YYYY-MM-DD
-            });
+
+            if(isValidDate(parseDate(value)) )
+            {
+                // Convert the date string to a Date object
+                const dateParts = value.split('/');
+                const formattedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+                setFormData({
+                    ...formData,
+                    [name]: formattedDate.toISOString().split('T')[0] // Format as YYYY-MM-DD
+                });
+            }
+
         } else {
             setFormData({
                 ...formData,
@@ -387,10 +436,7 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience }) => {
     useEffect(() => {
         if (index !== null && experience[index]) {
             const selectedExperience = experience[index];
-            const parseDate = (dateStr) => {
-                const [day, month, year] = dateStr.split('/');
-                return new Date(`${year}-${month}-${day}`);
-            };
+        
     
             setFormData({
                 company: selectedExperience.company,
@@ -486,7 +532,7 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience }) => {
     );
 };
 
-const EditEducationDialog = ({ dialogOpen, setDialogOpen, education }) => {
+const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) => {
     // Parse dialogOpen to get the index of the education entry to edit
     const openType = dialogOpen.split('-')[0];
     const index = !isNaN(parseInt(dialogOpen.split('-')[1])) ? parseInt(dialogOpen.split('-')[1]) : null;
@@ -513,13 +559,18 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education }) => {
         // Handle form submission logic here
     };
 
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date.getTime());
+    };
+    
+    const parseDate = (dateString) => {
+        const date = new Date(dateString);
+        return isValidDate(date) ? date : null;
+    };
+    
     useEffect(() => {
         if (index !== null) {
             const selectedEducation = education[index];
-            const parseDate = (dateStr) => {
-                const [day, month, year] = dateStr.split('/');
-                return new Date(`${year}-${month}-${day}`);
-            };
 
             setFormData({
                 schoolName: selectedEducation.schoolName,
@@ -688,12 +739,34 @@ const EditSkillsDialog = ({ dialogOpen, setDialogOpen, skills }) => {
     );
 };
 
+const EditFieldModal = ({dialogOpen, setDialogOpen, fieldName, fieldValue, onClose }) => {
+    const [newValue, setNewValue] = useState(fieldValue);
 
+    const handleClose = () => { 
+        setDialogOpen('none');
+        onClose(fieldName, newValue);
+    }
 
-
-
-
-
+    return (
+        <Dialog
+            open={dialogOpen === 'edit' + fieldName}
+            onClose={() => handleClose()}
+        >
+            <DialogTitle>Edit {fieldName}</DialogTitle>
+            <DialogContent sx={{ width: '30rem' }}>
+                <TextField
+                    label={'Modify ' + fieldName}
+                    name={fieldName}
+                    value={newValue}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    fullWidth
+                    margin='normal'
+                >
+                </TextField>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 
 const AccountPage = () => {
@@ -705,7 +778,70 @@ const AccountPage = () => {
     const [userDetails, setUserDetails] = useState(exampleUserDetails);
     const [dialogOpen, setDialogOpen] = useState('none');
     
+    const api = useApi()
 
+    const updateAccount = () => {
+        // setIsLoading(true)
+
+
+
+
+        api.get('/account/details').then(response => {
+            if (response.ok) {
+              response.json().then(data => {
+    
+                console.log('data', data)
+                
+                // setUserDetails(data.result)
+
+                const clone = structuredClone(userDetails);
+
+                clone['firstName'] = data.result.firstName
+                clone['lastName'] = data.result.lastName
+                clone['title'] = data.result.title
+                clone['location'] = data.result.location
+
+                console.log(clone)
+                setUserDetails(clone)
+                setIsLoading(false)
+              });
+            }
+            else {
+              console.log("Failed to save account");
+            }
+          })
+    };
+
+    const updateField = (fieldName, newValue) => { 
+
+        if(newValue === "")
+        {
+            newValue = null
+        }
+
+        api.postForm('/account/details', 
+        {
+            parameters: {
+                [fieldName]: newValue,
+            }
+        }
+        ).then(response => {
+
+                if (response.ok) {
+                    response.json().then(data => {
+                        updateAccount()
+                        console.log(data)
+                    });
+                }
+                else {
+                    console.log("Failed to save account");
+                }
+        })
+    };
+
+    useEffect(() => {
+        updateAccount()
+    }, []);
 
     // you'll need to conditionally render whether or not editing is enabled based on 
     // if the currently logged in user is the same as the user being viewed
@@ -724,13 +860,25 @@ const AccountPage = () => {
                         <div id='account-page-main-header-section'>
                             <img 
                                 id='account-page-profile-picture'
-                                src={userDetails.profilePhotoUrl != "" ? userDetails.profilePhotoUrl : userSolidOrange}
+                                src={userDetails.profilePhotoLink != null ? userDetails.profilePhotoLink : userSolidOrange}
                                 alt="profile picture" 
                             />
+                            <SectionEditButton onClick={() => setDialogOpen('editProfilePhotoLink')}/>
                             <div id='account-page-user-header-details' className='v-center'>
-                                <h1>{userDetails.name}</h1>
-                                <h2>{userDetails.title}</h2>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <h1>{userDetails.firstName} {userDetails.lastName}</h1>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <h2>{userDetails.title}</h2>
+                                    <SectionEditButton onClick={() => setDialogOpen('editTitle')}/>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <h3>{userDetails.location}</h3>
+                                    <SectionEditButton onClick={() => setDialogOpen('editLocation')}/>
+                                </div>
+
                             </div>
                         </div>
                         {}
@@ -769,10 +917,12 @@ const AccountPage = () => {
                         setDialogOpen={setDialogOpen}
                         userDetails={userDetails}
                         setUserDetails={setUserDetails}
+                        onClose={updateAccount}
                     />
                     <AddEducationDialog 
                         dialogOpen={dialogOpen} 
                         setDialogOpen={setDialogOpen}
+                        onClose={updateAccount}
                     />
                     {/* <AddSkillDialog 
                         dialogOpen={dialogOpen} 
@@ -782,16 +932,40 @@ const AccountPage = () => {
                         dialogOpen={dialogOpen} 
                         setDialogOpen={setDialogOpen}
                         experience={userDetails.experience}
+                        onClose={updateAccount}
                     />
                     <EditEducationDialog 
                         dialogOpen={dialogOpen} 
                         setDialogOpen={setDialogOpen}
                         education={userDetails.education}
+                        onClose={updateAccount}
                     />
                     <EditSkillsDialog 
                         dialogOpen={dialogOpen} 
                         setDialogOpen={setDialogOpen}
                         skills={userDetails.skills}
+                        onClose={updateAccount}
+                    />
+                    <EditFieldModal 
+                        dialogOpen={dialogOpen} 
+                        setDialogOpen={setDialogOpen}
+                        fieldName='Title'
+                        fieldValue={userDetails.title ?? ''}
+                        onClose={updateField}
+                    />
+                    <EditFieldModal 
+                        dialogOpen={dialogOpen} 
+                        setDialogOpen={setDialogOpen}
+                        fieldName='Location'
+                        fieldValue={userDetails.location ?? ''}
+                        onClose={updateField}
+                    />
+                    <EditFieldModal 
+                        dialogOpen={dialogOpen} 
+                        setDialogOpen={setDialogOpen}
+                        fieldName='ProfilePhotoLink'
+                        fieldValue={userDetails.ProfilePhotoLink ?? ''}
+                        onClose={updateField}
                     />
 
                 </div>
