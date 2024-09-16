@@ -97,6 +97,25 @@ export default function CreateResume() {
         setVersionHistoryOpen(!versionHistoryOpen);
     }
 
+    console.log("pdf:", pdf);
+    console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
+
+    // function arrayBufferToBase64(buffer) {
+    //     let binary = '';
+    //     let bytes = new Uint8Array(buffer);
+    //     let len = bytes.byteLength;
+    //     for (let i = 0; i < len; i++) {
+    //         binary += String.fromCharCode(bytes[i]);
+    //     }
+    //     return window.btoa(binary);
+    // }
+    
+    // // Example usage
+    // const byteArray = pdf && pdf["resumeContent"]["FileBytes"]; // Ensure this is an ArrayBuffer or Uint8Array
+    // const base64String = arrayBufferToBase64(byteArray);
+    
+    // console.log('Base64 String:', base64String);
+
     return (
         <div id='CreateResume_content' 
         className=
@@ -127,7 +146,7 @@ export default function CreateResume() {
                                 scrolling="no"
                             />
 
-                            { pdf["resumeContent"]["Reccomendations"].split('\n').slice(0,5).map((result, index) => (
+                            { pdf["resumeContent"]["Recommendations"].split('\n').slice(0,5).map((result, index) => (
                                 <Bubble key={ pdf.ResumeId + '_index' + index} content={result} index={index+1} targetRect={iframeRef} />
                             ))}
 

@@ -1,6 +1,6 @@
 const api = (token) => {
     // change depending on what backend launch config you're using
-    const baseUrl = "https://localhost:44392/api"; 
+    const baseUrl = "https://localhost:5001/api"; 
 
     const headers = {
       "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const api = (token) => {
               if (retries > 0) {
                   console.log(`Request failed, ${retries} retries remaining, retrying in ${delay} ms...`);
                   return new Promise(resolve => setTimeout(resolve, delay))
-                      .then(() => postFileForm(url, options, retries - 1, delay));
+                      .then(() => postFileForm(url, body, retries - 1, delay));
               }
               throw new Error('No retries left');
             }
@@ -65,7 +65,7 @@ const api = (token) => {
               if (retries > 0) {
                   console.log(`Request failed due to ${error}, ${retries} retries remaining, retrying in ${delay} ms...`);
                   return new Promise(resolve => setTimeout(resolve, delay))
-                      .then(() => postFileForm(url, options, retries - 1, delay));
+                      .then(() => postFileForm(url, body, retries - 1, delay));
               }
               throw error;  // Propagate the error if no retries left
           });

@@ -154,6 +154,12 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
         handleOptionsClose(); // Close the popover after deleting the page
     }
 
+    const handlePageChange = (page) => () => {
+        console.log('page:', page);
+        setSelectedPage(page);
+        handleOptionsClose();
+    }
+
 
     const addPageOpen = Boolean(addPageAnchorEl);
     const addPageId = addPageOpen ? 'add-page-popover' : undefined;
@@ -266,8 +272,8 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                                     <ListItem button>
                                         <ListItemText primary="Option 1" />
                                     </ListItem>
-                                    <ListItem button>
-                                        <ListItemText primary="Option 2" />
+                                    <ListItem button onClick={handlePageChange(page)}>
+                                        <ListItemText primary="Go to page" />
                                     </ListItem>
                                     {page !== "about" && (
                                         <ListItem button onClick={handlePageDelete(page)}>

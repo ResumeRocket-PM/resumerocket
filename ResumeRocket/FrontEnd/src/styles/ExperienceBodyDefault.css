@@ -8,8 +8,13 @@
     margin-top: 5rem; */
     padding-bottom: 5rem;
     position: relative;
+    /* height: 100%; */
 }
 
 #portfolio-exp-header {
     margin-top: 5rem;
+}
+
+#portfolio-exp-list {
+    padding-top: 4rem;
 }

@@ -89,7 +89,7 @@ export default function PortfolioContent({
                         portfolioContent={portfolioContent} 
                     />
                 )} */}
-                {selectedPage === "About" && (
+                {selectedPage === "about" && (
                     <>
                         <AboutBody 
                             userAbout={contentToRender.pages.about}
@@ -106,7 +106,7 @@ export default function PortfolioContent({
                         )}
                     </>
                 )}
-                {selectedPage === "Experience" && (
+                {selectedPage === "experience" && (
                     <ExperienceBody 
                         editMode={editMode}
                         portfolioContent={contentToRender}

@@ -33,7 +33,7 @@ function App() {
                           <PortfolioContent 
                               // portfolioContent={portfolioContentExample}
                               // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
-                              selectedPage="About" // Set the default selected page
+                              selectedPage="about" // Set the default selected page
                               editMode={false} // Set editMode to false for preview
                               previewMode={true} // Set previewMode to true for preview
                           />
@@ -45,7 +45,7 @@ function App() {
                           <PortfolioContent 
                               // portfolioContent={portfolioContentExample}
                               // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
-                              selectedPage="Experience" // Set the default selected page
+                              selectedPage="experience" // Set the default selected page
                               editMode={false} // Set editMode to false for preview
                               previewMode={true} // Set previewMode to true for preview
                           />

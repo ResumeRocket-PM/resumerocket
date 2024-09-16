@@ -155,7 +155,7 @@ export default function PortfolioPage() {
         setSelectedLayout(layout);
     };
 
-    const [selectedPage, setSelectedPage] = useState("About");
+    const [selectedPage, setSelectedPage] = useState("about");
     const [editMode, setEditMode] = useState(true);
 
     const [portfolioContent, setPortfolioContent] = useState();
@@ -258,7 +258,7 @@ export default function PortfolioPage() {
     };
     
     const handlePreviewClick = () => {
-        window.open('/portfolio/preview');
+        window.open('/portfolio/preview/about');
     };
 
     // console.log(selectedLayout)
