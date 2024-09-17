@@ -104,7 +104,6 @@ const projectDefault = {
 };
 
 const projectsPreviewDefault = {
-    "projects": [],
     "styles": {
         "header": {
             // "color": "white",
@@ -113,12 +112,12 @@ const projectsPreviewDefault = {
     }
 };
 
-const projectPreviewDefault = {
-    "name": "",
-    "description": "",
-    "image": "",
-    "link": ""
-};
+// const projectPreviewDefault = {
+//     "name": "",
+//     "description": "",
+//     "image": "",
+//     "link": ""
+// };
 
 const experienceDefault = {
     "experienceList": [],
@@ -164,7 +163,7 @@ export {
     portfolioContentDefault, 
     projectsDefault, 
     projectsPreviewDefault, 
-    projectPreviewDefault, 
+    // projectPreviewDefault, 
     projectDefault,
     experienceDefault,
     experienceItemDefault,

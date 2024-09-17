@@ -156,6 +156,9 @@ export default function PortfolioPage() {
     };
 
     const [selectedPage, setSelectedPage] = useState("about");
+    useEffect(() => {
+        console.log("selectedPage changed:", selectedPage);
+    }, [selectedPage]);
     const [editMode, setEditMode] = useState(true);
 
     const [portfolioContent, setPortfolioContent] = useState();
@@ -328,6 +331,7 @@ export default function PortfolioPage() {
                         portfolioContent={portfolioContent}
                         setPortfolioContent={setPortfolioContent}
                         selectedPage={selectedPage}
+                        setSelectedPage={setSelectedPage}
                         editMode={editMode}
                     />
                 </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import '../../../styles/ProjectsPreviewBodyDefault.css';
@@ -11,7 +11,12 @@ import FormControl from '@mui/material/FormControl';
 
 
 
-const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent}) => {
+const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, setSelectedPage, projectRef}) => {
+
+    const [projects, setProjects] = useState(portfolioContent.pages.projects.projectsData);
+    useEffect(() => {
+        setProjects(portfolioContent.pages.projects.projectsData);
+    }, [portfolioContent]);
 
     const [projectToAdd, setProjectToAdd] = useState({ ...projectDefault });
     const [addProjectOpen, setAddProjectOpen] = useState(false);    
@@ -39,14 +44,14 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent}) 
             return;
         }
 
-        const updatedProjects = [...portfolioContent.pages.projectsPreview.projects, projectToAdd];
+        const updatedProjects = [...portfolioContent.pages.projects.projectsData, projectToAdd];
         setPortfolioContent({
             ...portfolioContent,
             pages: {
                 ...portfolioContent.pages,
-                projectsPreview: {
-                    ...portfolioContent.pages.projectsPreview,
-                    projects: updatedProjects,
+                projects: {
+                    ...portfolioContent.pages.projects,
+                    projectsData: updatedProjects,
                 },
             },
         });
@@ -54,22 +59,30 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent}) 
         setAddProjectOpen(false);
     };
 
+    const handleGoToProject = (project) => {
+        setSelectedPage(project);
+    };
+
     
 
 
     return (
-        <div id='portfolio-projects-preview-root'>
+        <div id='portfolio-projects-preview-root' ref={projectRef}>
             <h1 id='portfolio-pp-header' style={portfolioContent.pages.projectsPreview.styles} >Projects</h1>
             <div id='portfolio-pp-projects-container'>
-                {portfolioContent.pages.projectsPreview.projects.map((project, index) => (
-                    <Card className='portfolio-pp-project' key={index}>
+                {projects && projects.map((project, index) => (
+                    <div 
+                        className='portfolio-pp-project' 
+                        key={index}
+                        onClick={() => handleGoToProject(`project${index}`)}
+                    >
                         <div>
                             <h1>{project.name}</h1>
                             <p>{project.description}</p>
                             <img src={project.image} alt="project" />
-                            <a href={project.link}>Link</a>
+                            <a href={project.projectLink}>Link</a>
                         </div>
-                    </Card>
+                    </div>
                 ))}
                 {editMode && (
                     <DialogButton 

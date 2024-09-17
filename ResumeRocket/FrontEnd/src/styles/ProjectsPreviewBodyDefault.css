@@ -33,6 +33,11 @@
     border: 1px solid black;
 }
 
+.portfolio-pp-project:hover {
+    cursor: pointer;
+    background-color: lightblue;
+}
+
 #portfolio-pp-add-project-button{
     width: 12rem;
     height: 12rem;

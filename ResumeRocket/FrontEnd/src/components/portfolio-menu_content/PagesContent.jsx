@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
@@ -90,7 +90,10 @@ const possiblePages = ['Projects', 'Education', 'Experience', 'Custom'];
 const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioPages, setPortfolioContent}) => {
     const [pagesAccordionExpanded, setPagesAccordionExpanded] = useState(false);
     const [addPageAnchorEl, setAddPageAnchorEl] = useState(null);
+    const [addPageOpen, setAddPageOpen] = useState(null);
     const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
+    const [whichPageOptionsOpen, setWhichPageOptionsOpen] = useState(null);
+
 
     const handleAddPageToPortfolio = (page) => {
 
@@ -130,42 +133,62 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
     };
 
     const handleAddPageClose = () => {
-        setAddPageAnchorEl(null);
+        setAddPageOpen(null);
     };
 
-    const handlePageOptionsClick = (event) => {
+    const handlePageOptionsClick = (event, identifier) => {
         setOptionsAnchorEl(event.currentTarget);
+        setWhichPageOptionsOpen(identifier);
     };
 
     const handleOptionsClose = () => {
-        setOptionsAnchorEl(null);
+        setWhichPageOptionsOpen(null);
     };
 
-    const handlePageDelete = (page) => () => {
-        //remove page from portfolio    
-        setPortfolioContent((prevContent) => {
-            const newPages = {...prevContent.pages};
-            delete newPages[page];
-            return {
-                ...prevContent,
-                pages: newPages,
-            }
-        });
-        handleOptionsClose(); // Close the popover after deleting the page
+    const handlePageDelete = (page) => {
+
+        if(page.startsWith('project')) {
+            //remove project from projects
+            setPortfolioContent((prevContent) => {
+                const newProjects = [...prevContent.pages.projects.projectsData];
+                newProjects.splice(page.slice('project'.length), 1);
+                return {
+                    ...prevContent,
+                    pages: {
+                        ...prevContent.pages,
+                        projects: {
+                            ...prevContent.pages.projects,
+                            projectsData: newProjects,
+                        }
+                    }
+                }
+            });
+        } else {
+            //remove whole page from portfolio    
+            setPortfolioContent((prevContent) => {
+                const newPages = {...prevContent.pages};
+                delete newPages[page];
+                return {
+                    ...prevContent,
+                    pages: newPages,
+                }
+            });
+        }
+        handleOptionsClose(); // Close the popover after deleting the page            
     }
 
-    const handlePageChange = (page) => () => {
+    const handlePageChange = (page) => {
         console.log('page:', page);
         setSelectedPage(page);
         // handleOptionsClose();
     }
 
 
-    const addPageOpen = Boolean(addPageAnchorEl);
+    // const addPageOpen = Boolean(addPageAnchorEl);
     const addPageId = addPageOpen ? 'add-page-popover' : undefined;
 
-    const optionsOpen = Boolean(optionsAnchorEl);
-    const optionsId = optionsOpen ? 'options-popover' : undefined;
+    // const optionsOpen = Boolean(optionsAnchorEl);
+    // const optionsId = optionsOpen ? 'options-popover' : undefined;
 
     return (
         <div id='portfolio-lm-pages'>
@@ -223,67 +246,102 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                                 <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
                             </AccordionSummary>
                             <MuiAccordionDetails>
-                                {Object.keys(portfolioPages[page]).map((item, idx) => (
-                                    <div key={idx} className='portfolio-lm-pages-project'>
-                                        <Typography>{JSON.stringify(item)}</Typography>
-                                    </div>
+                                {portfolioPages[page].projectsData.map((project, idx) => (
+                                    <React.Fragment key={idx}>
+                                        <div className='portfolio-lm-pages-project hz-space-btwn'>
+                                            <Typography
+                                                sx={{width: "100%", "&:hover": {cursor: 'pointer', backgroundColor: 'lightblue'}}}
+                                                onClick={() => handlePageChange(`project${idx}`)}
+                                            >
+                                                {project.name}
+                                            </Typography>
+                                            <img 
+                                                className='portfolio-lm-pages-options-icon'
+                                                src={ellipsisIcon} 
+                                                alt="options" 
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    handlePageOptionsClick(event, `project${idx}`);
+                                                }}
+                                                style={{}}
+                                            />
+                                        </div>
+                                        <Popover
+                                            id={`options-popover-${idx}`}
+                                            open={whichPageOptionsOpen === `project${idx}`}
+                                            anchorEl={optionsAnchorEl}
+                                            onClose={handleOptionsClose}
+                                            anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            }}
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'left',
+                                            }}
+                                            sx={{ marginTop: '10px' }}
+                                            disableEnforceFocus
+                                            disableAutoFocus
+                                        >
+                                            <List>
+                                                <ListItem button>
+                                                    <ListItemText primary="Option 1" />
+                                                </ListItem>                                            
+                                                <ListItem button onClick={() => handlePageDelete(`project${idx}`)}>
+                                                    <ListItemText primary="Delete" />
+                                                </ListItem>                                        
+                                            </List>
+                                        </Popover>                                     
+                                    </React.Fragment>
                                 ))}
                             </MuiAccordionDetails>
                         </Accordion>
                     ) : (
                         page !== 'projectsPreview' && (
-                        <>
-                            <div className='portfolio-lm-user-page' onClick={handlePageChange(page)}>
-                                <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
-                                <img 
-                                    src={ellipsisIcon} 
-                                    alt="options" 
-                                    onClick={(event) => {
-                                        event.stopPropagation();
-                                        handlePageOptionsClick(event);
-                                    }}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                                {/* <IconButton
-                                    sx={{ '&:hover': { backgroundColor: 'transparent' } }}
-                                    onClick={() => handlePageOptionsClick(page)}
-                                >
-                                    <DeleteIcon />
-                                </IconButton> */}
-                            </div>
+                            <React.Fragment key={index}>
+                                <div className='portfolio-lm-user-page' onClick={() => handlePageChange(page)}>
+                                    <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
+                                    <img 
+                                        className='portfolio-lm-pages-options-icon'
+                                        src={ellipsisIcon} 
+                                        alt="options" 
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            handlePageOptionsClick(event, page);
+                                        }}
+                                        style={{}}
+                                    />
+                                </div>
 
-                            <Popover
-                                id={optionsId}
-                                open={optionsOpen}
-                                anchorEl={optionsAnchorEl}
-                                onClose={handleOptionsClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                sx={{ marginTop: '10px' }}
-                                disableEnforceFocus
-                                disableAutoFocus
-                            >
-                                <List>
-                                    <ListItem button>
-                                        <ListItemText primary="Option 1" />
-                                    </ListItem>
-                                    {/* <ListItem button onClick={handlePageChange(page)}>
-                                        <ListItemText primary="Go to page" />
-                                    </ListItem> */}
-                                    {page !== "about" && (
-                                        <ListItem button onClick={handlePageDelete(page)}>
-                                            <ListItemText primary="Delete" />
-                                        </ListItem>                                        
-                                    )}
-                                </List>
-                            </Popover>   
-                        </>
+                                <Popover
+                                    id={`options-popover-${index}`}
+                                    open={whichPageOptionsOpen === page}
+                                    anchorEl={optionsAnchorEl}
+                                    onClose={handleOptionsClose}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                    sx={{ marginTop: '10px' }}
+                                    disableEnforceFocus
+                                    disableAutoFocus
+                                >
+                                    <List>
+                                        <ListItem button>
+                                            <ListItemText primary="Option 1" />
+                                        </ListItem>
+                                        {page !== "about" && (
+                                            <ListItem button onClick={() => handlePageDelete(page)}>
+                                                <ListItemText primary="Delete" />
+                                            </ListItem>                                        
+                                        )}
+                                    </List>
+                                </Popover>   
+                            </React.Fragment>
                         )
                     )}
                 </div>
