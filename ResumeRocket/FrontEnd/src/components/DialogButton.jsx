@@ -8,8 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 // import Checkbox from '@mui/material/Checkbox';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 
-
-const DialogButton = ({text, content, title=null, startIcon=null, onClose=null, isOpen=null, setIsOpen=null}) => {
+// isOpen and setIsOpen are optional props that can be passed to control the dialog from outside the component
+const DialogButton = ({text, content, buttonStyles=null, title=null, startIcon=null, onClose=null, isOpen=null, setIsOpen=null}) => {
 
 
     const [open, setOpen] = useState(isOpen !== null ? isOpen : false);
@@ -49,8 +49,9 @@ const DialogButton = ({text, content, title=null, startIcon=null, onClose=null, 
                     // fontWeight: 'inherit',
                     // color: 'currentColor',
                     // borderRadius: '16px',
-                    width: '10rem',
-                    height: '10rem',
+                    // width: '10rem',
+                    // height: '10rem',
+                    ...buttonStyles
                 }}
             >{text}
             </Button>

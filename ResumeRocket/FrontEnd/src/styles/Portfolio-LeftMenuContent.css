@@ -19,5 +19,69 @@
     background-color : #2596be;
 }
 
+#portfolio-lm-pages {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* .portfolio-lm-user-page-container {
+    padding-left: '39px';
+    background-color: white;
+}
+
+.portfolio-lm-user-page-container:hover {
+    background-color: "blue";
+    cursor: pointer;
+} */
+
+.portfolio-lm-user-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 0 .5rem 0;
+    /* border-radius: 5px; */
+    background-color: white;
+}
+
+.portfolio-lm-user-page:hover {
+    background-color: rgb(229, 235, 236);
+    cursor: pointer;
+}
+
+.portfolio-lm-user-page img {
+    margin-right: .5rem;
+    border-radius: 4px;
+}
+
+.portfolio-lm-user-page img:hover {
+    background-color: #d3d3d3;
+    cursor: pointer;
+}
+
+
+
+#portfolio-lm-pages-addpage-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* gap: 1rem; */
+    /* width: 12rem; */
+    flex-wrap: wrap;
+}
+
+.portfolio-lm-pages-option {
+    padding: .5rem;
+}
+
+.portfolio-lm-pages-option:hover {
+    background-color: #d3d3d3;
+    cursor: pointer;
+}
+
+
+
 
 

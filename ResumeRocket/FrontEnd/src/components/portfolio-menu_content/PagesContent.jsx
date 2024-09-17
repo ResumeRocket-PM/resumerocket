@@ -157,7 +157,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
     const handlePageChange = (page) => () => {
         console.log('page:', page);
         setSelectedPage(page);
-        handleOptionsClose();
+        // handleOptionsClose();
     }
 
 
@@ -223,7 +223,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                                 <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
                             </AccordionSummary>
                             <MuiAccordionDetails>
-                                {Object.keys(page).map((item, idx) => (
+                                {Object.keys(portfolioPages[page]).map((item, idx) => (
                                     <div key={idx} className='portfolio-lm-pages-project'>
                                         <Typography>{JSON.stringify(item)}</Typography>
                                     </div>
@@ -233,48 +233,49 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                     ) : (
                         page !== 'projectsPreview' && (
                         <>
-                            <Card sx={{...cardStyles}}>
-                                <div className='portfolio-lm-user-page'>
-                                    <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
-                                    <img 
-                                        src={ellipsisIcon} 
-                                        alt="options" 
-                                        onClick={handlePageOptionsClick} 
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                    {/* <IconButton
-                                        sx={{ '&:hover': { backgroundColor: 'transparent' } }}
-                                        onClick={() => handlePageOptionsClick(page)}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton> */}
-                                </div>
-                            </Card>
+                            <div className='portfolio-lm-user-page' onClick={handlePageChange(page)}>
+                                <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
+                                <img 
+                                    src={ellipsisIcon} 
+                                    alt="options" 
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        handlePageOptionsClick(event);
+                                    }}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                {/* <IconButton
+                                    sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+                                    onClick={() => handlePageOptionsClick(page)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton> */}
+                            </div>
 
                             <Popover
-                            id={optionsId}
-                            open={optionsOpen}
-                            anchorEl={optionsAnchorEl}
-                            onClose={handleOptionsClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            sx={{ marginTop: '10px' }}
-                            disableEnforceFocus
-                            disableAutoFocus
+                                id={optionsId}
+                                open={optionsOpen}
+                                anchorEl={optionsAnchorEl}
+                                onClose={handleOptionsClose}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                sx={{ marginTop: '10px' }}
+                                disableEnforceFocus
+                                disableAutoFocus
                             >
                                 <List>
                                     <ListItem button>
                                         <ListItemText primary="Option 1" />
                                     </ListItem>
-                                    <ListItem button onClick={handlePageChange(page)}>
+                                    {/* <ListItem button onClick={handlePageChange(page)}>
                                         <ListItemText primary="Go to page" />
-                                    </ListItem>
+                                    </ListItem> */}
                                     {page !== "about" && (
                                         <ListItem button onClick={handlePageDelete(page)}>
                                             <ListItemText primary="Delete" />

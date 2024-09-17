@@ -6,46 +6,118 @@ import DialogButton from '../../DialogButton';
 import { TextField } from '@mui/material';
 import { projectDefault, projectsPreviewDefault } from '../../../example_responses/portfolioContent';
 import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
 
 
 
 const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent}) => {
 
-    const [projectsPreview, setProjectsPreview] = useState(portfolioContent.pages.projectsPreview);
+    const [projectToAdd, setProjectToAdd] = useState({ ...projectDefault });
+    const [addProjectOpen, setAddProjectOpen] = useState(false);    
+    const [validationErrors, setValidationErrors] = useState({});
+
+
+    const handleInputChange = (key) => (event) => {
+        setProjectToAdd({
+            ...projectToAdd,
+            [key]: event.target.value,
+        });
+        setValidationErrors({
+            ...validationErrors,
+            [key]: false,
+        });
+    };
+
+    const handleAddProject = () => {
+        const errors = {};
+        if (!projectToAdd.name) errors.name = 'Name is required';
+        if (!projectToAdd.description) errors.description = 'Description is required';
+
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            return;
+        }
+
+        const updatedProjects = [...portfolioContent.pages.projectsPreview.projects, projectToAdd];
+        setPortfolioContent({
+            ...portfolioContent,
+            pages: {
+                ...portfolioContent.pages,
+                projectsPreview: {
+                    ...portfolioContent.pages.projectsPreview,
+                    projects: updatedProjects,
+                },
+            },
+        });
+        setProjectToAdd({ ...projectDefault }); // Reset the form
+        setAddProjectOpen(false);
+    };
+
+    
+
 
     return (
         <div id='portfolio-projects-preview-root'>
-            <h1 id='portfolio-pp-header' style={projectsPreview.styles} >Projects</h1>
+            <h1 id='portfolio-pp-header' style={portfolioContent.pages.projectsPreview.styles} >Projects</h1>
             <div id='portfolio-pp-projects-container'>
-                {projectsPreview.projects.map((project, index) => (
+                {portfolioContent.pages.projectsPreview.projects.map((project, index) => (
                     <Card className='portfolio-pp-project' key={index}>
-                        <CardContent>
+                        <div>
                             <h1>{project.name}</h1>
                             <p>{project.description}</p>
                             <img src={project.image} alt="project" />
                             <a href={project.link}>Link</a>
-                        </CardContent>
+                        </div>
                     </Card>
                 ))}
                 {editMode && (
                     <DialogButton 
+                        id='portfolio-pp-add-project-button'
                         text='Add Project'
                         title='Project Details'
                         startIcon={<AddIcon />}
+                        isOpen={addProjectOpen}
+                        setIsOpen={setAddProjectOpen}
+                        buttonStyles={{width: '12rem',
+                            height: '12rem',
+                            // padding:'1rem',
+                            margin: '1rem',
+                        }}
                         content={
-                            Object.keys(projectDefault).map((key, index) => (
-                                <TextField 
-                                    key={index}
-                                    label={key}
-                                    variant='outlined'
-                                />
-                            ))
+                            <>
+                            <div className='pp-add-project-dialog-body'>
+                                <p>* indicates required field</p>
+                                <FormControl sx={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+                                    {Object.keys(projectDefault).map((key, index) => (
+                                            <TextField 
+                                                key={index}
+                                                label={key}
+                                                variant='outlined'
+                                                required={key === 'name' || key === 'description'}
+                                                value={projectToAdd[key] || ''}
+                                                onChange={handleInputChange(key)}
+                                                error={!!validationErrors[key]}
+                                                helperText={validationErrors[key]}
+                                            />
+                                        ))}
+                                </FormControl>
+
+                            </div>
+
+                                <Button 
+                                    variant='contained' 
+                                    color='primary' 
+                                    onClick={handleAddProject}
+                                    sx={{marginTop: '1rem'}}
+                                >
+                                    Add
+                                </Button>                            
+                            </>
                         }
                     />
-
                 )}
             </div>
-
         </div>
     );
 };

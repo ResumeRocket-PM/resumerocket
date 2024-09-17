@@ -25,11 +25,26 @@
 .portfolio-pp-project {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    width: 12rem;
+    height: 12rem;
+    margin: 1rem;
+    border: 1px solid black;
+}
+
+#portfolio-pp-add-project-button{
     width: 12rem;
     height: 12rem;
     padding: 1rem;
     margin: 1rem;
-    border: 1px solid black;
+}
+
+.pp-add-project-dialog-body {
+
+}
+
+.pp-add-project-dialog-body p:first-of-type {
+    /* width: 100%; */
+    margin-bottom: 1rem;
 }
