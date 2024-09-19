@@ -14,6 +14,11 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import cameraIcon from '../../../assets/portfolio/camera-solid.svg';
 import { VisuallyHiddenInput } from '../../../utils/muiHelpers';
+import DialogButton from '../../DialogButton';
+import FormControl from '@mui/material/FormControl';
+import Label from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
+
 
 const addButtonStyles = {   
     '&:hover': {
@@ -21,10 +26,75 @@ const addButtonStyles = {
     }
 }
 
+const ContactMethodIcons = {
+    email: emailLogo,
+    instagram: instagramLogo,
+    linkedin: linkedinLogo,
+    github: githubLogo,
+    twitter: twitterLogo,
+    facebook: facebookLogo,
+    discord: discordLogo,
+}
+
+const AddContactMethodFields = ({ contactMethod, newContactMethodValue, setNewContactMethodValue }) => {
+    let label = '';
+    let placeholder = '';
+
+    switch (contactMethod) {
+        case 'email':
+            label = 'Email';
+            placeholder = 'Enter your email';
+            break;
+        case 'instagram':
+            label = 'Instagram Username';
+            placeholder = 'Enter your Instagram username';
+            break;
+        case 'linkedin':
+            label = 'LinkedIn URL';
+            placeholder = 'Enter your LinkedIn profile URL';
+            break;
+        case 'github':
+            label = 'GitHub Username';
+            placeholder = 'Enter your GitHub username';
+            break;
+        case 'twitter':
+            label = 'Twitter Handle';
+            placeholder = 'Enter your Twitter handle';
+            break;
+        case 'facebook':
+            label = 'Facebook Profile URL';
+            placeholder = 'Enter your Facebook profile URL';
+            break;
+        case 'discord':
+            label = 'Discord Username';
+            placeholder = 'Enter your Discord username';
+            break;
+        default:
+            return null;
+    }
+
+    return (
+        <TextField 
+            id={`portfolio-add-${contactMethod}`}
+            label={label}
+            placeholder={placeholder}
+            variant='outlined'
+            sx={{ marginBottom: '1rem' }}
+            value={newContactMethodValue}
+            onChange={(e) => setNewContactMethodValue(e.target.value)}
+            fullWidth
+        />
+    );
+};
+        
+
 const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent}) => {
     const [about, setAbout] = useState(userAbout);
+    const [selectedContactMethod, setSelectedContactMethod] = useState(null);
+    const [newContactMethodValue, setNewContactMethodValue] = useState('');
+    const [addContactMethodOpen, setAddContactMethodOpen] = useState(false);
 
-    const handleChange = (e) => {
+    const handleTextChange = (e) => {
         const { name, value } = e.target;
         const updatedAbout = { ...about, [name]: value };
         setAbout(updatedAbout);
@@ -36,7 +106,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                 about: updatedAbout,
             },
         }));
-    };
+    };        
 
     const autoResize = (e) => {
         e.target.style.height = '1px';  // Temporarily set height to 1px to get the correct scrollHeight
@@ -53,6 +123,27 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
     const handleAddProfilePicture = () => {
         // Add code to handle adding a profile picture
     }
+
+    const handleContactMethodSelected = (contactMethod) => {
+        setSelectedContactMethod(contactMethod);
+    }
+
+    const handleAddContactMethod = (contactMethod) => {
+        const updatedContactInfo = { ...about.contactInfo, [contactMethod]: newContactMethodValue };
+        const updatedAbout = { ...about, contactInfo: updatedContactInfo };
+        setAbout(updatedAbout);
+
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                about: updatedAbout,
+            },
+        }));
+        setAddContactMethodOpen(false);
+    }
+
+
 
 
     return (
@@ -107,7 +198,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                     tabIndex={-1}
                                     variant='outlined' 
                                     startIcon={<AddIcon/>} 
-                                    sx={{...addButtonStyles, marginTop: '1rem'}}
+                                    sx={{...addButtonStyles, marginTop: '1rem', height: '15rem', width: '15rem', borderRadius: '50%'}}
                                 >
                                     Add Profile Picture
                                     <VisuallyHiddenInput 
@@ -128,7 +219,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             rows="2"
                             cols="20"
                             value={about.name || ""}
-                            onChange={handleChange}
+                            onChange={handleTextChange}
                             onInput={autoResize}    
                             placeholder="Name" /* Placeholder text shown when about.name is empty */
                         />
@@ -139,7 +230,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             rows="2"
                             cols="30"
                             value={about.title || ""}
-                            onChange={handleChange}
+                            onChange={handleTextChange}
                             onInput={autoResize}    
                             placeholder="Title (Engineer, Graphic Designer, etc)" /* Placeholder text shown when about.name is empty */
                         />
@@ -180,6 +271,56 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 <a href={about.contactInfo.discord}>
                                     <img src={discordLogo} alt="discord" style={about.styles.contactLogos} />
                                 </a>
+                            )}
+                            {editMode && (
+                                <DialogButton 
+                                    id='portfolio-add-contact-button'
+                                    text={Object.keys(about.contactInfo).length === 0 ? 'Add Contact Method' : ''}                                    title='Add Contact Method'
+                                    startIcon={<AddIcon />}
+                                    isOpen={addContactMethodOpen}
+                                    setIsOpen={setAddContactMethodOpen}
+                                    buttonStyles={{}}
+                                    content={
+                                        <div id="portfolio-add-contact-dialog">
+                                            {selectedContactMethod ? (
+                                                <>
+                                                    <AddContactMethodFields 
+                                                        contactMethod={selectedContactMethod} 
+                                                        newContactMethodValue={newContactMethodValue} 
+                                                        setNewContactMethodValue={setNewContactMethodValue} 
+                                                    />
+                                                    <Button
+                                                        variant="contained"
+                                                        onClick={() => setSelectedContactMethod(null)}
+                                                        sx={{marginRight: '1rem', backgroundColor: 'red', "&:hover": {backgroundColor: '#FF6666'}}}
+                                                    >     
+                                                    Back
+                                                    </Button>  
+                                                    <Button
+                                                        variant="contained"
+                                                        onClick={() => handleAddContactMethod(selectedContactMethod, document.getElementById(`portfolio-add-${selectedContactMethod}`).value)}
+                                                        sx={{backgroundColor: 'green', "&:hover": {backgroundColor: '#90EE90'}}}
+                                                    >
+                                                    Add
+                                                    </Button>                                            
+                                                </>
+                                            ) : (
+                                                <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
+                                                    {Object.entries(ContactMethodIcons).map(([key, value], index) => (
+                                                        <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
+                                                    ))}
+                                                </FormControl>
+                                            )}
+                                            {/* <div id="portfolio-add-project-dialog">
+                                                <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
+                                                    {Object.entries(ContactMethodIcons).map(([key, value], index) => (
+                                                        <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
+                                                    ))}
+                                                </FormControl>
+                                            </div> */}
+                                        </div>
+                                    }
+                                />                              
                             )}
                     </div>
                 </div>

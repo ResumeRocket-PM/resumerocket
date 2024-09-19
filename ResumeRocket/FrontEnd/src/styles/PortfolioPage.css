@@ -79,32 +79,30 @@
     /* background-color: #ebecf0; */
     background-color: white;
 
-    position: relative;
+    /* position: relative; */
 }
 
 #portfolio-actual {
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
-
     overflow-y: auto;
-
     width: 80%;
-    /* 100px is the width of the left button container */
-    /* also this doesn't quite work the way you want, vw changes */
     max-width: calc((100vw - 100px) * 0.70);
     height: 80%;
     max-height: calc((100vh - 100px) * 0.80);
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle box shadow */
+    margin: auto; /* Center within the container */
 }
 
 #portfolio-top-right-options {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    /* align-self: center;  */
+}
+
+#portfolio-top-right-options-inner {
     display: flex;
     flex-direction: row;
     justify-content: center;

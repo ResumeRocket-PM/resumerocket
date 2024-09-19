@@ -19,6 +19,7 @@ import {portfolioContentExample, portfolioContentDefault} from "../../example_re
 import Switch from '@mui/material/Switch';
 import { useNavigate } from 'react-router-dom';
 import { UserInfoContext } from "../../context/UserInfoProvider";
+import PortfolioStylesBar from "../portfolio-styles-bar/PortfolioStylesBar";    
 
 
 
@@ -282,47 +283,44 @@ export default function PortfolioPage() {
             </div>
 
             <div id="portfolio-backdrop">
-                {/* <FormControl
-                    orientation="horizontal"
-                    sx={{ width: 300, justifyContent: 'space-between' }}    
-                > */}
                 <div id='portfolio-top-right-options'>
-                    { !portfolioContent && (
-                        <Button 
-                            variant="contained" 
+                    <div id="portfolio-top-right-options-inner" className="hz-center">
+                        { !portfolioContent && (
+                            <Button 
+                                variant="contained" 
+                                size="small"
+                                onClick={handleCreatePortfolio}
+                            >
+                                Create Portfolio
+                            </Button>
+                        )}
+                        <Button
+                            variant="contained"
                             size="small"
-                            onClick={handleCreatePortfolio}
+                            onClick={handlePreviewClick}
                         >
-                            Create Portfolio
+                            See Preview
                         </Button>
-                    )}
-                    <Button
-                        variant="contained"
-                        size="small"
-                        onClick={handlePreviewClick}
-                    >
-                        See Preview
-                    </Button>
-                    <div className='hz-center'>
-                        <p>
-                            {editMode ? 'Edit Mode' : 'View Mode'}
-                        </p>
-                        <Switch 
-                            // id="portfolio-editMode-switch"
-                            // sx={{position: 'absolute', top: '1rem', right: '1rem'}}
-                            checked={editMode}
-                            onChange={(event) => setEditMode(event.target.checked)}
-                            startDecorator={editMode ? 'Edit Mode' : 'View Mode'}
-                            slotProps={{
-                                startDecorator: {
-                                sx: {
-                                    minWidth: 24,
-                                },
-                                },
-                            }}
-                        />
+                        <div className='hz-center'>
+                            <p>
+                                {editMode ? 'Edit Mode' : 'View Mode'}
+                            </p>
+                            <Switch 
+                                // id="portfolio-editMode-switch"
+                                // sx={{position: 'absolute', top: '1rem', right: '1rem'}}
+                                checked={editMode}
+                                onChange={(event) => setEditMode(event.target.checked)}
+                                startDecorator={editMode ? 'Edit Mode' : 'View Mode'}
+                                slotProps={{
+                                    startDecorator: {
+                                    sx: {
+                                        minWidth: 24,
+                                    },
+                                    },
+                                }}
+                            />
+                        </div>
                     </div>
-
                 </div>
 
                 {/* </FormControl> */}
@@ -336,6 +334,7 @@ export default function PortfolioPage() {
                     />
                 </div>
             </div>
+            <PortfolioStylesBar/>
         </div>
     )
 }

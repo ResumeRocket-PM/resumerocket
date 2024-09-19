@@ -90,7 +90,7 @@ const possiblePages = ['Projects', 'Education', 'Experience', 'Custom'];
 const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioPages, setPortfolioContent}) => {
     const [pagesAccordionExpanded, setPagesAccordionExpanded] = useState(false);
     const [addPageAnchorEl, setAddPageAnchorEl] = useState(null);
-    const [addPageOpen, setAddPageOpen] = useState(null);
+    const [addPageOpen, setAddPageOpen] = useState(false);
     const [optionsAnchorEl, setOptionsAnchorEl] = useState(null);
     const [whichPageOptionsOpen, setWhichPageOptionsOpen] = useState(null);
 
@@ -130,10 +130,11 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
 
     const handleAddPageButtonClick = (event) => {
         setAddPageAnchorEl(event.currentTarget);
+        setAddPageOpen(true);
     };
 
     const handleAddPageClose = () => {
-        setAddPageOpen(null);
+        setAddPageOpen(false);
     };
 
     const handlePageOptionsClick = (event, identifier) => {
@@ -185,7 +186,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
 
 
     // const addPageOpen = Boolean(addPageAnchorEl);
-    const addPageId = addPageOpen ? 'add-page-popover' : undefined;
+    // const addPageId = addPageOpen ? 'add-page-popover' : undefined;
 
     // const optionsOpen = Boolean(optionsAnchorEl);
     // const optionsId = optionsOpen ? 'options-popover' : undefined;
@@ -200,7 +201,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                 Add Page
             </Button>
             <Popover
-                id={addPageId}
+                id="add-page-popover"
                 open={addPageOpen}
                 anchorEl={addPageAnchorEl}
                 onClose={handleAddPageClose}
