@@ -7,11 +7,11 @@ const api = (token) => {
     };
   
     if (token) {
-        console.log('token', token)
+        // console.log('token', token)
         headers["Authorization"] = "Bearer " + token;
     }
 
-    console.log('token', token)
+    // console.log('token', token)
 
     const get = (url) => (
         fetch(baseUrl + url, { method: "GET", headers, })

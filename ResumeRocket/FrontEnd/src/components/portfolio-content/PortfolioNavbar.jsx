@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import '../../styles/PortfolioNavbarDefault.css';
 
 const PortfolioNavbarDefault = ({portfolioContent}) => {
-    console.log("portfolioContent:", portfolioContent); 
+    // console.log("portfolioContent:", portfolioContent); 
 
     const [navContent, setNavContent] = useState(portfolioContent.navbar);
     // const [pages, setPages] = useState(portfolioContent.pages);
@@ -14,7 +14,7 @@ const PortfolioNavbarDefault = ({portfolioContent}) => {
     //     setPages(portfolioContent.pages);
     // }, [portfolioContent]);
 
-    console.log("navContent:", navContent);
+    // console.log("navContent:", navContent);
     // console.log("pages:", pages);
 
     return (

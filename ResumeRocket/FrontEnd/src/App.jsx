@@ -15,6 +15,8 @@ import AccountPage from './components/pages/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
 import {portfolioContentExample} from './example_responses/portfolioContent';
 import { useContext } from 'react';
+import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
+
 
 
 
@@ -60,7 +62,7 @@ function App() {
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
               <Route path="/home" element={<HomePage />} />
               <Route path="/resume-list" element={<ResumeListPage />} />
-              <Route path="/portfolio" element={<PortfolioPage />} />            
+              <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
               <Route path="/networking" element={<NetworkingPage />} />
               <Route path="/create-resume/:id?" element={<CreateResume />} />
               <Route path="/account" element={<AccountPage />} />

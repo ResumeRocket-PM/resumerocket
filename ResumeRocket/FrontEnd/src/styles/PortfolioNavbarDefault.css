@@ -1,6 +1,13 @@
 #portfolio-nav-container {
-    position: absolute;
+    /* position: absolute;
     top: 10px;
     right: 10px;
-    padding: 10px 15px;
+    padding: 10px 15px; */
+    /* padding: .5rem .5rem 0 0; */
+    /* padding-right: 2rem; */
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
 }

@@ -50,10 +50,6 @@
 }
 
 
-
-
-
-
 #portfolio-popout_section {
     display: flex;
     flex-direction: row;
@@ -80,17 +76,6 @@
     background-color: white;
 
     /* position: relative; */
-}
-
-#portfolio-actual {
-    overflow-y: auto;
-    width: 80%;
-    max-width: calc((100vw - 100px) * 0.70);
-    height: 80%;
-    max-height: calc((100vh - 100px) * 0.80);
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle box shadow */
-    margin: auto; /* Center within the container */
 }
 
 #portfolio-top-right-options {

@@ -15,15 +15,15 @@ const portfolioContentExample = {
         "styles": {
             "container": {
                 "display": "flex",
-                "justify-content": "flex-end",
-                "align-items": "flex-start",
+                "justifyContent": "flex-end",
+                "alignItems": "flex-start",
 
                 "gap": ".5rem",
             },
             "links": {
-                "text-decoration": "none",
+                "textDecoration": "none",
                 "color": "white",
-                "background-color": "red"
+                "backgroundColor": "red"
             },
         }
     },
@@ -38,7 +38,7 @@ const portfolioContentExample = {
             "styles": {
                 "header": {
                     // "color": "white",
-                    // "background-color": "black"
+                    // "backgroundColor": "black"
                 },
             }
         },
@@ -52,14 +52,14 @@ const portfolioContentDefault = {
         "styles": {
             "container": {
                 "display": "flex",
-                "justify-content": "flex-end",
-                "align-items": "flex-start",
+                "justifyContent": "flex-end",
+                "alignItems": "flex-start",
                 "gap": ".5rem",
             },
             "links": {
-                "text-decoration": "none",
+                "textDecoration": "none",
                 "color": "white",
-                "background-color": "red"
+                "backgroundColor": "red"
             },
         }
     },
@@ -87,7 +87,7 @@ const projectsDefault = {
         "styles": {
             "header": {
                 // "color": "white",
-                // "background-color": "black"
+                // "backgroundColor": "black"
             },
         }
 };
@@ -96,7 +96,7 @@ const projectDefault = {
     "name": "",
     "description": "",
     "image": "",
-    "video": "",
+    "videos": [],
     "projectLink": "",
     "githubLink": "",
     "technologies": [],
@@ -107,7 +107,7 @@ const projectsPreviewDefault = {
     "styles": {
         "header": {
             // "color": "white",
-            // "background-color": "black"
+            // "backgroundColor": "black"
         },
     }
 };
@@ -124,7 +124,7 @@ const experienceDefault = {
     "styles": {
         "header": {
             // "color": "white",
-            // "background-color": "black"
+            // "backgroundColor": "black"
         },
     }
 };
@@ -143,7 +143,7 @@ const educationDefault = {
     "styles": {
         "header": {
             // "color": "white",
-            // "background-color": "black"
+            // "backgroundColor": "black"
         },
     }
 };

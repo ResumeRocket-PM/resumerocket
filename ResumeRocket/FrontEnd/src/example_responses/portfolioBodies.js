@@ -56,7 +56,10 @@ const projectExample =
     "name": "Project 1",
     "description": "This is a description of project 1.",
     "image": "https://example.com/project1.jpg",
-    "video": "https://example.com/project1.mp4",
+    "videos": [
+        "https://example.com/project1.mp4", 
+        "https://example.com/project1.mp4"
+    ],
     "projectLink": "https://example.com/project1",
     "githubLink": "",
     "technologies": [

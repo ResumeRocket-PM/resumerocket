@@ -9,7 +9,10 @@ import { ClipLoader } from 'react-spinners';
 import { useState, useEffect, useContext, useRef } from "react";
 import { useApi } from "../hooks";
 import { useLocation } from "react-router-dom";
-
+// import PortfolioItemOptionsPopup from "./portfolio-content/PortfolioItemOptionsPopup";
+import { PortfolioEditContext } from "../context/PortfolioEditProvider";
+import PortfolioNavbar from "./portfolio-content/PortfolioNavbar";
+import "../styles/PortfolioContent.css"
 
 function Layout({layout, portfolioContent}) {
     return (
@@ -39,7 +42,6 @@ export default function PortfolioContent({
     setPortfolioContent = null, 
     selectedPage, 
     setSelectedPage,
-    editMode, 
     previewMode = null
 }) {
     // console.log("portfolioContent:", portfolioContent);    
@@ -50,17 +52,30 @@ export default function PortfolioContent({
     //     setPortfolioContent(initialPortfolioContent);
     // }, [initialPortfolioContent]);
 
+    const { 
+        editMode,
+        hoveredItem,
+        setHoveredItem,
+        anchorEl, 
+        setAnchorEl,
+        popoverHovered,
+        handleMouseEnter,
+        handleMouseLeave 
+    } = useContext(PortfolioEditContext);
+
     const location = useLocation();
     const projectsRef = useRef(null);
+
+    const [previewPortfolioContent, setPreviewPortfolioContent] = useState(null);
+    const api = useApi();
+
+    const contentToRender = previewMode ? previewPortfolioContent : portfolioContent;
 
     useEffect(() => {
         if (location.state && location.state.scrollToProjects && projectsRef.current) {
             projectsRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [location]);
-
-    const [previewPortfolioContent, setPreviewPortfolioContent] = useState(null);
-    const api = useApi();
 
     useEffect(() => {
         if (previewMode && !previewPortfolioContent) {
@@ -84,13 +99,16 @@ export default function PortfolioContent({
         }
     }, [previewMode, previewPortfolioContent, api]);
 
-    const contentToRender = previewMode ? previewPortfolioContent : portfolioContent;
-
     useEffect(() => {
         console.log("selectedPage changed:", selectedPage);
     }, [selectedPage]);
 
     console.log("selectedPage:", selectedPage); 
+    // console.log("hoveredItem:", Boolean(hoveredItem));
+    // console.log("popoverHovered: ", popoverHovered);
+    console.log("portfolioContent:", portfolioContent);
+
+    // setHoveredItem('')
 
     return (
         <>
@@ -106,6 +124,7 @@ export default function PortfolioContent({
                         portfolioContent={portfolioContent} 
                     />
                 )} */}
+                <PortfolioNavbar portfolioContent={portfolioContent}/>
                 {selectedPage === "about" && (
                     <>
                         <AboutBody 
@@ -114,7 +133,7 @@ export default function PortfolioContent({
                             portfolioContent={contentToRender}
                             setPortfolioContent={setPortfolioContent}
                         />
-                        {contentToRender.pages.projectsPreview && (
+                        {contentToRender.pages.projects && (
                             <ProjectsPreviewBody 
                                 editMode={editMode}
                                 portfolioContent={contentToRender}
@@ -140,6 +159,7 @@ export default function PortfolioContent({
                         projectNum={selectedPage.slice('project'.length)}
                     />
                 )}
+                {/* <PortfolioItemOptionsPopup/>                 */}
             </>                
             )}        
         </>

@@ -19,6 +19,6 @@ module.exports = {
     ],
     'react/prop-types': 'warn',
     'no-unused-vars': 'warn',
-    "complexity": ["warn", { "max": 22 }]
+    "complexity": ["warn", { "max": 30 }]
   },
 }

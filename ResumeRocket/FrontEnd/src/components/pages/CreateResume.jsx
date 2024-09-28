@@ -100,21 +100,37 @@ export default function CreateResume() {
     console.log("pdf:", pdf);
     console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
 
-    // function arrayBufferToBase64(buffer) {
-    //     let binary = '';
-    //     let bytes = new Uint8Array(buffer);
-    //     let len = bytes.byteLength;
-    //     for (let i = 0; i < len; i++) {
-    //         binary += String.fromCharCode(bytes[i]);
-    //     }
-    //     return window.btoa(binary);
-    // }
+    const downloadPdf = () => {
+        // Check if pdf is a Blob
+        if (pdf instanceof Blob) {
+            // Create a URL from the Blob
+            const blobUrl = URL.createObjectURL(pdf);
+            
+            // Create a temporary anchor element to trigger the download
+            const link = document.createElement('a');
+            
+            // Set the href to the Blob URL
+            link.href = blobUrl;
     
-    // // Example usage
-    // const byteArray = pdf && pdf["resumeContent"]["FileBytes"]; // Ensure this is an ArrayBuffer or Uint8Array
-    // const base64String = arrayBufferToBase64(byteArray);
+            // Set the download attribute with the desired file name
+            // *** actually I think we're gonna want the name of the og file 
+            link.download = 'downloaded-file.pdf';
     
-    // console.log('Base64 String:', base64String);
+            // Append the anchor to the body
+            document.body.appendChild(link);
+    
+            // Programmatically click the anchor to start the download
+            link.click();
+    
+            // Remove the anchor from the DOM
+            document.body.removeChild(link);
+    
+            // Release the object URL after download
+            URL.revokeObjectURL(blobUrl);
+        } else {
+            console.error("PDF is not a Blob");
+        }
+    };
 
     return (
         <div id='CreateResume_content' 
@@ -130,6 +146,7 @@ export default function CreateResume() {
                     handleVersionHistoryOpen={handleVersionHistoryOpen}
                 />
                 {chatOpen && <Chat/>}
+                <button onClick={downloadPdf} disabled={!pdf}>Download Resume</button>
             </div>
 
             <div id='resume_section'>

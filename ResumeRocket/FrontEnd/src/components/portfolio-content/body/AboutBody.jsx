@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { aboutExample } from '../../../example_responses/portfolioBodies';
 import '../../../styles/AboutBodyDefault.css';
 import PortfolioNavbar from '../PortfolioNavbar';
@@ -18,6 +18,8 @@ import DialogButton from '../../DialogButton';
 import FormControl from '@mui/material/FormControl';
 import Label from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
+import { PortfolioEditContext } from '../../../context/PortfolioEditProvider';
+import PortfolioItemWithPopupWrapper from '../PortfolioItemWithPopupWrapper';
 
 
 const addButtonStyles = {   
@@ -93,6 +95,25 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
     const [selectedContactMethod, setSelectedContactMethod] = useState(null);
     const [newContactMethodValue, setNewContactMethodValue] = useState('');
     const [addContactMethodOpen, setAddContactMethodOpen] = useState(false);
+    const { 
+        handleMouseEnterPI, 
+        handleMouseLeavePI, 
+        autoResizeTextArea, 
+        updateTextAreaSizes, 
+        anchorEl 
+    } = useContext(PortfolioEditContext); 
+    
+    const [tempValue, setTempValue] = useState({ name: about.name, title: about.title });
+
+    const handleTempChange = (e) => {
+        const { name, value } = e.target;
+        setTempValue(prevTempValue => ({...prevTempValue, [name]: value}));
+    };
+
+    // const handleTextChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setAbout(prevAbout => ({...prevAbout, [name]: value}));
+    // };
 
     const handleTextChange = (e) => {
         const { name, value } = e.target;
@@ -106,18 +127,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                 about: updatedAbout,
             },
         }));
-    };        
-
-    const autoResize = (e) => {
-        e.target.style.height = '1px';  // Temporarily set height to 1px to get the correct scrollHeight
-        e.target.style.height = (e.target.scrollHeight) + 'px';  // Adjust height to fit the content
-    };
+    };      
 
     useEffect(() => { // update height of textareas by class when listed useEffect dependencies change
-        const textareas = document.querySelectorAll('.portfolio-textarea');
-        textareas.forEach((textarea) => {
-            autoResize({ target: textarea });
-        });
+        updateTextAreaSizes();
     }, [about.name, about.title]); // Add dependencies for all fields that might change
 
     const handleAddProfilePicture = () => {
@@ -143,28 +156,24 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         setAddContactMethodOpen(false);
     }
 
-
-
-
     return (
         <>
             <div id='portfolio-about-root'>
-                <PortfolioNavbar portfolioContent={portfolioContent}/>
                 {editMode && (
-                    <IconButton 
-                        aria-label='add background picture'
-                        component='label'
-                        role={undefined}
-                        tabIndex={-1}
-                        sx={{position: 'absolute', bottom: '10px', right: '10px', ...addButtonStyles}}
-                    >
-                        <img style={{height:'1.5rem', width: '1.5rem' }} src={cameraIcon} alt="add background picture" />
-                        <VisuallyHiddenInput 
-                            type='file' 
-                            accept='image/*' 
-                            onChange={(event) => console.log(event.target.files)}
-                        />
-                    </IconButton>
+                        <IconButton 
+                            aria-label='add background picture'
+                            component='label'
+                            role={undefined}
+                            tabIndex={-1}
+                            sx={{position: 'absolute', bottom: '10px', right: '10px', ...addButtonStyles}}
+                        >
+                            <img style={{height:'1.5rem', width: '1.5rem' }} src={cameraIcon} alt="add background picture" />
+                            <VisuallyHiddenInput 
+                                type='file' 
+                                accept='image/*' 
+                                onChange={(event) => console.log(event.target.files)}
+                            />
+                        </IconButton>                        
                 )}
 
                 <div 
@@ -213,65 +222,109 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                     <div id='portfolio-about-header-details' className='hz-center'>
                         <div className='v-center-center'>
                         <textarea
-                            name="name"
+                            name="name" // *this MUST match name of the field in portfolioContent!
                             className={`portfolio-textarea h1 ${!editMode ? 'disabled-textarea' : ''}`}
                             id="portfolio-about-name"
                             rows="2"
                             cols="20"
-                            value={about.name || ""}
-                            onChange={handleTextChange}
-                            onInput={autoResize}    
+                            value={tempValue.name || ""}
+                            onChange={handleTempChange}
+                            onBlur={handleTextChange}
+                            onInput={autoResizeTextArea}    
                             placeholder="Name" /* Placeholder text shown when about.name is empty */
                         />
                         <textarea
-                            name="title"
+                            name="title" // *this MUST match name of the field in portfolioContent!
                             className={`portfolio-textarea h2 ${!editMode ? 'disabled-textarea' : ''}`}
                             id="portfolio-about-title"
                             rows="2"
                             cols="30"
-                            value={about.title || ""}
-                            onChange={handleTextChange}
-                            onInput={autoResize}    
+                            value={tempValue.title || ""}
+                            onChange={handleTempChange}
+                            onBlur={handleTextChange}
+                            onInput={autoResizeTextArea}    
                             placeholder="Title (Engineer, Graphic Designer, etc)" /* Placeholder text shown when about.name is empty */
                         />
                         </div>
                     </div>
                     <div id="portfolio-about-header-contact">
-                            {about.contactInfo.email && (
-                                <a href={`mailto:${about.contactInfo.email}`}>
-                                    <img src={emailLogo} alt="email" style={about.styles.contactLogos} />
-                                </a>
-                            )}
-                            {about.contactInfo.instagram && (
-                                <a href={about.contactInfo.instagram}>
-                                    <img src={instagramLogo} alt="instagram" style={about.styles.contactLogos} />
-                                </a>
-                            )}
-                            {about.contactInfo.linkedin && (
-                                <a href={about.contactInfo.linkedin}>
-                                    <img src={linkedinLogo} alt="linkedin" style={about.styles.contactLogos} />
-                                </a>
-                            )}
-                            {about.contactInfo.github && (
-                                <a href={about.contactInfo.github}>
-                                    <img src={githubLogo} alt="github" style={about.styles.contactLogos} />
-                                </a>
-                            )}
-                            {about.contactInfo.twitter && (
-                                <a href={about.contactInfo.twitter}>
-                                    <img src={twitterLogo} alt="twitter" style={about.styles.contactLogos} />
-                                </a>
-                            )}
-                            {about.contactInfo.facebook && (
-                                <a href={about.contactInfo.facebook}>
-                                    <img src={facebookLogo} alt="facebook" style={about.styles.contactLogos} />
-                                </a>
-                            )}
-                            {about.contactInfo.discord && (
-                                <a href={about.contactInfo.discord}>
-                                    <img src={discordLogo} alt="discord" style={about.styles.contactLogos} />
-                                </a>
-                            )}
+                    {about.contactInfo.email && (
+                    <PortfolioItemWithPopupWrapper>
+                            <a href={`mailto:${about.contactInfo.email}`}>
+                                <img 
+                                    src={emailLogo}
+                                    alt="email" 
+                                    style={about.styles.contactLogos}
+                                />
+                            </a>
+                        </PortfolioItemWithPopupWrapper>
+                    )}
+                    {about.contactInfo.instagram && (
+                        <PortfolioItemWithPopupWrapper>
+                            <a href={about.contactInfo.instagram}>
+                                <img 
+                                    src={instagramLogo} 
+                                    alt="instagram" 
+                                    style={about.styles.contactLogos} 
+                                />
+                            </a>                            
+                        </PortfolioItemWithPopupWrapper>    
+                    )}
+                    {about.contactInfo.linkedin && (
+                        <PortfolioItemWithPopupWrapper>
+                            <a href={about.contactInfo.linkedin}>
+                                <img 
+                                    src={linkedinLogo} 
+                                    alt="linkedin" 
+                                    style={about.styles.contactLogos} 
+                                />
+                            </a>
+                        </PortfolioItemWithPopupWrapper>
+                    )}
+                    {about.contactInfo.github && (
+                        <PortfolioItemWithPopupWrapper>
+                            <a href={about.contactInfo.github}>
+                                <img 
+                                    src={githubLogo} 
+                                    alt="github" 
+                                    style={about.styles.contactLogos} 
+                                />
+                            </a>
+                        </PortfolioItemWithPopupWrapper>
+                    )}
+                    {about.contactInfo.twitter && (
+                        <PortfolioItemWithPopupWrapper>
+                            <a href={about.contactInfo.twitter}>
+                                <img 
+                                    src={twitterLogo} 
+                                    alt="twitter" 
+                                    style={about.styles.contactLogos} 
+                                />
+                            </a>
+                        </PortfolioItemWithPopupWrapper>
+                    )}
+                    {about.contactInfo.facebook && (
+                        <PortfolioItemWithPopupWrapper>
+                            <a href={about.contactInfo.facebook}>
+                                <img 
+                                    src={facebookLogo} 
+                                    alt="facebook" 
+                                    style={about.styles.contactLogos} 
+                                />
+                            </a>
+                        </PortfolioItemWithPopupWrapper>
+                    )}
+                    {about.contactInfo.discord && (
+                        <PortfolioItemWithPopupWrapper>
+                            <a href={about.contactInfo.discord}>
+                                <img 
+                                    src={discordLogo} 
+                                    alt="discord" 
+                                    style={about.styles.contactLogos} 
+                                />
+                            </a>
+                        </PortfolioItemWithPopupWrapper>
+                    )}
                             {editMode && (
                                 <DialogButton 
                                     id='portfolio-add-contact-button'

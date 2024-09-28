@@ -20,7 +20,7 @@ import Switch from '@mui/material/Switch';
 import { useNavigate } from 'react-router-dom';
 import { UserInfoContext } from "../../context/UserInfoProvider";
 import PortfolioStylesBar from "../portfolio-styles-bar/PortfolioStylesBar";    
-
+import { PortfolioEditContext } from "../../context/PortfolioEditProvider";
 
 
 
@@ -148,6 +148,9 @@ export default function PortfolioPage() {
         setUserPortfolioContent
     } = useContext(UserInfoContext);
 
+    const {editMode, setEditMode, selectedPage, setSelectedPage} = useContext(PortfolioEditContext);
+
+
     const api = useApi();
     const navigate = useNavigate();
 
@@ -156,11 +159,11 @@ export default function PortfolioPage() {
         setSelectedLayout(layout);
     };
 
-    const [selectedPage, setSelectedPage] = useState("about");
-    useEffect(() => {
-        console.log("selectedPage changed:", selectedPage);
-    }, [selectedPage]);
-    const [editMode, setEditMode] = useState(true);
+    // const [selectedPage, setSelectedPage] = useState("about");
+    // useEffect(() => {
+    //     // console.log("selectedPage changed:", selectedPage);
+    // }, [selectedPage]);
+    // const [editMode, setEditMode] = useState(true);
 
     const [portfolioContent, setPortfolioContent] = useState();
     const handleSavePortfolioContent = () => {
@@ -181,6 +184,7 @@ export default function PortfolioPage() {
             }
         })        
     }
+
     // I think there's a better way to do this, with the .then callback and whatnot
     // (Austin)-> see pony express chats page for example, or devexpo listing users 
     useEffect(() => {
@@ -267,7 +271,7 @@ export default function PortfolioPage() {
 
     // console.log(selectedLayout)
     // console.log(newPortfolioContent)
-    console.log('portfolioContent', portfolioContent)
+    // console.log('portfolioContent', portfolioContent)
     
     return (
         <div id='PortfolioPage-root'>
@@ -310,8 +314,8 @@ export default function PortfolioPage() {
                                 // sx={{position: 'absolute', top: '1rem', right: '1rem'}}
                                 checked={editMode}
                                 onChange={(event) => setEditMode(event.target.checked)}
-                                startDecorator={editMode ? 'Edit Mode' : 'View Mode'}
-                                slotProps={{
+                                startdecorator={editMode ? 'Edit Mode' : 'View Mode'}
+                                slotprops={{
                                     startDecorator: {
                                     sx: {
                                         minWidth: 24,
@@ -325,13 +329,14 @@ export default function PortfolioPage() {
 
                 {/* </FormControl> */}
                 <div id="portfolio-actual">
-                    <PortfolioContent 
-                        portfolioContent={portfolioContent}
-                        setPortfolioContent={setPortfolioContent}
-                        selectedPage={selectedPage}
-                        setSelectedPage={setSelectedPage}
-                        editMode={editMode}
-                    />
+                    {/* <PortfolioEditProvider> */}
+                        <PortfolioContent 
+                            portfolioContent={portfolioContent}
+                            setPortfolioContent={setPortfolioContent}
+                            selectedPage={selectedPage}
+                            setSelectedPage={setSelectedPage}
+                        />
+                    {/* </PortfolioEditProvider> */}
                 </div>
             </div>
             <PortfolioStylesBar/>

@@ -54,7 +54,7 @@ const ExperienceBody = ({ editMode, portfolioContent, setPortfolioContent }) => 
     return (
         <>
             <div id='portfolio-experience-root'>
-                <PortfolioNavbar portfolioContent={portfolioContent}/>
+                {/* <PortfolioNavbar portfolioContent={portfolioContent}/> */}
                 <h1 id='portfolio-exp-header' style={portfolioContent.pages.experience.styles} >Experience</h1>
                 <div id='portfolio-exp-list' className='v-center-start'>
                     {portfolioContent.pages.experience.experienceList.map((job, index) => (
