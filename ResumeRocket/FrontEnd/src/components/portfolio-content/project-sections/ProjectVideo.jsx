@@ -1,14 +1,21 @@
 import React from 'react';
-import ProjectSectionWrapper from './ProjectSectionWrapper';
+import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
-const ProjectVideo = ({ videoUrl, title }) => {
+const ProjectVideo = ({ content, title }) => {
     return (
         <ProjectSectionWrapper id='project-video-root'>
             <div style={{width: "5rem", height: "5rem", backgroundColor: "lightblue"}} />
-            <video width="600" controls>
-                <source src={videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
+            <iframe 
+                width="560" 
+                height="315" 
+                src={content}
+                // src='https://www.youtube.com/embed/moN5-_tbkcY?si=3MAWo26eOcP6tyte'
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+            </iframe>
         </ProjectSectionWrapper>
     );
 };

@@ -55,25 +55,70 @@ const projectExample =
 {
     "name": "Project 1",
     "description": "This is a description of project 1.",
-    "image": "https://example.com/project1.jpg",
-    "videos": [
-        "https://example.com/project1.mp4", 
-        "https://example.com/project1.mp4"
-    ],
     "projectLink": "https://example.com/project1",
     "githubLink": "",
-    "technologies": [
-        "React",
-        "Node.js",
-        "Express",
-        "MongoDB"
+    "styles": {},
+    "sections": [
+        {
+            "type": "about",
+            "content": {
+                "overview": "This is an overview section.",
+                "goal": "This is a goal section.",
+                "role": "This is a role section.",
+                "tools": "This is a tools section.",
+                "team": "This is a team section.",
+                "timeline": "This is a timeline section.",
+                "features": [
+                    "Feature 1",
+                    "Feature 2",
+                    "Feature 3"
+                ],
+            }
+        },
+        {
+            "type": "text area",
+            "content": "This is a text area section."
+        },
+        {
+            "type": "image and text",
+            "content": {
+                "image": "https://example.com/image1.jpg",
+                "text": "This is an image and text section."
+            }
+        },
+        {
+            "type": "video",
+            "content": "https://example.com/video1.mp4"
+        },
+        {
+            "type": "image",
+            "content": "https://example.com/image2.jpg"
+        },
+        {
+            "type": "gallery",
+            "content": [
+                "https://example.com/image3.jpg",
+                "https://example.com/image4.jpg",
+                "https://example.com/image5.jpg"
+            ]
+        },
+        {
+            "type": "figma",
+            "content": "https://example.com/figma1"
+        },
+        {
+            "type": "jupyter",
+            "content": "https://example.com/jupyter1"
+        },
+        {
+            "type": "google slides",
+            "content": "https://example.com/googleslides1"
+        },
+        {
+            "type": "website preview",
+            "content": "https://example.com/website1"
+        }
     ],
-    "features": [
-        "Feature 1",
-        "Feature 2",
-        "Feature 3"
-    ],
-    "jupyterNoteBook": "", // probs the URL to the hosted notebook... 
 }
 
 const experienceExample = 

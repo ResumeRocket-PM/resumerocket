@@ -9,7 +9,7 @@ import { PortfolioEditContext } from '../../context/PortfolioEditProvider';
 import { useEffect, useState, useContext } from 'react';
 
 
-const PortfolioItemWithPopupWrapper = ({children, type="delete", popupLocation="top"}) => {
+const PortfolioItemWithPopupWrapper = ({children, onButtonClick, type="delete", popupLocation="top"}) => {
 
     // const { 
     //     hoveredItem,
@@ -114,7 +114,7 @@ const PortfolioItemWithPopupWrapper = ({children, type="delete", popupLocation="
                 <div style={{ pointerEvents: 'auto' }}>
                     <IconButton
                         variant="contained"
-                        onClick={() => onDelete()}
+                        onClick={() => onButtonClick()}
                         sx={{ backgroundColor: '#f7f7f7'}}
                     >
                         {type === "add" ? <AddIcon /> : <DeleteIcon />}

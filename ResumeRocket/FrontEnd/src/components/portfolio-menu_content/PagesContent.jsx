@@ -175,7 +175,8 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                 }
             });
         }
-        handleOptionsClose(); // Close the popover after deleting the page            
+        handleOptionsClose(); // Close the popover after deleting the page
+        setSelectedPage('about');
     }
 
     const handlePageChange = (page) => {

@@ -95,12 +95,8 @@ const projectsDefault = {
 const projectDefault = {
     "name": "",
     "description": "",
-    "image": "",
-    "videos": [],
-    "projectLink": "",
-    "githubLink": "",
-    "technologies": [],
-    "features": []
+    "styles": {},
+    "sections": [],
 };
 
 const projectsPreviewDefault = {

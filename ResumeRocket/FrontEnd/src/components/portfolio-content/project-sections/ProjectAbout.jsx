@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { PortfolioEditContext } from '../../../context/PortfolioEditProvider';
-import ProjectSectionWrapper from './ProjectSectionWrapper';
+import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
 const ProjectAbout = ({project, setProject}) => {
     const { editMode, autoResizeTextArea, updateTextAreaSizes } = useContext(PortfolioEditContext);
@@ -22,7 +22,7 @@ const ProjectAbout = ({project, setProject}) => {
 
 
     return (
-        <ProjectSectionWrapper id='project-about-root'>
+        <ProjectSectionWrapper id='project-about-root' project={project} setProject={setProject}>
             <div className='v-center-center'>
                 <textarea
                     name="name" // *this MUST match name of the field in portfolioContent!

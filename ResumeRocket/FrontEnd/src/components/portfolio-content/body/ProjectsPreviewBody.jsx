@@ -79,8 +79,7 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, s
                         <div>
                             <h1>{project.name}</h1>
                             <p>{project.description}</p>
-                            <img src={project.image} alt="project" />
-                            <a href={project.projectLink}>Link</a>
+                            {/* <a href={project.projectLink}>Link</a> */}
                         </div>
                     </div>
                 ))}
@@ -102,7 +101,7 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, s
                             <div className='pp-add-project-dialog-body'>
                                 <p>* indicates required field</p>
                                 <FormControl sx={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-                                    {Object.keys(projectDefault).map((key, index) => (
+                                    {Object.keys(projectDefault).filter(key => key !== 'styles' && key !== 'sections').map((key, index) => (
                                             <TextField 
                                                 key={index}
                                                 label={key}

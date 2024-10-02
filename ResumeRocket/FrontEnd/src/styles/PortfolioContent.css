@@ -67,3 +67,38 @@
     /* color: #a0a0a0;  */
     /* border: 1px solid #d0d0d0;  */
 }
+
+.dialog-add-project-section {
+    text-align: center;
+}
+
+.dialog-add-project-section:hover {
+    background-color: lightgrey;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dialog-add-project-section img {
+    width: 3rem;
+    height: 3rem;
+}
+
+#dialog-add-project-section-details-back-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 5px 0 0 5px;
+    padding: 5px;
+}
+
+#dialog-add-project-section-details-back-button:hover {
+    background-color: lightgrey;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#dialog-add-project-sections-container {
+    max-height: fit-content;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
