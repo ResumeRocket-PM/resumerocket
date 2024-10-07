@@ -9,8 +9,6 @@ import AccountSectionCard from './AccountSectionCard';
 import SectionEditButton from './SectionEditButton'; 
 import ExperienceEntry from './ExperienceEntry.jsx'; 
 import EducationEntry from './EducationEntry.jsx'; 
-import AddEducationDialog from './Dialog/AddEducationDialog.jsx'; 
-import AddExperienceDialog from './Dialog/AddExperienceDialog.jsx'; 
 import EditEducationDialog from './Dialog/EditEducationDialog.jsx'; 
 import EditExperienceDialog from './Dialog/EditExperienceDialog.jsx'; 
 import EditFieldModal from './Dialog/EditFieldModal.jsx'; 
@@ -18,32 +16,18 @@ import EditSkillsDialog from './Dialog/EditSkillsDialog.jsx';
 
 
 const AccountPage = () => {
-    // you should fetch the data when the page loads,
-    // set variables in a context just for this page, and update when needed
 
-    // when we initially call to get user details, we'll set all these state variables
-    const [isLoading, setIsLoading] = useState(false);
-    const [userDetails, setUserDetails] = useState(exampleUserDetails);
-    const [dialogOpen, setDialogOpen] = useState('none');
-    
     const api = useApi()
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [userDetails, setUserDetails] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState('none');
+    
     const updateAccount = () => {
-        // setIsLoading(true)
-
         api.get('/account/details').then(response => {
             if (response.ok) {
               response.json().then(data => {
-    
-                const clone = structuredClone(userDetails);
-
-                clone['firstName'] = data.result.firstName
-                clone['lastName'] = data.result.lastName
-                clone['title'] = data.result.title
-                clone['location'] = data.result.location
-
-                console.log(clone)
-                setUserDetails(clone)
+                setUserDetails(data.result)
                 setIsLoading(false)
               });
             }
@@ -60,10 +44,12 @@ const AccountPage = () => {
             newValue = null
         }
 
+        console.log('fieldName', fieldName, 'newValue', newValue)
+
         api.postForm('/account/details', 
         {
             parameters: {
-                [fieldName]: newValue,
+                [fieldName]: JSON.stringify(newValue),
             }
         }
         ).then(response => {
@@ -71,7 +57,6 @@ const AccountPage = () => {
                 if (response.ok) {
                     response.json().then(data => {
                         updateAccount()
-                        console.log(data)
                     });
                 }
                 else {
@@ -81,11 +66,9 @@ const AccountPage = () => {
     };
 
     useEffect(() => {
-        updateAccount()
+        updateAccount();
     }, []);
 
-    // you'll need to conditionally render whether or not editing is enabled based on 
-    // if the currently logged in user is the same as the user being viewed
     return (
         // just don't even display this page until the data is loaded
         // or display a loading spinner
@@ -128,20 +111,24 @@ const AccountPage = () => {
                         <AccountSectionCard 
                             title='Experience' 
                             buttonType={'add'}
-                            onButtonClick={() => setDialogOpen('addExperience')}
+                            onButtonClick={() => setDialogOpen('Experience')}
                         >
                             {userDetails.experience.map((entry, index) => (
-                                <ExperienceEntry key={index} {...entry} onEditClick={() => setDialogOpen(`editExperience-${index}`)}/>
+                                <ExperienceEntry key={index} {...entry} onEditClick={() => {
+                                    setDialogOpen(`Experience-${index}`);}}/>
                             ))}
                         </AccountSectionCard>
+                 
                         <AccountSectionCard 
                             title='Education' 
                             buttonType={'add'}
-                            onButtonClick={() => setDialogOpen('addEducation')}
+                            onButtonClick={() => setDialogOpen('Education')}
                         >                            {userDetails.education.map((entry, index) => (
-                                <EducationEntry key={index} {...entry} onEditClick={() => setDialogOpen(`editEducation-${index}`)}/>
+                                <EducationEntry key={index} {...entry} onEditClick={() => {
+                                    setDialogOpen(`Education-${index}`)}}/>
                             ))}
                         </AccountSectionCard>
+
                         <AccountSectionCard 
                             title='Skills' 
                             buttonType={'edit'}    
@@ -155,34 +142,25 @@ const AccountPage = () => {
                         </AccountSectionCard>
                     </div>
 
-                    <AddExperienceDialog 
-                        dialogOpen={dialogOpen} 
-                        setDialogOpen={setDialogOpen}
-                        userDetails={userDetails}
-                        setUserDetails={setUserDetails}
-                        onClose={updateAccount}
-                    />
-                    <AddEducationDialog 
-                        dialogOpen={dialogOpen} 
-                        setDialogOpen={setDialogOpen}
-                        onClose={updateAccount}
-                    />
-                    {/* <AddSkillDialog 
-                        dialogOpen={dialogOpen} 
-                        setDialogOpen={setDialogOpen}
-                    /> */}
-                    <EditExperienceDialog 
-                        dialogOpen={dialogOpen} 
-                        setDialogOpen={setDialogOpen}
-                        experience={userDetails.experience}
-                        onClose={updateAccount}
-                    />
-                    <EditEducationDialog 
-                        dialogOpen={dialogOpen} 
-                        setDialogOpen={setDialogOpen}
-                        education={userDetails.education}
-                        onClose={updateAccount}
-                    />
+                    { dialogOpen.startsWith('Experience') && (
+                        <EditExperienceDialog 
+                            dialogOpen={dialogOpen} 
+                            setDialogOpen={setDialogOpen}
+                            experience={userDetails.experience}
+                            onClose={updateField}
+                        />
+                    )}
+                    
+                    { dialogOpen.startsWith('Education') && (
+                        <EditEducationDialog 
+                            dialogOpen={dialogOpen} 
+                            setDialogOpen={setDialogOpen}
+                            education={userDetails.education}
+                            onClose={updateField}
+                        /> 
+                    )}
+
+                    
                     <EditSkillsDialog 
                         dialogOpen={dialogOpen} 
                         setDialogOpen={setDialogOpen}

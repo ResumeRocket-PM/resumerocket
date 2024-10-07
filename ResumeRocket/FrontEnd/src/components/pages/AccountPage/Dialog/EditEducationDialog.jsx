@@ -1,8 +1,7 @@
-import {useState, useEffect} from 'react';
-import { Dialog, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
+import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogTitle, TextField, Button, DialogActions } from "@mui/material";
 
 const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) => {
-    // Parse dialogOpen to get the index of the education entry to edit
     const openType = dialogOpen.split('-')[0];
     const index = !isNaN(parseInt(dialogOpen.split('-')[1])) ? parseInt(dialogOpen.split('-')[1]) : null;
 
@@ -11,9 +10,11 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
         degree: '',
         major: '',
         minor: '',
-        graduationDate: '',
-        courses: ''
+        graduationDate: ''
     });
+
+    const [errorMessages, setErrorMessages] = useState({});
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,33 +22,77 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
             ...formData,
             [name]: value
         });
+        // Validate form on every change
+        validateForm({ ...formData, [name]: value });
+    };
+
+    const validateForm = (data) => {
+        const errors = {};
+        if (!data.schoolName) errors.schoolName = "School name is required.";
+        if (!data.degree) errors.degree = "Degree is required.";
+        if (!data.major) errors.major = "Major is required.";
+        if (!data.graduationDate) errors.graduationDate = "Graduation date is required.";
+        
+        setErrorMessages(errors);
+        setIsFormValid(Object.keys(errors).length === 0);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here
+        
+        if (!isFormValid) {
+            return;
+        }
+
+        const updatedEducation = [...education]; 
+
+        if (index !== null && index >= 0 && index < updatedEducation.length) {
+            updatedEducation[index] = {
+                ...updatedEducation[index],
+                ...formData 
+            };
+        } else {
+            updatedEducation.push({
+                educationId: updatedEducation.length, 
+                ...formData
+            });
+        }
+
+        onClose('Education', updatedEducation);
+        setDialogOpen('none');
+    };
+
+    const handleDelete = () => {
+        if (index !== null && education) {
+            const updatedEducation = [...education];
+
+            if (index !== null && index >= 0 && index < updatedEducation.length) {
+                updatedEducation.splice(index, 1);
+                onClose('Education', updatedEducation);
+            }
+        }
+        setDialogOpen('none');
     };
 
     const isValidDate = (date) => {
         return date instanceof Date && !isNaN(date.getTime());
     };
-    
+
     const parseDate = (dateString) => {
         const date = new Date(dateString);
         return isValidDate(date) ? date : null;
     };
-    
+
     useEffect(() => {
-        if (index !== null) {
+        if (index !== null && education[index]) {
             const selectedEducation = education[index];
 
             setFormData({
                 schoolName: selectedEducation.schoolName,
                 degree: selectedEducation.degree,
                 major: selectedEducation.major,
-                minor: selectedEducation.minor,
-                graduationDate: selectedEducation.graduationDate ? parseDate(selectedEducation.graduationDate).toISOString().split('T')[0] : '',
-                courses: selectedEducation.courses.join(', ')
+                minor: '',
+                graduationDate: selectedEducation.graduationDate ? parseDate(selectedEducation.graduationDate).toISOString().split('T')[0] : ''
             });
         } else {
             setFormData({
@@ -55,18 +100,17 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                 degree: '',
                 major: '',
                 minor: '',
-                graduationDate: '',
-                courses: ''
+                graduationDate: ''
             });
         }
     }, [index, education]);
 
     return (
         <Dialog
-            open={openType === 'editEducation'}
+            open={openType === 'Education'}
             onClose={() => setDialogOpen('none')}
         >
-            <DialogTitle>Edit Education</DialogTitle>
+            <DialogTitle>{index === null ? 'Add Education' : 'Edit Education'}</DialogTitle>
             <DialogContent>
                 <form onSubmit={handleSubmit}>
                     <TextField
@@ -76,6 +120,8 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                         onChange={handleChange}
                         fullWidth
                         margin='normal'
+                        error={Boolean(errorMessages.schoolName)}
+                        helperText={errorMessages.schoolName}
                     />
                     <TextField
                         label='Degree'
@@ -84,6 +130,8 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                         onChange={handleChange}
                         fullWidth
                         margin='normal'
+                        error={Boolean(errorMessages.degree)}
+                        helperText={errorMessages.degree}
                     />
                     <TextField
                         label='Major'
@@ -92,6 +140,8 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                         onChange={handleChange}
                         fullWidth
                         margin='normal'
+                        error={Boolean(errorMessages.major)}
+                        helperText={errorMessages.major}
                     />
                     <TextField
                         label='Minor'
@@ -112,20 +162,27 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        error={Boolean(errorMessages.graduationDate)}
+                        helperText={errorMessages.graduationDate}
                     />
-                    <TextField
-                        label='Courses'
-                        name='courses'
-                        value={formData.courses}
-                        onChange={handleChange}
-                        fullWidth
-                        margin='normal'
-                    />
-                    <Button type='submit' variant='contained' color='primary'>
-                        Edit
-                    </Button>
                 </form>
             </DialogContent>
+            <DialogActions>
+                {index !== null && (
+                    <Button variant='contained' color='secondary' onClick={handleDelete} style={{ marginLeft: 'auto' }}>
+                        Delete
+                    </Button>
+                )}
+                <Button 
+                    type='submit' 
+                    variant='contained' 
+                    color='primary' 
+                    onClick={handleSubmit} 
+                    disabled={!isFormValid}
+                >
+                    Save
+                </Button>
+            </DialogActions>
         </Dialog>
     );
 };
