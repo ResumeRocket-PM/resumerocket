@@ -4,7 +4,7 @@ import { useApi } from "../../../hooks.js";
 
 import userSolidOrange from "../../../assets/user-solid-orange.svg"
 import "../../../styles/AccountPage.css";
-import { exampleUserDetails } from "../../../example_responses/networking.js";
+import accountBanner from '../../../assets/account-banner.png';
 import AccountSectionCard from './AccountSectionCard'; 
 import SectionEditButton from './SectionEditButton'; 
 import ExperienceEntry from './ExperienceEntry.jsx'; 
@@ -49,7 +49,7 @@ const AccountPage = () => {
         api.postForm('/account/details', 
         {
             parameters: {
-                [fieldName]: JSON.stringify(newValue),
+                [fieldName]: (typeof newValue === 'object' && newValue !== null) ? JSON.stringify(newValue) : newValue,
             }
         }
         ).then(response => {
@@ -81,33 +81,78 @@ const AccountPage = () => {
             { !isLoading &&
                 <div id='account-page-root'>
                     <div id='account-page-content'>
-                        <div id='account-page-main-header-section'>
-                            <img 
-                                id='account-page-profile-picture'
-                                src={userDetails.profilePhotoLink != null ? userDetails.profilePhotoLink : userSolidOrange}
-                                alt="profile picture" 
-                            />
-                            <SectionEditButton onClick={() => setDialogOpen('editProfilePhotoLink')}/>
 
 
-                            <div id='account-page-user-header-details' className='v-center'>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <h1>{userDetails.firstName} {userDetails.lastName}</h1>
-                                </div>
+<div style={{ position: 'relative', margin: 0, padding: 0 }}>
+    {/* Background Image */}
+    <div 
+        style={{
+            position: 'relative',
+            height: '200px', // Adjust height as needed
+            overflow: 'hidden',
+            margin: 0,
+            padding: 0
+        }}
+    >
+        <img 
+            id="background-image" 
+            src={accountBanner} // Replace with your image path
+            alt="Background" 
+            style={{
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                margin: 0, // Ensure no margin
+                padding: 0, // Ensure no padding
+                borderTopLeftRadius: '5px', // Round top left corner
+                borderTopRightRadius: '5px', // Round top right corner
+            }}
+        />
+    </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <h2>{userDetails.title}</h2>
-                                    <SectionEditButton onClick={() => setDialogOpen('editTitle')}/>
-                                </div>
+    {/* Profile Picture */}
+    <img 
+        id='account-page-profile-picture'
+        src={userDetails.profilePhotoLink != null ? userDetails.profilePhotoLink : userSolidOrange}
+        alt="profile picture" 
+        style={{
+            position: 'absolute',
+            top: '70px', // Adjust to overlap with the background image
+            left: '20px', // Adjust as needed for positioning
+            width: '150px', // Adjust size as needed
+            height: '150px', // Adjust size as needed
+            borderRadius: '50%', // Make it circular
+            border: '3px solid white', // Optional: border for visibility
+            zIndex: 1 // Ensure it's above the background
+        }} 
+        onClick={() => setDialogOpen('editProfilePhotoLink')}
+    />
 
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <h3>{userDetails.location}</h3>
-                                    <SectionEditButton onClick={() => setDialogOpen('editLocation')}/>
-                                </div>
+    <div id="account-page-main-header-section" >
+        <div id='account-page-user-header-details' className='v-center' style={{ position: 'relative', zIndex: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <h1>{userDetails.firstName} {userDetails.lastName}</h1>
+            </div>
 
-                            </div>
-                        </div>
-                        {}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <h2>{userDetails.title}</h2>
+                <SectionEditButton onClick={() => setDialogOpen('editTitle')} />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <h3>{userDetails.location}</h3>
+                <SectionEditButton onClick={() => setDialogOpen('editLocation')} />
+            </div>
+        </div>
+    </div>
+    
+
+
+</div>
+
+
+
+
                         <AccountSectionCard 
                             title='Experience' 
                             buttonType={'add'}
