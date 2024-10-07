@@ -1,50 +1,63 @@
-import {useState, useEffect} from 'react';
-import Chip from '@mui/material/Chip';
-import { Dialog, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
+import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogTitle, TextField, Button, Chip } from '@mui/material';
 
-const EditSkillsDialog = ({ dialogOpen, setDialogOpen, skills }) => {
+const EditSkillsDialog = ({ dialogOpen, setDialogOpen, skills, onClose }) => {
     const [newSkill, setNewSkill] = useState('');
     const [currentSkills, setCurrentSkills] = useState(skills);
-    
+
+    // Delete a skill
     const handleDeleteSkill = (index) => {
-        const updatedSkills = currentSkills.filter((skill, i) => i !== index);
-        setCurrentSkills(updatedSkills);
+        setCurrentSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
     };
 
-    const onClose = () => { 
-        setDialogOpen('none');
-        setTimeout(() => {
-            setCurrentSkills(skills);
-        }, 500);
-    }
+    // Add a new skill
+    const handleAddSkill = () => {
+        if (newSkill.trim()) {
+            setCurrentSkills((prevSkills) => [
+                ...prevSkills,
+                { description: newSkill.trim() } // Add the skill in the correct format
+            ]);
+            setNewSkill(''); // Reset the input field
+        }
+    };
+
+    // Handle Enter key for adding a skill
+    const handleKeyUp = (e) => {
+        if (e.key === 'Enter') {
+            handleAddSkill();
+        }
+    };
+
+    // Update current skills when the prop skills change
+    useEffect(() => {
+        setCurrentSkills(skills);
+    }, [skills]);
+
+    // Handle closing the dialog
+    const handleClose = () => {
+        console.log('currentSkills', currentSkills);
+        onClose('Skill', currentSkills); // Send current skills back unchanged
+        setDialogOpen('none'); // Close the dialog
+    };
 
     return (
-        <Dialog
-            open={dialogOpen === 'editSkills'}
-            onClose={() => onClose()}
-        >
+        <Dialog open={dialogOpen === 'Skills'} onClose={handleClose}>
             <DialogTitle>Edit Skills</DialogTitle>
             <DialogContent sx={{ width: '30rem' }}>
                 <TextField
-                    label='Add Skill'
-                    name='skillName'
+                    label="Add Skill"
+                    name="skillName"
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
-                    onKeyUp={(e) => {
-                        if (e.key === 'Enter') {
-                            setCurrentSkills([...currentSkills, newSkill]);
-                            setNewSkill('');
-                        }
-                    }}
+                    onKeyUp={handleKeyUp}
                     fullWidth
-                    margin='normal'
-                >
-                </TextField>
+                    margin="normal"
+                />
                 <div>
                     {currentSkills.map((skill, index) => (
                         <Chip
                             key={index}
-                            label={skill}
+                            label={skill.description} // Access description correctly
                             onDelete={() => handleDeleteSkill(index)}
                             color="primary"
                             variant="outlined"
@@ -52,16 +65,11 @@ const EditSkillsDialog = ({ dialogOpen, setDialogOpen, skills }) => {
                         />
                     ))}
                 </div>
-                <div id='edit-skills-save-button' className='hz-right'>
+                <div id="edit-skills-save-button" className="hz-right">
                     <Button
-                        onClick={() => {
-                            // Process form data here
-                            console.log(currentSkills);
-                            // Close the dialog
-                            setDialogOpen('none');
-                        }}
-                        variant='contained'
-                        color='primary'
+                        onClick={handleClose}
+                        variant="contained"
+                        color="primary"
                     >
                         Save
                     </Button>

@@ -113,7 +113,9 @@ const AccountPage = () => {
                             buttonType={'add'}
                             onButtonClick={() => setDialogOpen('Experience')}
                         >
-                            {userDetails.experience.map((entry, index) => (
+                            {userDetails.experience
+                            .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+                            .map((entry, index) => (
                                 <ExperienceEntry key={index} {...entry} onEditClick={() => {
                                     setDialogOpen(`Experience-${index}`);}}/>
                             ))}
@@ -123,20 +125,22 @@ const AccountPage = () => {
                             title='Education' 
                             buttonType={'add'}
                             onButtonClick={() => setDialogOpen('Education')}
-                        >                            {userDetails.education.map((entry, index) => (
-                                <EducationEntry key={index} {...entry} onEditClick={() => {
-                                    setDialogOpen(`Education-${index}`)}}/>
-                            ))}
+                        >   {userDetails.education
+                                .sort((a, b) => new Date(b.graduationDate) - new Date(a.graduationDate))
+                                .map((entry, index) => (
+                                    <EducationEntry key={index} {...entry} onEditClick={() => {
+                                        setDialogOpen(`Education-${index}`)}}/>
+                                ))}
                         </AccountSectionCard>
 
                         <AccountSectionCard 
                             title='Skills' 
                             buttonType={'edit'}    
-                            onButtonClick={() => setDialogOpen('editSkills')}
+                            onButtonClick={() => setDialogOpen('Skills')}
                         >
                             <ul>
                                 {userDetails.skills.map((skill, index) => (
-                                    <li key={index}>{skill}</li>
+                                    <li key={index}>{skill.description}</li>
                                 ))}
                             </ul>
                         </AccountSectionCard>
@@ -160,13 +164,15 @@ const AccountPage = () => {
                         /> 
                     )}
 
-                    
-                    <EditSkillsDialog 
-                        dialogOpen={dialogOpen} 
-                        setDialogOpen={setDialogOpen}
-                        skills={userDetails.skills}
-                        onClose={updateAccount}
-                    />
+                    { dialogOpen.startsWith('Skills') && (
+                        <EditSkillsDialog 
+                            dialogOpen={dialogOpen} 
+                            setDialogOpen={setDialogOpen}
+                            skills={userDetails.skills}
+                            onClose={updateField}
+                        />
+                    )}
+
                     <EditFieldModal 
                         dialogOpen={dialogOpen} 
                         setDialogOpen={setDialogOpen}

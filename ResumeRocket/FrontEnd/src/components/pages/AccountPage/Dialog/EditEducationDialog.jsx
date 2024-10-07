@@ -91,7 +91,7 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                 schoolName: selectedEducation.schoolName,
                 degree: selectedEducation.degree,
                 major: selectedEducation.major,
-                minor: '',
+                minor: selectedEducation.minor,
                 graduationDate: selectedEducation.graduationDate ? parseDate(selectedEducation.graduationDate).toISOString().split('T')[0] : ''
             });
         } else {
