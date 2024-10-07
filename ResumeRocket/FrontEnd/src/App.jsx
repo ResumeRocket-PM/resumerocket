@@ -11,7 +11,7 @@ import './styles/App.css';
 import { AuthContext } from './context/AuthProvider.jsx';
 import { UserInfoProvider} from './context/UserInfoProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
-import AccountPage from './components/pages/AccountPage.jsx';
+import AccountPage from './components/pages/AccountPage/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
 import {portfolioContentExample} from './example_responses/portfolioContent';
 import { useContext } from 'react';

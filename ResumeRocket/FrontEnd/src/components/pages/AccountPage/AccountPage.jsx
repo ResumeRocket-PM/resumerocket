@@ -1,108 +1,19 @@
 import {useState, useEffect} from 'react';
-import "../../styles/AccountPage.css";
-import addIcon from "../../assets/plus-solid.svg";
-import editIcon from "../../assets/pen-to-square-solid.svg";
-// import {IconButton, SvgIcon} from "@mui/material";
 import { ClipLoader } from 'react-spinners'; 
-import { exampleUserDetails } from "../../example_responses/networking.js";
-import { Dialog, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
-import { changeUserDetailsAsync } from "../../utils/userDetailsCalls.js";
-import { useApi } from "../../hooks";
-import userSolidOrange from "../../assets/user-solid-orange.svg"
 import Chip from '@mui/material/Chip';
 
+import { Dialog, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
 
+import { useApi } from "../../../hooks.js";
 
+import userSolidOrange from "../../../assets/user-solid-orange.svg"
+import "../../../styles/AccountPage.css";
+import { exampleUserDetails } from "../../../example_responses/networking.js";
+import AccountSectionCard from './AccountSectionCard'; 
+import SectionEditButton from './SectionEditButton'; 
+import ExperienceEntry from './ExperienceEntry.jsx'; 
+import EducationEntry from './EducationEntry.jsx'; 
 
-const SectionAddButton = ({onClick}) => {
-    return (
-        <div className='account-page-section-modify-button hz-center'>
-            <img src={addIcon} onClick={onClick}/>
-        </div>
-    );
-};
-
-const SectionEditButton = ({onClick, }) => {
-    return (
-        <div className='account-page-section-modify-button hz-center'>
-            <img src={editIcon} onClick={onClick}/>
-        </div>
-    );
-};
-
-const AccountSectionCard = ({title, children, buttonType, onButtonClick}) => {
-    return (
-        <div id={`account-page-${title}-section`} className='account-page-section-card'>
-        <div className='account-page-section-header hz-space-btwn'>
-            <h2>{title}</h2>
-            <div className='account-page-section-modify hz-center'>
-                {buttonType === 'add' && <SectionAddButton onClick={onButtonClick} />}
-                {buttonType === 'edit' && <SectionEditButton onClick={onButtonClick} />}
-            </div>
-        </div>
-        <div className='account-page-section-content'>
-            {children}
-        </div>
-    </div>
-    );
-};
-
-const ExperienceEntry = ({company, position, type, description, startDate, endDate, onEditClick}) => {    
-
-    const isValidDate = (date) => {
-        return date instanceof Date && !isNaN(date.getTime());
-    };
-    
-    const parseDate = (dateString) => {
-        const date = new Date(dateString);
-        return isValidDate(date) ? date : null;
-    };
-    
-    const formatDate = (date) => {
-        if (!isValidDate(date)) {
-            return ''; // Or any default value or error message you prefer
-        }
-        const options = { month: '2-digit', year: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
-    };
-
-    return (
-        <>
-            <div className='hz-space-btwn'>
-                <h3>{company}</h3>
-                <SectionEditButton onClick={onEditClick}/>
-            </div>
-            <div className='account-page-experience-entry v-center'>
-                <p>{position}</p>
-                <p>{type}</p>
-                <p>{formatDate(parseDate(startDate))} - {formatDate(parseDate(endDate))}</p>
-                <p>{description}</p>
-            </div>        
-        </>
-    );
-};
-
-const EducationEntry = ({schoolName, degree, major, minor, graduationDate, courses, onEditClick}) => {
-    return (
-        <>
-            <div className='hz-space-btwn'>
-                <h3>{schoolName}</h3>
-                <SectionEditButton onClick={onEditClick}/>
-            </div>        
-            <div className='account-page-education-entry v-center'>
-                <p>{degree} in {major} {minor && `with a minor in ${minor}`}</p>
-                <p>Graduated {graduationDate}</p>
-                {courses &&
-                    <ul>
-                        {courses.map((course, index) => (
-                            <li key={index}>{course}</li>
-                        ))}
-                    </ul>
-                }
-            </div>        
-        </>
-    );
-};
 
 const AddExperienceDialog = ({ dialogOpen, setDialogOpen, userDetails, setUserDetails, onClose }) => {
     const api = useApi();
