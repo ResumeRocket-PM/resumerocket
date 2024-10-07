@@ -1,9 +1,5 @@
 import {useState, useEffect} from 'react';
 import { ClipLoader } from 'react-spinners'; 
-import Chip from '@mui/material/Chip';
-
-import { Dialog, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
-
 import { useApi } from "../../../hooks.js";
 
 import userSolidOrange from "../../../assets/user-solid-orange.svg"
