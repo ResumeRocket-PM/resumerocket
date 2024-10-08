@@ -70,8 +70,6 @@ const AccountPage = () => {
     }, []);
 
     return (
-        // just don't even display this page until the data is loaded
-        // or display a loading spinner
         <>
             { isLoading &&
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -88,7 +86,7 @@ const AccountPage = () => {
     <div 
         style={{
             position: 'relative',
-            height: '200px', // Adjust height as needed
+            height: '200px', 
             overflow: 'hidden',
             margin: 0,
             padding: 0
@@ -96,16 +94,16 @@ const AccountPage = () => {
     >
         <img 
             id="background-image" 
-            src={accountBanner} // Replace with your image path
+            src={accountBanner} 
             alt="Background" 
             style={{
                 width: '100%', 
                 height: '100%', 
                 objectFit: 'cover',
-                margin: 0, // Ensure no margin
-                padding: 0, // Ensure no padding
-                borderTopLeftRadius: '5px', // Round top left corner
-                borderTopRightRadius: '5px', // Round top right corner
+                margin: 0, 
+                padding: 0, 
+                borderTopLeftRadius: '5px', 
+                borderTopRightRadius: '5px', 
             }}
         />
     </div>
@@ -117,13 +115,13 @@ const AccountPage = () => {
         alt="profile picture" 
         style={{
             position: 'absolute',
-            top: '70px', // Adjust to overlap with the background image
-            left: '20px', // Adjust as needed for positioning
-            width: '150px', // Adjust size as needed
-            height: '150px', // Adjust size as needed
-            borderRadius: '50%', // Make it circular
-            border: '3px solid white', // Optional: border for visibility
-            zIndex: 1 // Ensure it's above the background
+            top: '70px',
+            left: '20px',
+            width: '150px', 
+            height: '150px',
+            borderRadius: '50%', 
+            border: '3px solid white',
+            zIndex: 1 
         }} 
         onClick={() => setDialogOpen('editProfilePhotoLink')}
     />

@@ -22,7 +22,7 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
             ...formData,
             [name]: value
         });
-        // Validate form on every change
+
         validateForm({ ...formData, [name]: value });
     };
 
@@ -86,7 +86,7 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
     useEffect(() => {
         if (index !== null && education[index]) {
             const selectedEducation = education[index];
-
+            
             setFormData({
                 schoolName: selectedEducation.schoolName,
                 degree: selectedEducation.degree,

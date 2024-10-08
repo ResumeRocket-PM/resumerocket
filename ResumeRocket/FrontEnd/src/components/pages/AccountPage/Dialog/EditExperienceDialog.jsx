@@ -96,15 +96,7 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience, onClose }
                 startDate: selectedExperience.startDate ? parseDate(selectedExperience.startDate).toISOString().split('T')[0] : '',
                 endDate: selectedExperience.endDate ? parseDate(selectedExperience.endDate).toISOString().split('T')[0] : ''
             });
-            setFormErrors({}); // Reset errors on new experience selection
-            validateForm({
-                company: selectedExperience.company,
-                position: selectedExperience.position,
-                type: selectedExperience.type,
-                description: selectedExperience.description,
-                startDate: selectedExperience.startDate ? parseDate(selectedExperience.startDate).toISOString().split('T')[0] : '',
-                endDate: selectedExperience.endDate ? parseDate(selectedExperience.endDate).toISOString().split('T')[0] : ''
-            }); // Validate the loaded data
+            setFormErrors({}); 
         } else {
             setFormData({
                 company: '',
@@ -114,8 +106,8 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience, onClose }
                 startDate: '',
                 endDate: ''
             });
-            setFormErrors({}); // Reset errors when clearing the form
-            setIsFormValid(false); // Reset form validity
+            setFormErrors({});
+            setIsFormValid(false);
         }
     }, [index, experience]);
 
