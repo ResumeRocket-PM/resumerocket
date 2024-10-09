@@ -32,7 +32,7 @@ const ExperienceEntry = ({ company, position, type, description, startDate, endD
                         {`${formatDate(parseDate(startDate))} - ${displayEndDate}`}
                     </span>
                 </h3>
-                <SectionEditButton onClick={onEditClick} />
+                {onEditClick && <SectionEditButton onClick={onEditClick} />}
             </div>
             <div className='account-page-experience-entry v-center'>
                 <p style={{ textIndent: '1em' }}>

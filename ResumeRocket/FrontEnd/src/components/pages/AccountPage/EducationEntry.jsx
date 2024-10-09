@@ -32,8 +32,8 @@ const EducationEntry = ({ schoolName, degree, major, minor, graduationDate, cour
                     </span>
                 </h3>
 
-
-                <SectionEditButton onClick={onEditClick} />
+                {onEditClick && <SectionEditButton onClick={onEditClick} />}
+                
             </div>
             <div className='account-page-education-entry v-center'>
                 <p style={{ textIndent: '1em' }}>

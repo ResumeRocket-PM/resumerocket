@@ -1,9 +1,7 @@
 import React from 'react';
+import userSolidOrange from "../../../assets/user-solid-orange.svg"
 
-// Example userSolidOrange value for placeholder image
-const userSolidOrange = 'path_to_placeholder_image.png';
-
-const UserCard = ({ userDetails, setDialogOpen, onClick, isSelected }) => {
+const UserCard = ({ userDetails, onClick, isSelected }) => {
     return (
         <div
             style={{
@@ -18,10 +16,6 @@ const UserCard = ({ userDetails, setDialogOpen, onClick, isSelected }) => {
                 src={userDetails.ProfilePhotoLink != null ? userDetails.ProfilePhotoLink : userSolidOrange}
                 alt="profile"
                 style={styles.profilePicture}
-                onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click event
-                    setDialogOpen('editProfilePhotoLink');
-                }}
             />
             
             <div style={styles.userHeaderDetails}>
@@ -41,17 +35,17 @@ const UserCard = ({ userDetails, setDialogOpen, onClick, isSelected }) => {
 const styles = {
     userCard: {
         width: '200px', // Adjust the width for a smaller card
-        padding: '10px',
+        padding: '2px',
         borderRadius: '8px',
         boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
         position: 'relative',
         textAlign: 'center',
-        margin: '10px', // Add margin if needed
+        margin: '5px', // Add margin if needed
         cursor: 'pointer', // Indicate that the card is clickable
     },
     profilePicture: {
-        width: '80px', // Smaller profile picture
-        height: '80px',
+        width: '40px', // Smaller profile picture
+        height: '40px',
         borderRadius: '50%',
         border: '2px solid white',
         zIndex: 1,
