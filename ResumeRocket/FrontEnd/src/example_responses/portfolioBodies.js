@@ -117,6 +117,19 @@ const projectExample =
         {
             "type": "website preview",
             "content": "https://example.com/website1"
+        },
+        {
+            "type": "columns",
+            "content": [
+                {
+                    "title": "Column 1",
+                    "text": "This is column 1."
+                },
+                {
+                    "title": "Column 2",
+                    "text": "This is column 2."
+                }
+            ]
         }
     ],
 }

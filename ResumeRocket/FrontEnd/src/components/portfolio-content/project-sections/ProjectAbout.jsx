@@ -22,7 +22,7 @@ const ProjectAbout = ({project, setProject}) => {
 
 
     return (
-        <ProjectSectionWrapper id='project-about-root' project={project} setProject={setProject}>
+        <ProjectSectionWrapper project={project} setProject={setProject}>
             <div className='v-center-center'>
                 <textarea
                     name="name" // *this MUST match name of the field in portfolioContent!

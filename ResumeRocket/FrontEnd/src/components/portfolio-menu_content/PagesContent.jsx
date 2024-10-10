@@ -15,7 +15,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ellipsisIcon from '../../assets/ellipsis-solid.svg';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'; // **** THIS IS ELLIPSIS ICON ****
-import DeleteIcon from '@mui/icons-material/Delete';
 import { 
     projectsDefault,
     projectsPreviewDefault, 

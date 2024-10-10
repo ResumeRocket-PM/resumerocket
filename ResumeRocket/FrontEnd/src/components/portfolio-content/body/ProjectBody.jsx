@@ -10,6 +10,7 @@ import ProjectFigma from '../project-sections/ProjectFigma';
 import ProjectJupyter from '../project-sections/ProjectJupyter';
 import ProjectGoogleSlides from '../project-sections/ProjectGoogleSlides';
 import ProjectWebsitePreview from '../project-sections/ProjectWebsitePreview';
+import ProjectColumns from '../project-sections/ProjectColumns';
 
 const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNum}) => {
 
@@ -40,37 +41,44 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
         });
     }, [project]);
 
-    const renderSection = (section) => {
+    useEffect(() => {
+        console.log(project);
+    }, [project]);
+
+    const renderSection = (section, index) => {
         switch (section.type) {
             case 'video':
-                return <ProjectVideo key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectVideo key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'text area':
-                return <ProjectTextArea key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectTextArea key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'image and text':
-                return <ProjectImageAndText key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectImageAndText key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'image':
-                return <ProjectImage key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectImage key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'gallery':
-                return <ProjectGallery key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectGallery key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'figma':
-                return <ProjectFigma key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectFigma key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'jupyter':
-                return <ProjectJupyter key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectJupyter key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'google slides':
-                return <ProjectGoogleSlides key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectGoogleSlides key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             case 'website preview':
-                return <ProjectWebsitePreview key={section.type} project={project} setProject={setProject} content={section.content} />;
+                return <ProjectWebsitePreview key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
+            case 'columns':
+                return <ProjectColumns key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
             default:
                 return null;
         }
     };
+
 
     return (
         <div id="portfolio-project-root">
             {project ? (
                 <>
                     <ProjectAbout project={project} setProject={setProject} />
-                    {project.sections.map(renderSection)}                
+                    {project.sections.map((section, index) => renderSection(section, index))}
                 </>
 
             ) : (

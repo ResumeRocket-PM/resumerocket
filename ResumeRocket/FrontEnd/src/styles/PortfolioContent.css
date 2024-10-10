@@ -1,5 +1,6 @@
 #portfolio-actual {
     overflow-y: auto;
+    overflow-x: hidden;
     width: 80%;
     max-width: calc((100vw - 100px) * 0.70);
     height: 80%;
@@ -9,18 +10,112 @@
     margin: auto; /* Center within the container */
 }
 
+.h1 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+}   
+
+.p {
+    font-size: 1em;
+}
+
 .project-section {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem 0 1rem 0;
-    border-bottom: 1px solid black;
+    position: relative; /* Ensure the pseudo-elements are positioned relative to this element */
+    /* padding: 1rem 0; */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    overflow: hidden; 
 }
 
-.project-section:last-child:not(:only-child) {
-    border-bottom: none;
+.portfolio-edit-button-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: transform 0.1s ease-in-out, width 0.3s ease-in-out; /* Smooth transition */
+    transform: translateX(100%); 
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: hidden; /* Hide overflow */
+    width: 50px; /* Initial width to show only the ellipsis button */
+}
+
+.project-section:hover .portfolio-edit-button-wrapper {
+    transform: translateX(0); /* Slide in from the right */
+    opacity: 1; 
+}
+
+.portfolio-edit-button-wrapper.expanded {
+    /* transition: width 0.3s ease-in-out; Slower transition for expanding buttons */
+    width: 200px; /* Expanded width to show all buttons */
+}
+
+.portfolio-edit-button-wrapper .portfolio-project-section-button {
+    margin-right: 0.5rem; /* Add space between buttons */
+    position: relative; /* Ensure the component is positioned relative to the parent */
+    z-index: 1; /* Ensure the component is above the border */
+    background-color: lightgrey; /* Optional: Set background color to cover the border */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    width: 2rem;
+    height: 2rem;
+}
+
+.portfolio-edit-button-wrapper .portfolio-project-section-button:hover {
+    background-color: lightgreen; /* Change background color on hover */
+}
+
+
+/* Wrapper for the button that will hold the border */
+.portfolio-add-button-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0 1rem 0;
+}
+
+.portfolio-add-button-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%; /* Position the border in the middle of the div */
+    left: 0;
+    right: 0;
+    height: 1px; /* Height of the border */
+    background-color: black; /* Color of the border */
+    z-index: 0; /* Ensure the border is behind the button */
+}
+
+.portfolio-add-button-wrapper .portfolio-project-section-button {
+    position: relative;
+    z-index: 1; /* Bring the button above the border */
+    background-color: lightgrey;
+    border-radius: 5px;
+    width: 2rem;
+    height: 2rem;
+}
+
+.portfolio-add-button-wrapper .portfolio-project-section-button:hover {
+    background-color: lightgreen;
+}
+
+.portfolio-item-with-popup-wrapper {
+    max-width: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .portfolio-textarea {
@@ -101,4 +196,65 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+}
+
+/* #### REARRANGE PROJECT SECTIONS STYLES #### */
+.rearrange-sections-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    max-height: 400px; /* Adjust as needed */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+.rearrange-section-block {
+    padding: 10px;
+    background-color: lightgrey;
+    cursor: grab;
+    transition: transform 0.2s;
+    user-select: none; /* Prevent text selection */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.rearrange-section-block.dragging {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    width: calc(100% - 20px); /* Adjust width to fit within the container */
+    z-index: 1000;
+    pointer-events: none; /* Prevent interaction with other elements while dragging */
+}
+/* #################################### */
+
+.portfolio-project-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 100%; /* Ensure it does not exceed the width of its parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* overflow: hidden; */
+}
+
+.portfolio-project-columns .column {
+    max-width: 100%; /* Ensure child elements do not exceed the width of the parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.portfolio-project-columns .portfolio-textarea {
+    border: 2px solid transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
+    text-align: center; /* Center text horizontally */
+    padding: 0 0 5px 0;
+    resize: none; /* Prevent manual resizing */
+    overflow: hidden; /* Hide scrollbars */
+    box-sizing: border-box; /* Include padding and border in the element’s total width and height */
+    max-width: 100%; /* Ensure textarea does not exceed the width of its parent */
+}
+
+.slider-container {
+    margin: .5rem 0 1rem 0;
 }

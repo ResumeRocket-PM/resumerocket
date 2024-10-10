@@ -3,7 +3,6 @@ import { Popover } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 // import './PortfolioItemOptionsPopup.css'; // Assuming you will have some styles
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { PortfolioEditContext } from '../../context/PortfolioEditProvider';
 import { useEffect, useState, useContext } from 'react';
@@ -98,7 +97,7 @@ const PortfolioItemWithPopupWrapper = ({children, onButtonClick, type="delete", 
 
     return (
         <>
-            <Popover
+            {/* <Popover
                 className="portfolio-item-options-popup"
                 open={Boolean(hoveredItem) || Boolean(popoverHovered)}
                 anchorEl={anchorEl}
@@ -120,7 +119,7 @@ const PortfolioItemWithPopupWrapper = ({children, onButtonClick, type="delete", 
                         {type === "add" ? <AddIcon /> : <DeleteIcon />}
                     </IconButton>
                 </div>
-            </Popover>
+            </Popover> */}
             
             <div
                 className="portfolio-item-with-popup-wrapper"

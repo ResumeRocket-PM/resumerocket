@@ -1,5 +1,5 @@
 #portfolio-project-root {
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,6 +7,46 @@
     /* border-top: 1px solid black;
     margin-top: 5rem; */
     /* padding-bottom: 5rem; */
-    position: relative;
+    /* position: relative; */
     /* height: 100%; */
+}
+
+/* .carousel-img {
+    margin: 0 10px 0 10px;
+} */
+
+/* h3 {
+    font-size: 36px;
+    margin: 10px;
+    padding: 2% 0;
+    position: relative;
+} */
+
+.carousel-item {
+    font-size: 36px;
+    margin: 10px;
+    background: #29c2a0;
+    color: #fff;
+    line-height: 100px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease; /* Add transition for smooth effect */
+}
+
+.slick-current .carousel-item {
+    background: red;
+    transform: scale(1); /* Ensure the current item is at full size */
+    opacity: 1; /* Ensure the current item is fully opaque */
+}
+
+.prev-slide .carousel-item,
+.next-slide .carousel-item {
+    transform: scale(0.9); /* Slightly smaller */
+    opacity: 0.8; /* Slightly transparent */
+}
+
+.prev-prev-slide .carousel-item,
+.next-next-slide .carousel-item {
+    transform: scale(0.8); /* Smaller */
+    opacity: 0.6; /* More transparent */
 }

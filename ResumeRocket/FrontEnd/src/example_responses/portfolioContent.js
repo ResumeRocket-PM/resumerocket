@@ -32,8 +32,12 @@ const portfolioContentExample = {
         "projectsPreview": projectsPreviewExample,
         "projects": {
             "projectsData": [
-                {},
-                {}
+                {
+                    ...projectExample
+                },
+                {
+                    ...projectExample,
+                }
             ],
             "styles": {
                 "header": {
@@ -91,6 +95,22 @@ const projectsDefault = {
             },
         }
 };
+
+const projectColumnsContentDefault = [
+    {
+        "title": "",
+        "text": ""
+    },
+    {
+        "title": "",
+        "text": ""
+    },
+    {
+        "title": "",
+        "text": ""
+    }
+]
+
 
 const projectDefault = {
     "name": "",
@@ -161,6 +181,8 @@ export {
     projectsPreviewDefault, 
     // projectPreviewDefault, 
     projectDefault,
+    projectColumnsContentDefault,
+
     experienceDefault,
     experienceItemDefault,
     educationDefault,

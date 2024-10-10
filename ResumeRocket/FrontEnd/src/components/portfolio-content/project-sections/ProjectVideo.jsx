@@ -1,10 +1,15 @@
 import React from 'react';
 import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
-const ProjectVideo = ({ content, title }) => {
+
+
+const ProjectVideo = ({ project, setProject, content, sectionIndex }) => {
     return (
-        <ProjectSectionWrapper id='project-video-root'>
-            <div style={{width: "5rem", height: "5rem", backgroundColor: "lightblue"}} />
+        <ProjectSectionWrapper 
+            project={project} 
+            setProject={setProject}
+            sectionIndex={sectionIndex}
+        >
             <iframe 
                 width="560" 
                 height="315" 

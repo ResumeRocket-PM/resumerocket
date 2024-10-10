@@ -10,4 +10,7 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    padding: 1rem 1rem 1rem 0;
+    box-sizing: border-box; /* Include padding in the element's total width */
+
 }
