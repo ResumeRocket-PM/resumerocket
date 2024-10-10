@@ -4,14 +4,14 @@ import NotFoundPage from './components/pages/NotFoundPage.jsx';
 import LoginPage from './components/pages/LoginPage.jsx';
 import ResumeListPage from "./components/pages/ResumeListPage.jsx";
 import PortfolioPage from "./components/pages/PortfolioPage.jsx";
-import NetworkingPage from "./components/pages/NetworkingPage.jsx";
+import NetworkingPage from "./components/pages/NetworkingPage/NetworkingPage.jsx";
 import CreateResume from "./components/pages/CreateResume.jsx";
 import Navbar from './components/Navbar.jsx';
 import './styles/App.css';
 import { AuthContext } from './context/AuthProvider.jsx';
 import { UserInfoProvider} from './context/UserInfoProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
-import AccountPage from './components/pages/AccountPage.jsx';
+import AccountPage from './components/pages/AccountPage/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
 import {portfolioContentExample} from './example_responses/portfolioContent';
 import { useContext } from 'react';

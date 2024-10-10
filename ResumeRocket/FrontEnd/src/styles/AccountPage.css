@@ -1,6 +1,5 @@
 #account-page-root {
     padding-top: 3rem;
-    background-color: #F1F1F1;
     /* width: 100%; */
     /* min-height: 100vh; */
     display: flex;
@@ -39,7 +38,6 @@
 #account-page-main-header-section {
     margin: 0 auto;
     padding: 20px;
-    background-color: grey;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
@@ -49,6 +47,7 @@
     width: 10rem;
     height: 10rem;
     border-radius: 50%;
+    border: 4px solid rgba(71, 113, 250, 0.5);
 }
 
 #account-page-user-header-details {
@@ -62,7 +61,6 @@
 .account-page-section-card {
     margin: 0 auto;
     padding: 1.5rem;
-    background-color: lightgrey;
     border-radius: 5px;
     box-shadow: 0 0 100px rgba(0, 0, 0, 0.1); 
     margin-top: 20px;
@@ -89,7 +87,7 @@
 
 .account-page-section-modify-button:hover {
     cursor: pointer;
-    background-color: rgba(128, 128, 128, 0.5);
+    background-color: rgba(71, 113, 250, 0.5);
     border-radius: 50%;
 }
 

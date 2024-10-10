@@ -1,5 +1,3 @@
-// import MenuItem from "@mui/material/MenuItem";
-// import { useAuth } from '../AuthHooks.jsx';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../styles/Navbar.css";
@@ -14,23 +12,16 @@ import IconButton from "@mui/material/IconButton";
 import ForumIcon from "@mui/icons-material/Forum";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Menu, MenuItem } from "@mui/material";
-import {useAuth} from '../hooks.js'
-// import { fetchCurrentUserData } from '../utils/apiCalls';
-
+import { useAuth } from '../hooks.js';
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
-//   const { currentUser, updateCurrentUser } = useAuth();
-  // const [isSignedIn, setIsSignedIn] = useState(false);
-//   const navigate = useNavigate();
   const [activeNavLink, setActiveNavLink] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, isLoggedIn } = useAuth();
-  //setup----------
-  // const userData = fetchCurrentUserData();
-  // updateCurrentUser(userData);
-  //---------------
+
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleAccountButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,46 +32,33 @@ export default function Navbar() {
   };
 
   const handleSignOut = () => {
-    logout()
+    logout();
     navigate('/', { replace: true });
     handleAccountMenuClose();
-  }
+  };
 
-const handleNavLinkClick = (link) => {
-  console.log('link set to: ', link);
-  setActiveNavLink(link);
-}
+  const handleNavLinkClick = (link) => {
+    setActiveNavLink(link);
+  };
 
-useEffect(() => {
-  // if pathname does not include /resume or /portfolio or /networking, set activeNavLink to null
-  if (location.pathname.includes('/resume-list')) setActiveNavLink('/resume-list');
-  else if (location.pathname.includes('/portfolio')) setActiveNavLink('/portfolio');
-  else if (location.pathname.includes('/networking')) setActiveNavLink('/networking');
-  else setActiveNavLink(null);
-}, [location]);
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/networking?query=${searchQuery}`);
+    }
+  };
 
-  // useEffect(() => {
-  //   const authToken = sessionStorage.getItem('authToken');
-  //   if (authToken) {
-  //     // setIsSignedIn(true);
-      
-  //     // Fetch current user data and update the AuthContext
-  //     fetchCurrentUserData()
-  //       .then(userData => {
-  //         updateCurrentUser(userData);
-  //       })
-  //       .catch(error => {
-  //         console.error('Error fetching user data:', error);
-  //       });
-  //   } else {
-  //     // setIsSignedIn(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (location.pathname.includes('/resume-list')) setActiveNavLink('/resume-list');
+    else if (location.pathname.includes('/portfolio')) setActiveNavLink('/portfolio');
+    else if (location.pathname.includes('/networking')) setActiveNavLink('/networking');
+    else setActiveNavLink(null);
+    setSearchQuery(''); 
+  }, [location]);
+
 
   return (
     <>
       <nav id="navbar">
-
         <Link to="/" id="logo_name">
           <img id="logo" src={rocket} alt="logo" />
           <h1 id="brand_name">Resume Rocket</h1>
@@ -101,7 +79,21 @@ useEffect(() => {
           </Link>
         </div>
 
-        <div id="account_buttons">
+        <div id="search_and_account">
+          <input
+            type="text"
+            placeholder="Search Users..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearch}
+            style={{
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid black',
+              marginRight: '15px',
+            }}
+          />
+
           <IconButton aria-label="messaging">
             <ForumIcon fontSize="large" />
           </IconButton>
@@ -131,25 +123,19 @@ useEffect(() => {
             }}
             getcontentanchorel={null}
           >
-              <MenuItem onClick={handleSignOut}>
-                <Link
-                  to="/"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Sign Out
+            <MenuItem onClick={handleSignOut}>
+              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+                Sign Out
+              </Link>
+            </MenuItem>
+
+            {isLoggedIn && 
+              <MenuItem onClick={handleAccountMenuClose}>
+                <Link to="/account" style={{ textDecoration: "none", color: "inherit" }}>
+                  Account
                 </Link>
               </MenuItem>
-
-              { isLoggedIn && 
-                <MenuItem onClick={handleAccountMenuClose}>
-                  <Link
-                    to="/account"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    Account
-                  </Link>
-                </MenuItem>
-              }
+            }
           </Menu>
         </div>
       </nav>
