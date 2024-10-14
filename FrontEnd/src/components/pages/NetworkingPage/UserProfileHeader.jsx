@@ -1,6 +1,7 @@
 import React from 'react';
 import userSolidOrange from "../../../assets/user-solid-orange.svg"; // Default image
 import accountBanner from '../../../assets/account-banner.png';
+import { Link } from 'react-router-dom';
 
 const UserProfileHeader = ({ userDetails, onEditProfilePhoto, onEditTitle, onEditLocation }) => {
   return (
@@ -61,6 +62,12 @@ const UserProfileHeader = ({ userDetails, onEditProfilePhoto, onEditTitle, onEdi
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <h3>{userDetails.location}</h3>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <Link to={`/create-resume/${userDetails.primaryResumeId}`} style={{ textAlign: 'center' }}>
+                {userDetails.primaryResumeId != null ? 'View Resume' : null }
+            </Link>
           </div>
         </div>
       </div>
