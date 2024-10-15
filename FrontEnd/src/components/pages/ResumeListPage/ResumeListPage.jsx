@@ -272,7 +272,7 @@ const ResumeListPage = () => {
               
               <TableCell>
                 <Link to={`/create-resume/${row.resumeID}`}  align='center'>
-                  { row.resumeContent['FileName']}
+                  { 'View' }
                 </Link>
               </TableCell>
             </TableRow>
