@@ -65,6 +65,10 @@ export default function Navbar() {
         </Link>
 
         <div id="nav_links">
+          <Link to="/resume" className="nav_link" onClick={() => handleNavLinkClick('/resume-list')}>
+            <img src={activeNavLink === '/resume-list' ? fileIconOrange : fileIcon} alt="resume" />
+            <p>Resume (new)</p>
+          </Link>
           <Link to="/resume-list" className="nav_link" onClick={() => handleNavLinkClick('/resume-list')}>
             <img src={activeNavLink === '/resume-list' ? fileIconOrange : fileIcon} alt="resume" />
             <p>Resume</p>

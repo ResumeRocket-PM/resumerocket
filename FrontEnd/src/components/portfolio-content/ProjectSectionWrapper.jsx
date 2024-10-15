@@ -16,9 +16,9 @@ import AddSectionDialog from './AddSectionDialog';
 import RearrangeSectionsDialog from './RearrangeSectionsDialog';
 
 
-const ProjectSectionWrapper = ({ children, project, setProject, sectionIndex }) => {
+const ProjectSectionWrapper = ({ children, project, setProject, sectionIndex, type=null }) => {
 
-    // const { handleMouseEnterPI, handleMouseLeavePI } = useContext(PortfolioEditContext);
+    const { editMode } = useContext(PortfolioEditContext);
     const [addSectionDialogOpen, setAddSectionDialogOpen] = useState(false);
     const [rearrangeDialogOpen, setRearrangeDialogOpen] = useState(false); // New state for rearrange dialog
     const [isExpanded, setIsExpanded] = useState(false);
@@ -48,66 +48,74 @@ const ProjectSectionWrapper = ({ children, project, setProject, sectionIndex }) 
             onMouseEnter={() => setSectionIsHovered(true)}
             onMouseLeave={() => setSectionIsHovered(false)}
         >
-            <PortfolioItemWithPopupWrapper onButtonClick={() => setAddSectionDialogOpen(true)} type="add" popupLocation="bottom">
+            <div className='project-section-content'>
                 {children}
-            </PortfolioItemWithPopupWrapper>
-
-            <div className="portfolio-add-button-wrapper">
-                <IconButton
-                    variant="contained"
-                    onClick={() => setAddSectionDialogOpen(true)}
-                    className="portfolio-project-section-button"
-                >
-                    <AddIcon />
-                </IconButton>
             </div>
 
-            <div 
-                className={`portfolio-edit-button-wrapper ${isExpanded ? 'expanded' : ''}`}
-                ref={editButtonWrapperRef}
-                onMouseEnter={() => setEditButtonIsHovered(true)}
-                onMouseLeave={() => setEditButtonIsHovered(false)}
-            >
-                {isExpanded && (
-                    <>
+            <div className='project-section-break'>
+                { editMode && 
+                    <div className="portfolio-add-button-wrapper">
                         <IconButton
                             variant="contained"
+                            onClick={() => setAddSectionDialogOpen(true)}
                             className="portfolio-project-section-button"
-                            onClick={deleteProjectSection}
                         >
-                            <img src={TrashIcon} alt="delete portfolio section button" />
+                            <AddIcon />
                         </IconButton>
-                        <IconButton
-                            variant="contained"
-                            className="portfolio-project-section-button"
-                            onClick={() => setRearrangeDialogOpen(true)}
-                        >
-                            <img src={UpDownArrows} alt="move portfolio section button up/down" />
-                        </IconButton>                        
-                    </>
-                )}
-                <IconButton
-                    variant="contained"
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    id='ayoooo'
-                    className="portfolio-project-section-button"
-                >
-                    <MoreHorizIcon />
-                </IconButton>                
+                    </div>
+                }
             </div>
 
-            <AddSectionDialog 
-                addSectionDialogOpen={addSectionDialogOpen}
-                setAddSectionDialogOpen={setAddSectionDialogOpen}
-                setProject={setProject}
-                sectionIndex={sectionIndex}
-            />
-            <RearrangeSectionsDialog // New rearrange dialog component
-                rearrangeDialogOpen={rearrangeDialogOpen}
-                setRearrangeDialogOpen={setRearrangeDialogOpen}
-                project={project}
-                setProject={setProject}
-            />
+            {editMode && (
+                <>
+                    <div 
+                        className={`portfolio-edit-button-wrapper ${isExpanded ? 'expanded' : ''}`}
+                        ref={editButtonWrapperRef}
+                        onMouseEnter={() => setEditButtonIsHovered(true)}
+                        onMouseLeave={() => setEditButtonIsHovered(false)}
+                    >
+                        {isExpanded && (
+                            <>
+                                <IconButton
+                                    variant="contained"
+                                    className="portfolio-project-section-button"
+                                    onClick={deleteProjectSection}
+                                >
+                                    <img src={TrashIcon} alt="delete portfolio section button" />
+                                </IconButton>
+                                <IconButton
+                                    variant="contained"
+                                    className="portfolio-project-section-button"
+                                    onClick={() => setRearrangeDialogOpen(true)}
+                                >
+                                    <img src={UpDownArrows} alt="move portfolio section button up/down" />
+                                </IconButton>    
+                            </>
+                        )}
+                        <IconButton
+                            variant="contained"
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            id='ayoooo'
+                            className="portfolio-project-section-button"
+                        >
+                            <MoreHorizIcon />
+                        </IconButton>                
+                    </div>
+
+                    <AddSectionDialog 
+                        addSectionDialogOpen={addSectionDialogOpen}
+                        setAddSectionDialogOpen={setAddSectionDialogOpen}
+                        setProject={setProject}
+                        sectionIndex={sectionIndex}
+                    />
+                    <RearrangeSectionsDialog // New rearrange dialog component
+                        rearrangeDialogOpen={rearrangeDialogOpen}
+                        setRearrangeDialogOpen={setRearrangeDialogOpen}
+                        project={project}
+                        setProject={setProject}
+                    />                
+                </>
+            )}
         </div>
     );
 };

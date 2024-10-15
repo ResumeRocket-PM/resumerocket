@@ -7,7 +7,8 @@ const ProjectFigma = ({project, setProject, content, sectionIndex}) => {
 
 
     return (
-        <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
+        // <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
+        <>
             {editMode && (
                 <iframe 
                     style={{ border: '1px solid rgba(0, 0, 0, 0.1)' }} 
@@ -17,7 +18,9 @@ const ProjectFigma = ({project, setProject, content, sectionIndex}) => {
                     allowFullScreen
                 ></iframe>
             )}
-        </ProjectSectionWrapper>
+        </>
+
+        // </ProjectSectionWrapper>
     );
 };
 

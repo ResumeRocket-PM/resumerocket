@@ -8,7 +8,8 @@ const ProjectGoogleSlides = ({project, setProject, content, sectionIndex}) => {
 
 
     return (
-        <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
+        // <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
+        <>
             {editMode && (
                 <iframe 
                     src="https://docs.google.com/presentation/d/e/2PACX-1vTUjlNdDeM7_GrCrByUsboznGDntTN1xyiuA1YhLndg2COOeb7yVX0dZyQAEheqrq4Why4BshpF2tWr/embed?start=false&loop=false&delayms=3000" 
@@ -19,8 +20,9 @@ const ProjectGoogleSlides = ({project, setProject, content, sectionIndex}) => {
                     mozallowfullscreen="true" 
                     webkitallowfullscreen="true"
                 ></iframe>
-            )}
-        </ProjectSectionWrapper>
+            )}        
+        </>
+        // </ProjectSectionWrapper>
     );
 };
 

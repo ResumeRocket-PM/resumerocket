@@ -22,7 +22,7 @@ const ProjectAbout = ({project, setProject}) => {
 
 
     return (
-        <ProjectSectionWrapper project={project} setProject={setProject}>
+        // <ProjectSectionWrapper project={project} setProject={setProject}>
             <div className='v-center-center'>
                 <textarea
                     name="name" // *this MUST match name of the field in portfolioContent!
@@ -47,7 +47,7 @@ const ProjectAbout = ({project, setProject}) => {
                     placeholder="Project Description" /* Placeholder text shown when about.name is empty */
                 />
             </div>
-        </ProjectSectionWrapper>
+        // </ProjectSectionWrapper>
     );
 };
 

@@ -5,11 +5,12 @@ import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
 const ProjectVideo = ({ project, setProject, content, sectionIndex }) => {
     return (
-        <ProjectSectionWrapper 
-            project={project} 
-            setProject={setProject}
-            sectionIndex={sectionIndex}
-        >
+        // <ProjectSectionWrapper 
+        //     project={project} 
+        //     setProject={setProject}
+        //     sectionIndex={sectionIndex}
+        // >
+        <>
             <iframe 
                 width="560" 
                 height="315" 
@@ -20,8 +21,10 @@ const ProjectVideo = ({ project, setProject, content, sectionIndex }) => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowfullscreen>
-            </iframe>
-        </ProjectSectionWrapper>
+            </iframe>        
+        </>
+
+        // </ProjectSectionWrapper>
     );
 };
 

@@ -16,7 +16,8 @@ import PortfolioContent from './components/PortfolioContent.jsx';
 import {portfolioContentExample} from './example_responses/portfolioContent';
 import { useContext } from 'react';
 import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
-
+import { ResumeProvider } from './context/ResumeProvider.jsx';
+import ResumePage from './components/pages/ResumePages/ResumePage.jsx';
 
 
 
@@ -61,6 +62,7 @@ function App() {
             {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
               <Route path="/home" element={<HomePage />} />
+              <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
               <Route path="/resume-list" element={<ResumeListPage />} />
               <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
               <Route path="/networking" element={<NetworkingPage />} />

@@ -96,6 +96,25 @@ const projectsDefault = {
         }
 };
 
+const projectDefault = {
+    "name": "",
+    "description": "",
+    "styles": {},
+    "sections": [],
+};
+
+const projectTextAreaStylesDefault = {
+    // "font": "h1",
+    // "fontSize": "1em", // these aren't getting used rn
+    // "fontWeight": "normal" // these aren't getting used rn
+    textarea: {
+        "font": "p",
+        "textAlign": "text-align-center",
+        // "horizontalAlign": "",
+        // "verticalAlign": "",
+    }
+}
+
 const projectColumnsContentDefault = [
     {
         "title": "",
@@ -110,14 +129,6 @@ const projectColumnsContentDefault = [
         "text": ""
     }
 ]
-
-
-const projectDefault = {
-    "name": "",
-    "description": "",
-    "styles": {},
-    "sections": [],
-};
 
 const projectsPreviewDefault = {
     "styles": {
@@ -181,6 +192,7 @@ export {
     projectsPreviewDefault, 
     // projectPreviewDefault, 
     projectDefault,
+    projectTextAreaStylesDefault,
     projectColumnsContentDefault,
 
     experienceDefault,

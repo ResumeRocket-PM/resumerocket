@@ -1,0 +1,124 @@
+/* #### styles for ResumePage.jsx ### */
+
+#resume-page-root {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;
+    align-items: center; */
+    flex-grow: 1;
+    /* overflow: hidden; */
+}
+
+#resume-page-main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+    background-color: aliceblue;
+}
+
+#resume-tabs-container {
+    position: sticky;
+    top: 60px;
+    z-index: 999;
+    background-color: white;
+}
+
+/* ################################## */
+
+/* #### styles for SavedResumesSection.jsx ### */
+
+#resume-rows-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+}
+
+.resume-row {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.resume-row.header {
+    background-color: lightgrey;
+    font-weight: bold;
+}
+
+.resume-cell {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.resume-cell.header {
+    min-width: 180px; /* Adjust this value as needed */
+}
+
+.resume-cell.header.version-header {
+    width: 25px; /* Set a specific width */
+    min-width: 25px; /* Ensure the minimum width is the same */
+    flex: none; /* Prevent the cell from growing */
+}
+
+.resume-cell.version-cell {
+    flex: none; /* Prevent the cell from growing */
+    width: 25px; /* Set the same width as the header */
+    min-width: 25px; /* Ensure the minimum width is the same */
+    border: none; /* Remove border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.version-history-icon:hover {
+    cursor: pointer;
+    background-color: lightgrey;
+}
+
+/* ################################## */
+
+/* #### styles for VersionHistory.jsx ### */
+
+.timeline {
+    position: relative;
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 20px 0;
+    border-left: 2px solid #ddd;
+    margin-left: 20px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 50%;
+}
+
+.timeline-date {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.timeline-content {
+    margin-left: 20px;
+}
+
+/* ################################## */

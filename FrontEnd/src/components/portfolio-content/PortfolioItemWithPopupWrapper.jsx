@@ -1,135 +1,184 @@
 import PropTypes from 'prop-types';
-import { Popover } from '@mui/material';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-// import './PortfolioItemOptionsPopup.css'; // Assuming you will have some styles
-import AddIcon from '@mui/icons-material/Add';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { PortfolioEditContext } from '../../context/PortfolioEditProvider';
-import { useEffect, useState, useContext } from 'react';
 
+const PortfolioItemWithPopupWrapper = ({
+    children, 
+    popoverContent, 
+    popoverOpen=null, 
+    setPopoverOpen=null, 
+    useContentClick=false,    
+    popupLocation="top",
+    popupContentClasses="",
+    childrenContainerClasses="",
+    wrapperClasses="",
+}) => {
 
-const PortfolioItemWithPopupWrapper = ({children, onButtonClick, type="delete", popupLocation="top"}) => {
-
-    // const { 
-    //     hoveredItem,
-    //     popoverHovered,
-    //     anchorEl,
-    //     handlePopoverEnter,
-    //     handlePopoverLeave,
-    // } = useContext(PortfolioEditContext);
+    const { editMode } = useContext(PortfolioEditContext);
 
     const [hoveredItem, setHoveredItem] = useState('');
     const [popoverHovered, setPopoverHovered] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    // const [popoverOpen, setPopoverOpen] = useState(false);
-
-    const onDelete = () => {
-        console.log("Delete");
-    }
+    const [popupDimensions, setPopupDimensions] = useState({ width: 0, height: 0 });
+    const contentRef = useRef(null);
+    const wrapperRef = useRef(null);
 
     const handleMouseEnterPI = (event, item) => {
-        console.log("handleMouseEnter");
+        if (!editMode || useContentClick) return;
         setHoveredItem(item);
-        setAnchorEl(event.currentTarget);
     };
 
     const handleMouseLeavePI = () => {
-        if(popoverHovered){
-            // setHoveredItem('yeababy');
-            return;
-        }
-        console.log("handleMouseLeave");
+        if (!editMode || useContentClick) return;
+        if (popoverHovered) return;
         setHoveredItem('');
-        // setAnchorEl(null);
     };
 
     const handlePopoverEnter = () => {
-        console.log("handlePopoverEnter");
+        if (!editMode || useContentClick) return;
         setPopoverHovered(true);
     };
 
     const handlePopoverLeave = () => {
-        console.log("handlePopoverLeave");
+        if (!editMode || useContentClick) return;
         setPopoverHovered(false);
-        // if (!hoveredItem) {
-        //     setAnchorEl(null);
-        // }
     };
+
+    const handleContentClick = (event) => {
+        if (!editMode || !useContentClick) return;
+        setPopoverOpen(true);
+        event.stopPropagation();
+    };
+
+    const handleDocumentClick = (event) => {
+        if (!editMode || !useContentClick) return;
+        if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+            setPopoverOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!hoveredItem && !popoverHovered) {
+            setPopoverOpen(false);
+        }
+        if (hoveredItem || popoverHovered) {
+            setPopoverOpen(true);
+        }
+    }, [hoveredItem, popoverHovered]);
+
+    useEffect(() => {
+        if (popoverOpen === false) {
+            setHoveredItem('');
+            setPopoverHovered(false);
+        }
+    }, [popoverOpen]);
+
+    useEffect(() => {
+        if(contentRef.current) {
+            const { width, height } = contentRef.current.getBoundingClientRect();
+            setPopupDimensions({ width, height });
+        }
+    }, [popoverOpen]);
+
+    useEffect(() => {
+        if (useContentClick) {
+            document.addEventListener('click', handleDocumentClick);
+            return () => {
+                document.removeEventListener('click', handleDocumentClick);
+            };
+        }
+    }, [useContentClick]);
 
     const getPopoverPosition = (popupLocation) => {
         switch(popupLocation) {
             case 'top':
                 return {
-                    anchorOrigin: { vertical: 'top', horizontal: 'center' },
-                    transformOrigin: { vertical: 'bottom', horizontal: 'center' }
+                    top: `-${popupDimensions.height + 6}px`,
+                    left: '50%',
+                    marginLeft: `-${popupDimensions.width / 2}px`,
                 };
             case 'right':
                 return {
-                    anchorOrigin: { vertical: 'center', horizontal: 'right' },
-                    transformOrigin: { vertical: 'center', horizontal: 'left' }
+                    top: '50%',
+                    right: '0',
+                    marginLeft: '6px',
                 };
             case 'bottom':
                 return {
-                    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-                    transformOrigin: { vertical: 'top', horizontal: 'center' }
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translate(-50%, 0)'
                 };
             case 'left':
                 return {
-                    anchorOrigin: { vertical: 'center', horizontal: 'left' },
-                    transformOrigin: { vertical: 'center', horizontal: 'right' }
+                    top: '50%',
+                    left: '0',
+                    transform: 'translate(-100%, -50%)'
                 };
             case 'top-right':
                 return {
-                    anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                    transformOrigin: { vertical: 'bottom', horizontal: 'left' }
+                    top: '0',
+                    left: '100%',
+                };
+            case 'top-right-over':
+                return {
+                    top: '0',
+                    right: '0',
+                    margin: '6px 6px 0 0'
                 };
             default:
                 return {
-                    anchorOrigin: { vertical: 'top', horizontal: 'center' },
-                    transformOrigin: { vertical: 'bottom', horizontal: 'center' }
+                    top: '0',
+                    right: '0',
+                    // margin: '6px 6px 0 0'
                 };
         }
     };
 
-    const { anchorOrigin, transformOrigin } = getPopoverPosition(popupLocation);
-
+    const popoverStyle = getPopoverPosition(popupLocation);
+    // console.log('popupContentClasses:', popupContentClasses); 
 
     return (
         <>
-            {/* <Popover
-                className="portfolio-item-options-popup"
-                open={Boolean(hoveredItem) || Boolean(popoverHovered)}
-                anchorEl={anchorEl}
-                // onClose={onClose}
-                onMouseEnter={handlePopoverEnter}
-                onMouseLeave={handlePopoverLeave}
-                anchorOrigin={anchorOrigin}
-                transformOrigin={transformOrigin}
-                sx={{pointerEvents: 'none'}}
-                disableEnforceFocus
-                disableAutoFocus
-            >
-                <div style={{ pointerEvents: 'auto' }}>
-                    <IconButton
-                        variant="contained"
-                        onClick={() => onButtonClick()}
-                        sx={{ backgroundColor: '#f7f7f7'}}
-                    >
-                        {type === "add" ? <AddIcon /> : <DeleteIcon />}
-                    </IconButton>
-                </div>
-            </Popover> */}
-            
             <div
-                className="portfolio-item-with-popup-wrapper"
+                className={'portfolio-item-with-popup-wrapper ' + wrapperClasses}
                 onMouseEnter={(event) => handleMouseEnterPI(event, 'portfolio-item')}
                 onMouseLeave={handleMouseLeavePI}
+                ref={wrapperRef}
             >
-                {children}
+                {editMode && (
+                    <div 
+                        className={`portfolio-popup-container ${!popoverOpen ? 'not-visible' : ''}`}
+                        style={{ 
+                            ...popoverStyle,
+                            pointerEvents: 'auto',
+                        }}
+                        onMouseEnter={handlePopoverEnter}
+                        onMouseLeave={handlePopoverLeave}
+                    >
+                        <div 
+                            className={`portfolio-popup-content ` + popupContentClasses}
+                            ref={contentRef}
+                        >
+                            {popoverContent}
+                        </div>
+                    </div>                        
+                )}
+                <div className={'portfolio-popup-children-content ' + childrenContainerClasses}  onClick={handleContentClick}>
+                        {children}
+                </div>
             </div>
         </>
     );
+};
+
+PortfolioItemWithPopupWrapper.propTypes = {
+    children: PropTypes.node.isRequired,
+    popoverContent: PropTypes.node,
+    popoverOpen: PropTypes.bool,
+    setPopoverOpen: PropTypes.func,
+    useContentClick: PropTypes.bool,
+    popupLocation: PropTypes.string,
+    popupContentClasses: PropTypes.string,
 };
 
 export default PortfolioItemWithPopupWrapper;

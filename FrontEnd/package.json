@@ -18,6 +18,8 @@
     "@hello-pangea/dnd": "^17.0.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
+    "@tinymce/tinymce-react": "^5.1.1",
+    "diff-match-patch": "^1.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
@@ -29,10 +31,11 @@
     "vite-plugin-treat-umd-as-commonjs": "^0.1.4"
   },
   "devDependencies": {
+    "@rollup/plugin-inject": "^5.0.5",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
-    "buffer": "6.0.3",
+    "buffer": "^6.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",

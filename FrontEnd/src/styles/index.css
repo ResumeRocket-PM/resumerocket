@@ -76,3 +76,12 @@ p {
   justify-content: start;
   align-items: start;
 }
+
+.not-visible {
+  /* display: none; */
+  visibility: hidden;
+}
+
+.bold {
+  font-weight: bold;
+}

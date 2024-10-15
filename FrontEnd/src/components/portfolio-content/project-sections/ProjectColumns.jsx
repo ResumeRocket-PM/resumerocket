@@ -35,23 +35,24 @@ const ProjectColumns = ({ project, setProject, content, sectionIndex }) => {
     };
 
     return (
-        <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
+        // <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
+        <>
             {editMode && (
                 <div className='portfolio-project-columns'>
                     {tempValues.map((column, index) => (
                         <div className="column" key={index}>
                             <TextareaAutosize
-                                className={`portfolio-textarea h1 ${!editMode ? 'portfolio-textarea-disabled' : ''}`}
+                                className={`portfolio-textarea h1 ${!editMode ? 'disabled-textarea' : ''}`}
                                 value={column.title}
                                 onChange={(e) => handleTempChange(e, index, 'title')}
                                 onBlur={() => handleTextChange(index, 'title')}
                                 aria-label="minimum height"
                                 minRows={1}
-                                // style={{ width: "80%" }}
+                                style={{ width: "fit-content" }}
                                 placeholder="Enter title here"
                             />
                             <TextareaAutosize
-                                className={`portfolio-textarea p ${!editMode ? 'portfolio-textarea-disabled' : ''}`}
+                                className={`portfolio-textarea p ${!editMode ? 'disabled-textarea' : ''}`}
                                 value={column.text}
                                 onChange={(e) => handleTempChange(e, index, 'text')}
                                 onBlur={() => handleTextChange(index, 'text')}
@@ -63,7 +64,9 @@ const ProjectColumns = ({ project, setProject, content, sectionIndex }) => {
                     ))}
                 </div>
             )}
-        </ProjectSectionWrapper>
+        </>
+
+        // </ProjectSectionWrapper>
     );
 };
 

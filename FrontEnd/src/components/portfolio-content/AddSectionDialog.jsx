@@ -18,7 +18,10 @@ import GoogleSlidesIcon from "../../assets/portfolio/project sections/google-sli
 import WebsitePreview from "../../assets/portfolio/project sections/website-preview.png";
 import ColumnsIcon from "../../assets/portfolio/project sections/columns.png";
 
-import { projectColumnsContentDefault } from '../../example_responses/portfolioContent';
+import { 
+    projectColumnsContentDefault,
+    projectTextAreaStylesDefault,
+} from '../../example_responses/portfolioContent';
 
 const SectionIcons = [ 
     { icon: TextAreaIcon, name: "text area" },
@@ -45,12 +48,28 @@ const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setPr
 
     const handleSectionClick = (section) => {
         setAddSectionDialogOpen(false);
+    
         setProject(prevProject => {
             const newSections = [...prevProject.sections];
-            newSections.splice(sectionIndex+1, 0, {
+            let newSection = {
                 type: section.name,
-                content: section.name === 'columns' ? defaultContent.columns : ""
-            });
+                content: "",
+                styles: {},
+            };
+    
+            if (section.name === 'text area') {
+                newSection.styles = projectTextAreaStylesDefault;
+            }
+
+            if (section.name === 'image and text') {
+                newSection.styles = projectTextAreaStylesDefault;
+            }
+    
+            if (section.name === 'columns') {
+                newSection.content = defaultContent.columns;
+            }
+    
+            newSections.splice(sectionIndex + 1, 0, newSection);
             return {
                 ...prevProject,
                 sections: newSections,

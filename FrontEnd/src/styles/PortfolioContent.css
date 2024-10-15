@@ -20,9 +20,50 @@
     font-weight: bold;
 }   
 
+.h3 {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.h4 {
+    font-size: 1em;
+    font-weight: bold;
+}
+
 .p {
     font-size: 1em;
 }
+
+.text-align-left {
+    text-align: left !important;
+}
+
+.text-align-center {
+    text-align: center !important;
+}
+
+.text-align-right {
+    text-align: right !important;
+}
+
+.vertical-align-top {
+    /* vertical-align: top !important; */
+    align-self: flex-start !important;
+}
+
+.vertical-align-center {
+    align-self: center !important;
+}
+
+.vertical-align-bottom {
+    align-self: flex-end !important;
+}
+
+.full-height {
+    /* height: 100%; */
+    /* flex-grow: 1; */
+}
+/* ################################################################ */
 
 .project-section {
     width: 100%;
@@ -33,7 +74,39 @@
     position: relative; /* Ensure the pseudo-elements are positioned relative to this element */
     /* padding: 1rem 0; */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    overflow: hidden; 
+    
+    /* overflow: hidden;  */
+    overflow: visible; /* Allow the popup buttons to overflow */
+    
+    /* border-bottom: 1px solid black;
+    padding: 1rem 0 1rem 0; */
+}
+
+.project-section-content {
+    position: relative;
+}
+
+.project-section-break {
+    width: 100%;
+    /* background-color: black; */
+    position: relative;
+    height: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-section-break::before {
+    content: ''; /* Add a pseudo-element */
+    position: absolute; /* Position the pseudo-element */
+    top: 50%; /* Position at the middle vertically */
+    left: 0; /* Position at the left */
+    right: 0; /* Position at the right */
+    height: 1px; /* Set the height */
+    background-color: black; /* Set the color */
+    transform: translateY(-50%); /* Adjust to center */
+    z-index: 0; /* Ensure it is below the content */
 }
 
 .portfolio-edit-button-wrapper {
@@ -75,25 +148,12 @@
 }
 
 
-/* Wrapper for the button that will hold the border */
 .portfolio-add-button-wrapper {
-    position: relative;
-    width: 100%;
+    position: relative; /* Change to relative positioning */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem 0 1rem 0;
-}
-
-.portfolio-add-button-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 50%; /* Position the border in the middle of the div */
-    left: 0;
-    right: 0;
-    height: 1px; /* Height of the border */
-    background-color: black; /* Color of the border */
-    z-index: 0; /* Ensure the border is behind the button */
+    z-index: 1; /* Ensure it is above other content */
 }
 
 .portfolio-add-button-wrapper .portfolio-project-section-button {
@@ -109,14 +169,7 @@
     background-color: lightgreen;
 }
 
-.portfolio-item-with-popup-wrapper {
-    max-width: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
+/* ###### Textarea styles ###### */
 
 .portfolio-textarea {
     border: 2px solid transparent;
@@ -125,7 +178,7 @@
     font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
 
     /* height: calc(100% + 5px);  */
-
+    /* width: fit-content; */
 
     text-align: center; /* Center text horizontally */
     padding: 0 0 5px 0;
@@ -163,6 +216,106 @@
     /* border: 1px solid #d0d0d0;  */
 }
 
+.portfolio-textarea-popup-content {
+    /* box-sizing: border-box; */
+}
+
+/* ####################### */
+
+/* ######## Project Image and Text styles ############# */
+
+
+/* ####################### */
+
+/* ######## Project Columns styles ############# */
+
+.portfolio-project-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 100%; /* Ensure it does not exceed the width of its parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* overflow: hidden; */
+}
+
+@media (max-width: 1590px) {
+    .portfolio-project-columns {
+        grid-template-columns: 1fr; /* Switch to a single column layout */
+    }
+}
+
+.portfolio-project-columns .column {
+    max-width: 100%; /* Ensure child elements do not exceed the width of the parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* .portfolio-project-columns .portfolio-textarea {
+    border: 2px solid transparent;
+    background-color: transparent;
+    border-radius: 5px;
+    font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
+    text-align: center;
+    padding: 0 0 5px 0;
+    resize: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
+} */
+
+/* ##################################### */
+
+/* ###### Popup styles ###### */
+
+.portfolio-item-with-popup-wrapper {
+    /* max-width: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; */
+
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    
+    /* height: 100%; */
+    overflow: visible;
+    /* z-index: 1; */
+    position: relative;
+}
+
+.portfolio-popup-container {
+    z-index: 2;
+    /* width: 100%; */
+    /* margin-bottom: 5px; */
+    /* border-radius: 5px; */
+    /* background-color: green; */
+    position: absolute;
+}
+
+.portfolio-popup-container:hover {
+    /* background-color: lightgreen; */
+    /* border-radius: 5px; */
+    cursor: pointer;
+}
+
+.portfolio-popup-content {
+    border-radius: 5px;
+    background-color: lightgrey;
+    width: fit-content;
+    z-index: 2;
+    padding: 5px;
+}
+
+.project-edit-image-popup-content:hover {
+    background-color: lightgreen;
+}
+
+/* ######################### */
+
+/* ############# Add project component styles ############# */
+
 .dialog-add-project-section {
     text-align: center;
 }
@@ -198,6 +351,8 @@
     gap: 1rem;
 }
 
+/* ################################# */
+
 /* #### REARRANGE PROJECT SECTIONS STYLES #### */
 .rearrange-sections-container {
     display: flex;
@@ -228,33 +383,9 @@
 }
 /* #################################### */
 
-.portfolio-project-columns {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    max-width: 100%; /* Ensure it does not exceed the width of its parent */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    /* overflow: hidden; */
-}
-
-.portfolio-project-columns .column {
-    max-width: 100%; /* Ensure child elements do not exceed the width of the parent */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-.portfolio-project-columns .portfolio-textarea {
-    border: 2px solid transparent;
-    background-color: transparent;
-    border-radius: 5px;
-    font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
-    text-align: center; /* Center text horizontally */
-    padding: 0 0 5px 0;
-    resize: none; /* Prevent manual resizing */
-    overflow: hidden; /* Hide scrollbars */
-    box-sizing: border-box; /* Include padding and border in the element’s total width and height */
-    max-width: 100%; /* Ensure textarea does not exceed the width of its parent */
-}
-
 .slider-container {
     margin: .5rem 0 1rem 0;
 }
+
+
+

@@ -11,6 +11,7 @@ import ProjectJupyter from '../project-sections/ProjectJupyter';
 import ProjectGoogleSlides from '../project-sections/ProjectGoogleSlides';
 import ProjectWebsitePreview from '../project-sections/ProjectWebsitePreview';
 import ProjectColumns from '../project-sections/ProjectColumns';
+import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
 const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNum}) => {
 
@@ -46,30 +47,46 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
     }, [project]);
 
     const renderSection = (section, index) => {
-        switch (section.type) {
-            case 'video':
-                return <ProjectVideo key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'text area':
-                return <ProjectTextArea key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'image and text':
-                return <ProjectImageAndText key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'image':
-                return <ProjectImage key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'gallery':
-                return <ProjectGallery key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'figma':
-                return <ProjectFigma key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'jupyter':
-                return <ProjectJupyter key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'google slides':
-                return <ProjectGoogleSlides key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'website preview':
-                return <ProjectWebsitePreview key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            case 'columns':
-                return <ProjectColumns key={index} project={project} setProject={setProject} content={section.content} sectionIndex={index} />;
-            default:
-                return null;
-        }
+        // //convert section.styles to json
+        // if (section.styles === undefined) {
+        //     section.styles = {};
+        // }
+        // if (typeof section.styles === 'string') {
+        //     section.styles = JSON.parse(section.styles);
+        // }
+
+        const sectionContent = () => {
+            switch (section.type) {
+                case 'video':
+                    return <ProjectVideo project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'text area':
+                    return <ProjectTextArea project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'image and text':
+                    return <ProjectImageAndText project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'image':
+                    return <ProjectImage project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'gallery':
+                    return <ProjectGallery project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'figma':
+                    return <ProjectFigma project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'jupyter':
+                    return <ProjectJupyter project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'google slides':
+                    return <ProjectGoogleSlides project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'website preview':
+                    return <ProjectWebsitePreview project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                case 'columns':
+                    return <ProjectColumns project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                default:
+                    return null;
+            }
+        };
+    
+        return (
+            <ProjectSectionWrapper key={index} project={project} setProject={setProject} sectionIndex={index} type={section.type}>
+                {sectionContent()}
+            </ProjectSectionWrapper>
+        );
     };
 
 
@@ -77,7 +94,9 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
         <div id="portfolio-project-root">
             {project ? (
                 <>
-                    <ProjectAbout project={project} setProject={setProject} />
+                    <ProjectSectionWrapper project={project} setProject={setProject}>
+                        <ProjectAbout project={project} setProject={setProject} />
+                    </ProjectSectionWrapper>
                     {project.sections.map((section, index) => renderSection(section, index))}
                 </>
 

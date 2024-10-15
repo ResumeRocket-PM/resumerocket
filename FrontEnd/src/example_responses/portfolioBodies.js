@@ -73,26 +73,31 @@ const projectExample =
                     "Feature 2",
                     "Feature 3"
                 ],
-            }
+            },
+            "styles": {}
         },
         {
             "type": "text area",
-            "content": "This is a text area section."
+            "content": "This is a text area section.",
+            "styles": {}
         },
         {
             "type": "image and text",
             "content": {
                 "image": "https://example.com/image1.jpg",
                 "text": "This is an image and text section."
-            }
+            },
+            "styles": {}
         },
         {
             "type": "video",
-            "content": "https://example.com/video1.mp4"
+            "content": "https://example.com/video1.mp4",
+            "styles": {}
         },
         {
             "type": "image",
-            "content": "https://example.com/image2.jpg"
+            "content": "https://example.com/image2.jpg",
+            "styles": {}
         },
         {
             "type": "gallery",
@@ -100,23 +105,28 @@ const projectExample =
                 "https://example.com/image3.jpg",
                 "https://example.com/image4.jpg",
                 "https://example.com/image5.jpg"
-            ]
+            ],
+            "styles": {}
         },
         {
             "type": "figma",
-            "content": "https://example.com/figma1"
+            "content": "https://example.com/figma1",
+            "styles": {}
         },
         {
             "type": "jupyter",
-            "content": "https://example.com/jupyter1"
+            "content": "https://example.com/jupyter1",
+            "styles": {}
         },
         {
             "type": "google slides",
-            "content": "https://example.com/googleslides1"
+            "content": "https://example.com/googleslides1",
+            "styles": {}
         },
         {
             "type": "website preview",
-            "content": "https://example.com/website1"
+            "content": "https://example.com/website1",
+            "styles": {}
         },
         {
             "type": "columns",
@@ -129,7 +139,8 @@ const projectExample =
                     "title": "Column 2",
                     "text": "This is column 2."
                 }
-            ]
+            ],
+            "styles": {}
         }
     ],
 }

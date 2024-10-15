@@ -20,6 +20,8 @@ import Label from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import { PortfolioEditContext } from '../../../context/PortfolioEditProvider';
 import PortfolioItemWithPopupWrapper from '../PortfolioItemWithPopupWrapper';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 
 const addButtonStyles = {   
@@ -249,7 +251,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                     </div>
                     <div id="portfolio-about-header-contact">
                     {about.contactInfo.email && (
-                    <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={`mailto:${about.contactInfo.email}`}>
                                 <img 
                                     src={emailLogo}
@@ -260,7 +262,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </PortfolioItemWithPopupWrapper>
                     )}
                     {about.contactInfo.instagram && (
-                        <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={about.contactInfo.instagram}>
                                 <img 
                                     src={instagramLogo} 
@@ -271,7 +273,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </PortfolioItemWithPopupWrapper>    
                     )}
                     {about.contactInfo.linkedin && (
-                        <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={about.contactInfo.linkedin}>
                                 <img 
                                     src={linkedinLogo} 
@@ -282,7 +284,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </PortfolioItemWithPopupWrapper>
                     )}
                     {about.contactInfo.github && (
-                        <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={about.contactInfo.github}>
                                 <img 
                                     src={githubLogo} 
@@ -293,7 +295,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </PortfolioItemWithPopupWrapper>
                     )}
                     {about.contactInfo.twitter && (
-                        <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={about.contactInfo.twitter}>
                                 <img 
                                     src={twitterLogo} 
@@ -304,7 +306,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </PortfolioItemWithPopupWrapper>
                     )}
                     {about.contactInfo.facebook && (
-                        <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={about.contactInfo.facebook}>
                                 <img 
                                     src={facebookLogo} 
@@ -315,7 +317,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </PortfolioItemWithPopupWrapper>
                     )}
                     {about.contactInfo.discord && (
-                        <PortfolioItemWithPopupWrapper>
+                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
                             <a href={about.contactInfo.discord}>
                                 <img 
                                     src={discordLogo} 
