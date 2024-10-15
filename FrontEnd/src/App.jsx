@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom
 import HomePage from './components/pages/HomePage.jsx';
 import NotFoundPage from './components/pages/NotFoundPage.jsx';
 import LoginPage from './components/pages/LoginPage.jsx';
-import ResumeListPage from "./components/pages/ResumeListPage.jsx";
+import ResumeListPage from "./components/pages/ResumeListPage/ResumeListPage.jsx";
 import PortfolioPage from "./components/pages/PortfolioPage.jsx";
 import NetworkingPage from "./components/pages/NetworkingPage/NetworkingPage.jsx";
 import CreateResume from "./components/pages/CreateResume.jsx";

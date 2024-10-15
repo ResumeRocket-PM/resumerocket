@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import LeftBarResume from '../LeftBarResume.jsx';
-import { Card, CardContent, Dialog} from '@mui/material/';
+import { Card, CardContent, Dialog, Button} from '@mui/material/';
 import Chat from '../Chat.jsx';
 import { useApi } from "../../hooks";
 import Bubble from "../Effects/Bubble.jsx"
@@ -36,11 +36,10 @@ export default function CreateResume() {
     let { id } = useParams();
     const api = useApi();
 
-    const [pdf, setpdf] = useState(null);
+    const [resume, setResume] = useState(null);
     const iframeRef = useRef(null);
     const [targetRect, setTargetRect] = useState(null);
 
-    
     const handleResize = () => {
         if (iframeRef.current) {
           setTargetRect(iframeRef.current.getBoundingClientRect());
@@ -51,10 +50,10 @@ export default function CreateResume() {
     {
         if(id !== undefined)
         {
-            api.get(`/job/postings/${id}`)
+            api.get(`/resume/${id}`)
             .then(response => response.json())
             .then(data => {
-                setpdf(data.result);
+                setResume(removePageContainer(data.result));
 
                 setTimeout(() => {
                     handleResize();
@@ -97,38 +96,56 @@ export default function CreateResume() {
         setVersionHistoryOpen(!versionHistoryOpen);
     }
 
-    console.log("pdf:", pdf);
-    console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
+    // console.log("pdf:", pdf);
+    // console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
 
     const downloadPdf = () => {
-        // Check if pdf is a Blob
-        if (pdf instanceof Blob) {
+        api.get(`/resume/${id}/pdf`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            console.log('response', response)
+            return response.blob(); 
+        })
+        .then(pdfBlob => {
             // Create a URL from the Blob
-            const blobUrl = URL.createObjectURL(pdf);
-            
-            // Create a temporary anchor element to trigger the download
+            const blobUrl = URL.createObjectURL(pdfBlob);
+
             const link = document.createElement('a');
             
-            // Set the href to the Blob URL
             link.href = blobUrl;
-    
-            // Set the download attribute with the desired file name
-            // *** actually I think we're gonna want the name of the og file 
-            link.download = 'downloaded-file.pdf';
-    
-            // Append the anchor to the body
+
+            link.download = 'resume.pdf'; 
+
             document.body.appendChild(link);
-    
-            // Programmatically click the anchor to start the download
+
             link.click();
-    
-            // Remove the anchor from the DOM
+
             document.body.removeChild(link);
-    
-            // Release the object URL after download
+
             URL.revokeObjectURL(blobUrl);
+        })
+        .catch(error => {
+            console.error("Error downloading PDF:", error);
+        });
+    };
+
+    const removePageContainer = (html) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+    
+        const styleTags = tempDiv.querySelectorAll('style');
+        const styles = Array.from(styleTags).map(style => style.outerHTML).join('\n');
+    
+        const pageContainer = tempDiv.querySelector('#page-container');
+    
+        if (pageContainer) {
+            return `${styles}\n${pageContainer.innerHTML}`;
         } else {
-            console.error("PDF is not a Blob");
+            console.warn('No #page-container found in the HTML');
+            return null; 
         }
     };
 
@@ -146,14 +163,25 @@ export default function CreateResume() {
                     handleVersionHistoryOpen={handleVersionHistoryOpen}
                 />
                 {chatOpen && <Chat/>}
-                <button onClick={downloadPdf} disabled={!pdf}>Download Resume</button>
+                <Button 
+                style={{ marginLeft: '20px' }}
+                variant="contained" 
+                onClick={downloadPdf} 
+                disabled={!resume}>Download Pdf</Button>
             </div>
 
             <div id='resume_section'>
 
                 {!versionHistoryOpen &&
                     <Card className="ResumeFull" sx={{}}>
-                        {pdf && <CardContent>
+
+                        <CardContent>
+                            <div
+                                dangerouslySetInnerHTML={{ __html: resume }}
+                            />
+                        </CardContent>
+
+                        {/* {pdf && <CardContent>
                             <iframe id="resumePDFViewer" ref={iframeRef}
                                 src={`data:application/pdf;base64,${pdf["resumeContent"]["FileBytes"]}#toolbar=0&navpanes=0`}
                                 width="100%"
@@ -167,7 +195,7 @@ export default function CreateResume() {
                                 <Bubble key={ pdf.ResumeId + '_index' + index} content={result} index={index+1} targetRect={iframeRef} />
                             ))}
 
-                        </CardContent> }
+                        </CardContent> } */}
                     </Card>                
                 }
 

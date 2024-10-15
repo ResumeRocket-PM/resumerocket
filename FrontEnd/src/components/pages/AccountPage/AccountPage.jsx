@@ -13,6 +13,7 @@ import EditEducationDialog from './Dialog/EditEducationDialog.jsx';
 import EditExperienceDialog from './Dialog/EditExperienceDialog.jsx'; 
 import EditFieldModal from './Dialog/EditFieldModal.jsx'; 
 import EditSkillsDialog from './Dialog/EditSkillsDialog.jsx'; 
+import UploadPDFButton from './UploadPDFButton.jsx';
 
 
 const AccountPage = () => {
@@ -80,7 +81,7 @@ const AccountPage = () => {
                 <div id='account-page-root'>
                     <div id='account-page-content'>
 
-                        <div style={{ position: 'relative', margin: 0, padding: 0 }}>
+                    <div style={{ position: 'relative', margin: 0, padding: 0 }}>
                             {/* Background Image */}
                             <div 
                                 style={{
@@ -125,7 +126,8 @@ const AccountPage = () => {
                                 onClick={() => setDialogOpen('editProfilePhotoLink')}
                             />
 
-                            <div id="account-page-main-header-section" >
+                            <div id="account-page-main-header-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                {/* User details */}
                                 <div id='account-page-user-header-details' className='v-center' style={{ position: 'relative', zIndex: 2 }}>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <h1>{userDetails.firstName} {userDetails.lastName}</h1>
@@ -141,11 +143,11 @@ const AccountPage = () => {
                                         <SectionEditButton onClick={() => setDialogOpen('editLocation')} />
                                     </div>
                                 </div>
+
+                                {/* Right-aligned Upload Button */}
+                                <UploadPDFButton primaryResumeId={userDetails.primaryResumeId} onSubmit={updateAccount} />
                             </div>
                         </div>
-
-
-
 
                         <AccountSectionCard 
                             title='Experience' 
