@@ -19,6 +19,10 @@ const EducationEntry = ({ schoolName, degree, major, minor, graduationDate, cour
         return new Intl.DateTimeFormat('en-US', options).format(date);
     };
 
+    const displayGraduationDate = graduationDate 
+    ? `Graduated: ${formatDate(parseDate(graduationDate))}` 
+    : 'Currently Enrolled';
+
     return (
         <>
             <div className='hz-space-btwn'>
@@ -28,7 +32,7 @@ const EducationEntry = ({ schoolName, degree, major, minor, graduationDate, cour
                         {degree}, <span style={{ fontStyle: 'italic', fontSize: '0.9em' }}>{schoolName}</span>
                     </span>
                     <span>
-                        {`Graduated: ${formatDate(parseDate(graduationDate))}`}
+                        {displayGraduationDate}
                     </span>
                 </h3>
 
