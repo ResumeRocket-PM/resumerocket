@@ -100,6 +100,16 @@ const projectDefault = {
     "name": "",
     "description": "",
     "styles": {},
+    "aboutStyles": {
+        "name": {
+            "font": "h1",
+            "textAlign": "text-align-center",
+        },
+        "description": {
+            "font": "p",
+            "textAlign": "text-align-center",
+        }
+    },
     "sections": [],
 };
 

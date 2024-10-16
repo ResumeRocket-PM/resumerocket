@@ -134,7 +134,7 @@ export default function TextSizeOptionsMenu({
                         {...TransitionProps}
                         // style={{ transformOrigin: placement === 'bottom-end' ? 'center top' : 'bottom-end' }}
                     >
-                        <Paper style={{margin: '10px 0 0 -5px', '&& .MuiPaper-root': {zIndex: '2'}, width: '103.03px'}}>
+                        <Paper style={{margin: '10px 0 0 -5px', width: '103.03px'}}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} style={{ padding: '0', zIndex: '1000' }}                                >
                                     <MenuItem  onClick={() => handleFontSizeItemClick('h1')}>

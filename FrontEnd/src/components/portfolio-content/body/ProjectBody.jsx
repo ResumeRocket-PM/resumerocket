@@ -95,7 +95,7 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
             {project ? (
                 <>
                     <ProjectSectionWrapper project={project} setProject={setProject}>
-                        <ProjectAbout project={project} setProject={setProject} />
+                        <ProjectAbout project={project} setProject={setProject} styles={project.aboutStyles} />
                     </ProjectSectionWrapper>
                     {project.sections.map((section, index) => renderSection(section, index))}
                 </>

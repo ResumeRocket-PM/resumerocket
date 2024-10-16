@@ -101,7 +101,7 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, s
                             <div className='pp-add-project-dialog-body'>
                                 <p>* indicates required field</p>
                                 <FormControl sx={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-                                    {Object.keys(projectDefault).filter(key => key !== 'styles' && key !== 'sections').map((key, index) => (
+                                    {Object.keys(projectDefault).filter(key => key !== 'styles' && key !== 'sections' && key !== 'aboutStyles').map((key, index) => (
                                             <TextField 
                                                 key={index}
                                                 label={key}
