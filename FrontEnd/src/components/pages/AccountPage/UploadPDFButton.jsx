@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useApi } from "../../../hooks"; 
 
@@ -48,7 +48,18 @@ const UploadPDFButton = ({ primaryResumeId, onSubmit }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <Button variant="contained" onClick={handleUploadClick} disabled={isLoading}>
+      <Button 
+        variant="contained" 
+        onClick={handleUploadClick} 
+        disabled={isLoading} 
+        style={{ position: 'relative' }} // Make button relative to position the spinner
+      >
+        {isLoading && (
+          <CircularProgress 
+            size={24} 
+            style={{ position: 'absolute', left: '50%', marginLeft: '-12px', color: 'white' }} // Center the spinner
+          />
+        )}
         {fileName} {/* Display the file name or default button text */}
       </Button>
 
