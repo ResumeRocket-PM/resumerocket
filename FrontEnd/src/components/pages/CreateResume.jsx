@@ -1,12 +1,16 @@
 import "../../styles/CreateResume.css";
 import PropTypes from 'prop-types';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import LeftBarResume from '../LeftBarResume.jsx';
 import { Card, CardContent, Dialog, Button} from '@mui/material/';
 import Chat from '../Chat.jsx';
 import { useApi } from "../../hooks";
 import Bubble from "../Effects/Bubble.jsx"
+import { ClipLoader } from "react-spinners";
+import { debounce, set } from 'lodash';
+import AddVersionToResumeHistoryButton from './ResumePages/AddVersionToResumeHistoryButton.jsx';
+
 
 function ShareDialog(props) {
 
@@ -31,14 +35,20 @@ ShareDialog.propTypes = {
   };
 
 
-export default function CreateResume() {
+export default function CreateResume({resumeId=null}) {
 
     let { id } = useParams();
+    id = resumeId || id; // use resumeId if provided, otherwise use id from URL
     const api = useApi();
 
     const [resume, setResume] = useState(null);
     const iframeRef = useRef(null);
     const [targetRect, setTargetRect] = useState(null);
+
+    const [resumeLoading, setResumeLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [resumeDoneEditing, setResumeDoneEditing] = useState(true);
 
     const handleResize = () => {
         if (iframeRef.current) {
@@ -53,16 +63,18 @@ export default function CreateResume() {
             api.get(`/resume/${id}`)
             .then(response => response.json())
             .then(data => {
+                console.log('data', data);
                 setResume(removePageContainer(data.result));
 
                 setTimeout(() => {
                     handleResize();
                   }, 100); 
+                setResumeLoading(false);
             })
             .catch(error => {
                 console.error("Failed to fetch data:", error);
                 setError(error.message);
-                setIsLoading(false);
+                setResumeLoading(false);
             });
         }
 
@@ -149,6 +161,23 @@ export default function CreateResume() {
         }
     };
 
+    // const handleResumeHtmlContentChange = (event) => {
+    //     setResume(event.target.innerHTML);
+    // };
+
+    const debouncedSetResume = useCallback(
+        debounce((newHtml) => {
+            setResume(newHtml);
+        }, 1000),
+        []
+    );
+    
+    const handleResumeHtmlContentChange = (event) => {
+        setResumeDoneEditing(false);
+        debouncedSetResume(event.target.innerHTML);
+        setResumeDoneEditing(true); 
+    };
+
     return (
         <div id='CreateResume_content' 
         className=
@@ -167,17 +196,33 @@ export default function CreateResume() {
                 style={{ marginLeft: '20px' }}
                 variant="contained" 
                 onClick={downloadPdf} 
-                disabled={!resume}>Download Pdf</Button>
+                disabled={!resume}>Download Pdf
+                </Button>
+                <div style={{marginLeft: '20px'}}>
+                    <AddVersionToResumeHistoryButton
+                    resume={resume}
+                    resumeLoading={resumeLoading}
+                    resumeDoneEditing={resumeDoneEditing}
+                    originalResumeId={id}
+                    />
+                </div>
+
             </div>
 
             <div id='resume_section'>
+                {resumeLoading ? (
+                    <ClipLoader />
+                ) : (
+                    <>
 
                 {!versionHistoryOpen &&
                     <Card className="ResumeFull" sx={{}}>
 
                         <CardContent>
-                            <div
+                            <div id='resume-html-container'
+                                contentEditable={true}
                                 dangerouslySetInnerHTML={{ __html: resume }}
+                                onInput={handleResumeHtmlContentChange}
                             />
                         </CardContent>
 
@@ -198,7 +243,6 @@ export default function CreateResume() {
                         </CardContent> } */}
                     </Card>                
                 }
-
                 {versionHistoryOpen && 
                     <>
                         <Card className="ResumeSmaller" sx={{}}>
@@ -213,7 +257,11 @@ export default function CreateResume() {
                         </Card>                
                     </>
                 }
+                    </>
+                )}
             </div>
+
+
             <ShareDialog open={shareDialogOpen} onClose={handleShareDialogClose}/>
             <div id="col3">
                 {[...Array(6).keys()].map((num) => (

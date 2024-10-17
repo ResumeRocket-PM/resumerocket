@@ -1,0 +1,52 @@
+<div style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', padding: '0 6rem 0 6rem' }}>
+    <h2>Edit Resume Section</h2>
+    <input type="file" accept=".pdf" onChange={handleFileChange} />
+    <button onClick={handleUpload}>Upload Resume</button>
+    <button onClick={handleDownload}>Download Resume</button>
+    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+        <div style={{ width: '45%' }}>
+            <h3>Document 1</h3>
+            <Editor
+                apiKey='3gq33pyhpnc13v47yaafsogn5868lr512o1hx0pqvho0deu2'
+                value={"&lt;object type=&quot;application/pdf&quot; data=&quot;data:application/pdf;base64,JVBERi0xLjUKJYCBgoMKMSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvRmlyc3QgMTQxL04gMjAvTGVuZ3==&quot;&gt;&lt;/object&gt;"}
+                init={{
+                    height: 700,
+                    menubar: false,
+                    plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                    ],
+                    toolbar:
+                        'undo redo | formatselect | bold italic backcolor | \
+                        alignleft aligncenter alignright alignjustify | \
+                        bullist numlist outdent indent | removeformat | help'
+                }}
+                onEditorChange={handleEditorChange}
+            />
+        </div>
+        <div style={{ width: '45%' }}>
+            <h3>Document 2</h3>
+            <Editor
+                apiKey='3gq33pyhpnc13v47yaafsogn5868lr512o1hx0pqvho0deu2'
+                value={comparisonDocContent}
+                init={{
+                    height: 700,
+                    menubar: false,
+                    plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                    ],
+                    toolbar:
+                        'undo redo | formatselect | bold italic backcolor | \
+                        alignleft aligncenter alignright alignjustify | \
+                        bullist numlist outdent indent | removeformat | help'
+                }}
+                onEditorChange={handleComparisonEditorChange}
+            />
+        </div>
+    </div>
+    <button onClick={compareDocuments}>Compare Documents</button>
+    <div dangerouslySetInnerHTML={{ __html: diffHtml }} />
+</div>
