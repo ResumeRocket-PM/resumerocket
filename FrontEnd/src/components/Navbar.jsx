@@ -65,14 +65,14 @@ export default function Navbar() {
         </Link>
 
         <div id="nav_links">
-          <Link to="/resume" className="nav_link" onClick={() => handleNavLinkClick('/resume-list')}>
-            <img src={activeNavLink === '/resume-list' ? fileIconOrange : fileIcon} alt="resume" />
-            <p>Resume (new)</p>
-          </Link>
-          <Link to="/resume-list" className="nav_link" onClick={() => handleNavLinkClick('/resume-list')}>
-            <img src={activeNavLink === '/resume-list' ? fileIconOrange : fileIcon} alt="resume" />
+          <Link to="/resume" className="nav_link" onClick={() => handleNavLinkClick('/resume')}>
+            <img src={activeNavLink === '/resume' ? fileIconOrange : fileIcon} alt="resume" />
             <p>Resume</p>
           </Link>
+          {/* <Link to="/resume-list" className="nav_link" onClick={() => handleNavLinkClick('/resume-list')}>
+            <img src={activeNavLink === '/resume-list' ? fileIconOrange : fileIcon} alt="resume" />
+            <p>Resume</p>
+          </Link> */}
           <Link to="/portfolio" className="nav_link" onClick={() => handleNavLinkClick('/portfolio')}>
             <img src={activeNavLink === '/portfolio' ? briefCaseIconOrange : briefCaseIcon} alt="portfolio" />
             <p>Portfolio</p>

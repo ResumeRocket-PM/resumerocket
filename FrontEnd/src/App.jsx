@@ -63,7 +63,7 @@ function App() {
             <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
               <Route path="/home" element={<HomePage />} />
               <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
-              <Route path="/resume-list" element={<ResumeListPage />} />
+              {/* <Route path="/resume-list" element={<ResumeListPage />} /> */}
               <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
               <Route path="/networking" element={<NetworkingPage />} />
               <Route path="/create-resume/:id?" element={<CreateResume />} />
