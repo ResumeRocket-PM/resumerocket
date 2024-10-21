@@ -232,10 +232,12 @@
 .portfolio-project-columns {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    /* gap: 1rem; */
+    width: 100%; /* Ensure it takes up the full width of the parent */
     max-width: 100%; /* Ensure it does not exceed the width of its parent */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     /* overflow: hidden; */
+    padding-left: 28px; /* to account for add button, button is 24, plus 4 padding */
 }
 
 @media (max-width: 1590px) {
@@ -245,7 +247,7 @@
 }
 
 .portfolio-project-columns .column {
-    max-width: 100%; /* Ensure child elements do not exceed the width of the parent */
+    /* max-width: 100%; Ensure child elements do not exceed the width of the parent */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
@@ -261,6 +263,18 @@
     box-sizing: border-box;
     max-width: 100%;
 } */
+
+.portfolio-column-divider-add-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* position: relative; Add relative positioning to contain the absolutely positioned child */
+    /* background-color: lightgrey; */
+    height: 100%;
+    width: fit-content;
+    padding: 0 2px; 
+}
 
 /* ##################################### */
 

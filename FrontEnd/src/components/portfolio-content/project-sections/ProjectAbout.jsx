@@ -97,39 +97,35 @@ const ProjectAbout = ({project, setProject, styles}) => {
         });
     };
 
-    const handleNameTextAreaClickAway = (event) => {
-        if (nameTextAreaRef.current && namePopoverRef.current.contains(event.target)) {
-            focusNameTextArea();
-            return;
-        } else if (namePopoverOpen) {
-            setNamePopoverOpen(false);
-        }
-    };
+    // const handleNameTextAreaClickAway = (event) => {
+    //     if (nameTextAreaRef.current && namePopoverRef.current.contains(event.target)) {
+    //         return;
+    //     } else if (namePopoverOpen) {
+    //         setNamePopoverOpen(false);
+    //     }
+    // };
 
-    const handleDescriptionTextAreaClickAway = (event) => {
-        if (descriptionTextAreaRef.current) {
-            // if(descriptionPopoverRef.current) {
-                if(descriptionPopoverRef.current.contains(event.target)) {
-                    return;
-                }
-            // }
+    // const handleDescriptionTextAreaClickAway = (event) => {
+    //     if (descriptionTextAreaRef.current) {
+    //             if(descriptionPopoverRef.current.contains(event.target)) {
+    //                 return;
+    //             }
+    //     } else if (descriptionPopoverOpen) {
+    //         setDescriptionPopoverOpen(false);
+    //     }
+    // }
 
-        } else if (descriptionPopoverOpen) {
-            setDescriptionPopoverOpen(false);
-        }
-    }
+    // const focusNameTextArea = () => {
+    //     if (nameTextAreaRef.current) {
+    //         nameTextAreaRef.current.focus();
+    //     }
+    // };
 
-    const focusNameTextArea = () => {
-        if (nameTextAreaRef.current) {
-            nameTextAreaRef.current.focus();
-        }
-    };
-
-    const focusDescriptionTextArea = () => {
-        if (descriptionTextAreaRef.current) {
-            descriptionTextAreaRef.current.focus();
-        }
-    };
+    // const focusDescriptionTextArea = () => {
+    //     if (descriptionTextAreaRef.current) {
+    //         descriptionTextAreaRef.current.focus();
+    //     }
+    // };
 
     return (
         // <ProjectSectionWrapper project={project} setProject={setProject}>
@@ -151,8 +147,9 @@ const ProjectAbout = ({project, setProject, styles}) => {
                         </div>
                     }
                 >
-                    <ClickAwayListener mouseEvent="onMouseDown" onClickAway={handleNameTextAreaClickAway}>
-                        
+                    <ClickAwayListener mouseEvent="onMouseDown" 
+                        // onClickAway={handleNameTextAreaClickAway}
+                    >    
                         <TextareaAutosize
                             ref={nameTextAreaRef}
                             className={[
@@ -194,7 +191,10 @@ const ProjectAbout = ({project, setProject, styles}) => {
                         </div>
                     }
                 >
-                    <ClickAwayListener mouseEvent="onMouseDown" onClickAway={handleDescriptionTextAreaClickAway}>
+                    <ClickAwayListener 
+                        mouseEvent="onMouseDown"
+                        // onClickAway={handleDescriptionTextAreaClickAway}
+                    >
                         <TextareaAutosize
                             ref={descriptionTextAreaRef}
                             className={[

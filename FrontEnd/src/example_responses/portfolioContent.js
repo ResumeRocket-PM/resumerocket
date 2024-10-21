@@ -127,16 +127,52 @@ const projectTextAreaStylesDefault = {
 
 const projectColumnsContentDefault = [
     {
-        "title": "",
-        "text": ""
+        "title": {
+            "text": "",
+            styles: {
+                "font": "h1",
+                "textAlign": "text-align-center",
+            }
+        },
+        "description": {
+            "text": "",
+            styles: {
+                "font": "p",
+                "textAlign": "text-align-center",
+            }
+        }
     },
     {
-        "title": "",
-        "text": ""
+        "title": {
+            "text": "",
+            styles: {
+                "font": "h1",
+                "textAlign": "text-align-center",
+            }
+        },
+        "description": {
+            "text": "",
+            styles: {
+                "font": "p",
+                "textAlign": "text-align-center",
+            }
+        }
     },
     {
-        "title": "",
-        "text": ""
+        "title": {
+            "text": "",
+            styles: {
+                "font": "h1",
+                "textAlign": "text-align-center",
+            }
+        },
+        "description": {
+            "text": "",
+            styles: {
+                "font": "p",
+                "textAlign": "text-align-center",
+            }
+        }
     }
 ]
 
