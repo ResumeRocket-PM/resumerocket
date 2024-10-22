@@ -35,6 +35,7 @@ const UploadPDFButton = ({ primaryResumeId, onSubmit }) => {
     api.postFileForm("/resume/primary", formData) // Call the API to upload
       .then(response => {
         onSubmit(); // Trigger callback after successful submission
+        console.log("pdf response: ", response)
       })
       .catch(error => {
         console.error('Error uploading file:', error);
