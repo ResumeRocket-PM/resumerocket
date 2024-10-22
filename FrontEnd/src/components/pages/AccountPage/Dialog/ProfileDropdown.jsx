@@ -2,33 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { TextField, MenuItem, CircularProgress } from '@mui/material';
 import { useApi } from "../../../../hooks"; // Custom hook to call backend APIs
 
-const MajorDropdown = ({ label, selectedMajor, onMajorSelect }) => {
+const ProfileDropdown = ({ label, apiUrl, pxSize}) => {
     const [inputValue, setInputValue] = useState(''); // Initial input value
-    const [majorList, setMajorList] = useState([]); // Dropdown options
+    const [profileList, setProfileList] = useState([]); // Dropdown options
     const [isLoading, setIsLoading] = useState(false); // Loading indicator
+    const [selectedProfile, setSelectedProfile] = useState(''); // To store the selected profile field name
     const api = useApi(); // Use API hook for fetching data
 
-    const fetchMajors = (inputValue) => {
+    const fetchData = (inputValue) => {
         if (!inputValue) {
-            setMajorList([]); // Reset the list when input is empty
+            setProfileList([]); // Reset the list when input is empty
             return;
         }
         setIsLoading(true); // Show loading spinner
 
-        api.get(`/profile/MajorName/${inputValue}/true`) // Assuming true for the sorting order
+        api.get(`/profile/${apiUrl}/${inputValue}/true`) // Use the passed apiUrl for the request
             .then(response => {
                 if (response.ok) {
                     response.json().then(data => {
                         const mlist = data.result;
-                        setMajorList(mlist);
+                        setProfileList(mlist);
                     });
                 } else {
-                    setMajorList(["There was an error fetching majors"]);
+                    setProfileList(["there are something error"]);
                 }
             })
             .catch((error) => {
-                console.error('Error fetching major names:', error);
-                setMajorList(["There was an error fetching majors"]);
+                console.error('Error fetching data:', error);
             })
             .finally(() => {
                 setIsLoading(false); // Hide loading spinner
@@ -37,7 +37,7 @@ const MajorDropdown = ({ label, selectedMajor, onMajorSelect }) => {
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            fetchMajors(inputValue);
+            fetchData(inputValue);
         }, 300); // Adding debounce of 300ms for better performance
 
         return () => clearTimeout(delayDebounceFn); // Cleanup to avoid multiple calls
@@ -47,36 +47,40 @@ const MajorDropdown = ({ label, selectedMajor, onMajorSelect }) => {
         <div style={{ width: '552px' }}>
             {/* Input text bar for searching */}
             <TextField
-                label={label} // Use the dynamic label
+                label={label} // Dynamic label
                 variant="outlined"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)} // Update input value
                 fullWidth
+                style={{ marginTop: pxSize }}
             />
 
-            {/* Dropdown menu for showing major names */}
+            {/* Dropdown menu for showing select profile field names */}
             {isLoading ? (
                 <CircularProgress size={24} style={{ margin: '10px' }} /> // Show loading spinner
             ) : (
-                majorList.length > 0 && (
+                profileList.length > 0 && (
                     <div>
-                        {majorList.map((major, index) => (
+                        {profileList.map((profile, index) => (
                             <MenuItem
                                 key={index}
                                 onClick={() => {
-                                    onMajorSelect(major); // Call the passed onMajorSelect handler
-                                    setInputValue(major); // Show the selected Major in input
-                                    setMajorList([]); // Hide the dropdown
+                                    setSelectedProfile(profile); // Set selected profile file name
+                                    setInputValue(profile); // Show the selected profile in input
+                                    setProfileList([]); // Hide the dropdown
                                 }}
                             >
-                                {major}
+                                {profile}
                             </MenuItem>
                         ))}
                     </div>
                 )
             )}
+
+            {/* Display selected profile field name */}
+            {selectedProfile && <p>Selected {label}: {selectedProfile}</p>}
         </div>
     );
 };
 
-export default MajorDropdown;
+export default ProfileDropdown;
