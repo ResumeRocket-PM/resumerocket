@@ -3,19 +3,17 @@ import { useEffect, useState, useContext, useRef } from 'react';
 import { PortfolioEditContext } from '../../context/PortfolioEditProvider';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
-
 const PortfolioItemWithPopupWrapper = ({
     children, 
     popoverContent, 
-    popoverOpen=null, 
-    setPopoverOpen=null, 
-    useContentClick=false,
-    popupLocation="top",
-    popupContentClasses="",
-    childrenContainerClasses="",
-    wrapperClasses="",
+    popoverOpen: propPopoverOpen = null, 
+    setPopoverOpen: propSetPopoverOpen = null, 
+    useContentClick = false,
+    popupLocation = "top",
+    popupContentClasses = "",
+    childrenContainerClasses = "",
+    wrapperClasses = "",
 }) => {
-
     const { editMode } = useContext(PortfolioEditContext);
 
     const [hoveredItem, setHoveredItem] = useState('');
@@ -24,6 +22,11 @@ const PortfolioItemWithPopupWrapper = ({
     const popupContentRef = useRef(null);
     const wrapperRef = useRef(null);
     const childrenContainerRef = useRef(null);
+
+    // Initialize state for popoverOpen if prop is null
+    const [statePopoverOpen, setStatePopoverOpen] = useState(false);
+    const popoverOpen = propPopoverOpen !== null ? propPopoverOpen : statePopoverOpen;
+    const setPopoverOpen = propSetPopoverOpen !== null ? propSetPopoverOpen : setStatePopoverOpen;
 
     const handleMouseEnterPI = (event, item) => {
         if (!editMode || useContentClick) return;
@@ -49,7 +52,7 @@ const PortfolioItemWithPopupWrapper = ({
     const handleContentClick = (event) => {
         if (!editMode || !useContentClick) return;
         setPopoverOpen(true);
-        event.stopPropagation();
+        // event.stopPropagation();
     };
 
     const handleDocumentClick = (event) => {
@@ -59,9 +62,7 @@ const PortfolioItemWithPopupWrapper = ({
         }
     };
 
-    const yeetThePopover = () => {
-        setPopoverOpen(false);
-    };
+
 
     useEffect(() => {
         if (!hoveredItem && !popoverHovered) {
@@ -136,7 +137,6 @@ const PortfolioItemWithPopupWrapper = ({
                 return {
                     top: '0',
                     right: '0',
-                    // margin: '6px 6px 0 0'
                 };
         }
     };
@@ -170,9 +170,7 @@ const PortfolioItemWithPopupWrapper = ({
                     </div>                        
                 )}
                 <div className={'portfolio-popup-children-content ' + childrenContainerClasses}  onClick={handleContentClick}>
-                    {/* <ClickAwayListener mouseEvent="onMouseDown" onClickAway={() => setPopoverOpen}> */}
-                        {children}
-                    {/* </ClickAwayListener> */}
+                    {children}
                 </div>
             </div>
         </>
