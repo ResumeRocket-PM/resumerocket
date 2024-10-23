@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, TextField, Button, DialogActions, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import ProfileDropdown from './ProfileDropdown'; // Import your profileDropdown component
 
 const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience, onClose }) => {
     const openType = dialogOpen.split('-')[0];
@@ -129,15 +130,22 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience, onClose }
                         error={!!formErrors.company}
                         helperText={formErrors.company}
                     />
-                    <TextField
+                    {/*<TextField*/}
+                    {/*    label='Position'*/}
+                    {/*    name='position'*/}
+                    {/*    value={formData.position}*/}
+                    {/*    onChange={handleChange}*/}
+                    {/*    fullWidth*/}
+                    {/*    margin='normal'*/}
+                    {/*    error={!!formErrors.position}*/}
+                    {/*    helperText={formErrors.position}*/}
+                    {/*/>*/}
+                    <ProfileDropdown
                         label='Position'
-                        name='position'
-                        value={formData.position}
-                        onChange={handleChange}
-                        fullWidth
-                        margin='normal'
-                        error={!!formErrors.position}
-                        helperText={formErrors.position}
+                        apiUrl="careerName"
+                        pxSize='20px'
+                        selectedProfile={formData.position}  // Pass current schoolName as selected value
+                        onProfileSelect={handleChange} // Handle the university change
                     />
                     <FormControl fullWidth margin='normal' error={!!formErrors.type}>
                         <InputLabel>Type</InputLabel>
