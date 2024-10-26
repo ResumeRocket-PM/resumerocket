@@ -1,6 +1,6 @@
 const api = (token) => {
     // change depending on what backend launch config you're using
-    const baseUrl = process.env.API_URL || "https://localhost:5001/api"; 
+    const baseUrl = process.env.REACT_APP_API_URL || "https://localhost:5001/api"; 
 
     const headers = {
       "Content-Type": "application/json",

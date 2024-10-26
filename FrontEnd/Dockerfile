@@ -10,7 +10,7 @@ RUN npm install -g serve
 
 COPY . .
 
-ENV API_URL=https://www.resume-rocket.net/api
+ENV REACT_APP_API_URL=https://www.resume-rocket.net/api
 
 RUN npm run build
 
