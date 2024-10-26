@@ -10,6 +10,8 @@ RUN npm install -g serve
 
 COPY . .
 
+ENV API_URL=https://www.resume-rocket.net/api
+
 RUN npm run build
 
 EXPOSE 3000
