@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, TextField, Button, DialogActions } from "@mui/material";
+import ProfileDropdown from './ProfileDropdown'; // Import your profileDropdown component
 
 const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) => {
     const openType = dialogOpen.split('-')[0];
@@ -113,15 +114,13 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
             <DialogTitle>{index === null ? 'Add Education' : 'Edit Education'}</DialogTitle>
             <DialogContent>
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label='School Name'
-                        name='schoolName'
-                        value={formData.schoolName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin='normal'
-                        error={Boolean(errorMessages.schoolName)}
-                        helperText={errorMessages.schoolName}
+                    
+                    <ProfileDropdown
+                        label='University'
+                        apiUrl="UniversityName"
+                        pxSize='20px'
+                        selectedProfile={formData.majorName}  // Pass current schoolName as selected value
+                        onProfileSelect={handleChange} // Handle the university change
                     />
                     <TextField
                         label='Degree'
@@ -133,24 +132,23 @@ const EditEducationDialog = ({ dialogOpen, setDialogOpen, education, onClose }) 
                         error={Boolean(errorMessages.degree)}
                         helperText={errorMessages.degree}
                     />
-                    <TextField
+
+                    <ProfileDropdown
                         label='Major'
-                        name='major'
-                        value={formData.major}
-                        onChange={handleChange}
-                        fullWidth
-                        margin='normal'
-                        error={Boolean(errorMessages.major)}
-                        helperText={errorMessages.major}
+                        apiUrl="MajorName"
+                        pxSize='20px'
+                        selectedProfile={formData.majorName}  // Pass current schoolName as selected value
+                        onProfileSelect={handleChange} // Handle the university change
                     />
-                    <TextField
+                    
+                    <ProfileDropdown
                         label='Minor'
-                        name='minor'
-                        value={formData.minor}
-                        onChange={handleChange}
-                        fullWidth
-                        margin='normal'
+                        apiUrl="MajorName"
+                        pxSize = '20px'
+                        selectedProfile={formData.majorName}  // Pass current schoolName as selected value
+                        onProfileSelect={handleChange} // Handle the university change
                     />
+
                     <TextField
                         label='Graduation Date'
                         name='graduationDate'
