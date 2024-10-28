@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { useApi } from '../hooks';
 
 const AuthContext = createContext();
 
@@ -15,9 +16,11 @@ const AuthProvider = ({ children }) => {
     setAuthToken(null);
   };
 
+
   const isLoggedIn = !!authToken;
   console.log("isLoggedIn: ", isLoggedIn);
   console.log("authToken: ", authToken);
+
 
   return (
     <AuthContext.Provider 
@@ -25,7 +28,7 @@ const AuthProvider = ({ children }) => {
       {{  authToken,
           login,
           logout, 
-          isLoggedIn
+          isLoggedIn,
       }}
     >
       {children}

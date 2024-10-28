@@ -58,25 +58,25 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
         const sectionContent = () => {
             switch (section.type) {
                 case 'video':
-                    return <ProjectVideo project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectVideo project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'text area':
-                    return <ProjectTextArea project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectTextArea project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'image and text':
-                    return <ProjectImageAndText project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectImageAndText project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'image':
-                    return <ProjectImage project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectImage project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'gallery':
-                    return <ProjectGallery project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectGallery project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'figma':
-                    return <ProjectFigma project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectFigma project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'jupyter':
-                    return <ProjectJupyter project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectJupyter project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'google slides':
-                    return <ProjectGoogleSlides project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectGoogleSlides project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'website preview':
-                    return <ProjectWebsitePreview project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectWebsitePreview project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'columns':
-                    return <ProjectColumns project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} />;
+                    return <ProjectColumns project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 default:
                     return null;
             }

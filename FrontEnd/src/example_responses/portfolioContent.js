@@ -62,8 +62,7 @@ const portfolioContentDefault = {
             },
             "links": {
                 "textDecoration": "none",
-                "color": "white",
-                "backgroundColor": "red"
+                "color": "black",
             },
         }
     },
@@ -73,7 +72,9 @@ const portfolioContentDefault = {
             "title": "",
             "personalSummary": "",
             "profilePicture": "",
+            "profilePictureId": "",
             "backgroundPicture": "", //../assets/code-background.jpg
+            "backgroundPictureId": "",
             "contactInfo": {
             },
             "styles": {
@@ -176,6 +177,22 @@ const projectColumnsContentDefault = [
     }
 ]
 
+const projectTextAreaContentDefault = {
+    "text": ""
+}
+
+const projectImageContentDefault = {
+    "imageUrl": "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
+    "imageId": "",
+}
+
+// #############################################
+// #############################################
+// #############################################
+// #############################################
+// #############################################
+
+
 const projectsPreviewDefault = {
     "styles": {
         "header": {
@@ -236,10 +253,11 @@ export {
     portfolioContentDefault, 
     projectsDefault, 
     projectsPreviewDefault, 
-    // projectPreviewDefault, 
     projectDefault,
     projectTextAreaStylesDefault,
     projectColumnsContentDefault,
+    projectImageContentDefault,
+    projectTextAreaContentDefault,
 
     experienceDefault,
     experienceItemDefault,

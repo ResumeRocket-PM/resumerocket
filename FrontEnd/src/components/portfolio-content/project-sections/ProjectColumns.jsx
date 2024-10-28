@@ -78,6 +78,7 @@ const ProjectColumn = ({
                             onBlur={() => handleTextChange(index, 'description')}
                             aria-label="minimum height"
                             minRows={1}
+                            style={{ width: "100%" }}
                             placeholder="Enter information about the project here"
                         />
                     </div>                         

@@ -12,7 +12,9 @@ const PortfolioItemWithPopupWrapper = ({
     popupLocation = "top",
     popupContentClasses = "",
     childrenContainerClasses = "",
+    childrenContainerStyles = {},
     wrapperClasses = "",
+    wrapperStyles = {},
 }) => {
     const { editMode } = useContext(PortfolioEditContext);
 
@@ -149,6 +151,7 @@ const PortfolioItemWithPopupWrapper = ({
                 className={'portfolio-item-with-popup-wrapper ' + wrapperClasses}
                 onMouseEnter={(event) => handleMouseEnterPI(event, 'portfolio-item')}
                 onMouseLeave={handleMouseLeavePI}
+                style={wrapperStyles}
                 ref={wrapperRef}
             >
                 {editMode && (
@@ -169,7 +172,11 @@ const PortfolioItemWithPopupWrapper = ({
                         </div>
                     </div>                        
                 )}
-                <div className={'portfolio-popup-children-content ' + childrenContainerClasses}  onClick={handleContentClick}>
+                <div 
+                    className={'portfolio-popup-children-content ' + childrenContainerClasses}  
+                    onClick={handleContentClick}
+                    style={childrenContainerStyles}
+                >
                     {children}
                 </div>
             </div>

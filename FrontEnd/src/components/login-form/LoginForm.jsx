@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './LoginForm.css'; // make sure to create a corresponding CSS file
 import { useSpring, animated } from 'react-spring';
 
@@ -8,10 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import {useAuth} from '../../hooks.js'
 import { useApiWithoutToken } from '../../hooks.js';
 import { portfolioContentDefault } from '../../example_responses/portfolioContent.js';
+import { ImageContext } from '../../context/ImageProvider.jsx';
 
 
 const LoginForm = () => {
   const { login } = useAuth();
+  const { storeImageSASToken } = useContext(ImageContext);
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const api = useApiWithoutToken();
@@ -125,6 +127,16 @@ const LoginForm = () => {
         else {
           console.log("Failed to save account");
         }
+      }).then(response => {
+          api.get('/image/generateSasToken')
+          .then(sasResponse => sasResponse.json())
+          .then(sasData => {
+            console.log('sasData', sasData);  
+            storeImageSASToken(sasData.sasToken.split('?')[1]);
+          })
+          .catch(err => {
+              console.error('Error generating SAS token:', err);
+          });
       })
     }
 

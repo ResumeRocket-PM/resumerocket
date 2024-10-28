@@ -89,3 +89,11 @@ p {
 .no-padding {
   padding: 0;
 }
+
+.can-hover {
+  cursor: pointer;
+}
+
+.border-glow:hover {
+  box-shadow: 0 0 5px 5px #48abe0;
+}

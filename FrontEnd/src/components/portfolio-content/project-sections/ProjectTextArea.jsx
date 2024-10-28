@@ -107,12 +107,15 @@ const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles })
 
     return (
         // <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
-        <div className='project-text-area-root'>
+        <div className='project-text-area-root' style={{width: '100%'}}>
             <PortfolioItemWithPopupWrapper
                 popoverOpen={popoverOpen}
                 setPopoverOpen={setPopoverOpen}
                 popupLocation="top"
                 useContentClick={true}
+                wrapperStyles={{width: '100%'}}
+                childrenContainerClasses='hz-center'
+                childrenContainerStyles={{width: '100%'}}
                 popoverContent={
                     <div className='portfolio-textarea-popup-content hz-center'>
                         <TextSizeOptionsMenu 
@@ -131,11 +134,12 @@ const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles })
                         styles?.textarea?.textAlign || '',
                         !editMode ? 'disabled-textarea' : ''
                     ].join(' ')}
-                    sx={{
+                    style={{
                         // fontSize: `${styles?.fontSize || '1em'}`,
                         // fontWeight: `${styles?.fontWeight || 'normal'}`,
                         // fontSize: "24px",
                         // fontWeight: "normal",
+                        width: '70%'
                     }}
                     value={tempValue || ""}
                     onChange={handleTempChange}

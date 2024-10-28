@@ -7,9 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 // import Checkbox from '@mui/material/Checkbox';
 // import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
 
 // isOpen and setIsOpen are optional props that can be passed to control the dialog from outside the component
-const DialogButton = ({text, content, buttonStyles=null, title=null, startIcon=null, onClose=null, isOpen=null, setIsOpen=null}) => {
+const DialogButton = ({text, content, buttonStyles=null, title=null, startIcon=null, icon=null, onClose=null, isOpen=null, setIsOpen=null}) => {
 
 
     const [open, setOpen] = useState(isOpen !== null ? isOpen : false);
@@ -39,22 +40,34 @@ const DialogButton = ({text, content, buttonStyles=null, title=null, startIcon=n
 
     return (
         <>
-            <Button 
-                variant="outlined" 
-                onClick={toggleDialogOpen}
-                startIcon={startIcon}
-                sx={{
-                    // minWidth: 'fit-content', 
-                    // backgroundColor: '#A1D7F5',
-                    // fontWeight: 'inherit',
-                    // color: 'currentColor',
-                    // borderRadius: '16px',
-                    // width: '10rem',
-                    // height: '10rem',
-                    ...buttonStyles
-                }}
-            >{text}
-            </Button>
+            {startIcon && (
+                <Button 
+                    variant="outlined" 
+                    onClick={toggleDialogOpen}
+                    startIcon={startIcon}
+                    sx={{
+                        // minWidth: 'fit-content', 
+                        // backgroundColor: '#A1D7F5',
+                        // fontWeight: 'inherit',
+                        // color: 'currentColor',
+                        // borderRadius: '16px',
+                        // width: '10rem',
+                        // height: '10rem',
+                        ...buttonStyles
+                    }}
+                >{text}
+                </Button>
+            )}
+
+            {icon && (
+                <Button
+                    variant="outlined"
+                    sx={{...buttonStyles, minWidth: 'fit-content', padding: "5px"}}
+                >
+                    {icon}
+                </Button>
+            )}
+
             <Dialog
             open={open}
             onClose={toggleDialogOpen}

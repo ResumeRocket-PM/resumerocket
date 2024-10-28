@@ -5,15 +5,29 @@ import styled from "styled-components";
 import ProjectSectionWrapper from "../ProjectSectionWrapper";
 import KermitPic from '../../../assets/kermit-profile-pic.jpg';
 import { useRef, useEffect } from 'react';
+import appImg1 from '../../../assets/stock-images/app_image_1.jpg';
+import appImg2 from '../../../assets/stock-images/app_image_2.jpg';
+import appImg3 from '../../../assets/stock-images/app_image_3.jpg';
+
+
+// const images = [
+//     "https://images.ctfassets.net/rt5zmd3ipxai/5hWDLmY62kBYnc2Cm4WF2T/e2ffb09597504b9832fafdf579c80c91/NVA_-_MASTER_-_BLOG_-_EXOTIC_-_LEOPARD_GECKO.jpg?fit=fill&fm=webp&h=678&w=1252&q=72",
+//     "https://cdn.medvet.com/app/uploads/2016/12/Common-diseases-leopard-gecko.jpg?strip=all&lossy=1&ssl=1",
+//     "https://www.thesprucepets.com/thmb/sPIX7usm_Q2CfR51TtVlbd6hFio=/8093x0/filters:no_upscale():strip_icc()/day-geckos-as-pets-1236908-hero-eac0bb91e96548c18066fd58bbb26772.jpg",
+//     "https://ottawa.citynews.ca/wp-content/blogs.dir/sites/4/2024/03/22/gecko-verdian-chua-unsplash-scaled-1024x576.jpg",
+//     "https://www.sciencealert.com/images/2024/10/happy_gecko-642x260.jpg",
+//     "https://news.uga.edu/wp-content/uploads/2017/12/UGA-BlueGecko-960.jpg",
+// ];
 
 const images = [
-    "https://images.ctfassets.net/rt5zmd3ipxai/5hWDLmY62kBYnc2Cm4WF2T/e2ffb09597504b9832fafdf579c80c91/NVA_-_MASTER_-_BLOG_-_EXOTIC_-_LEOPARD_GECKO.jpg?fit=fill&fm=webp&h=678&w=1252&q=72",
-    "https://cdn.medvet.com/app/uploads/2016/12/Common-diseases-leopard-gecko.jpg?strip=all&lossy=1&ssl=1",
-    "https://www.thesprucepets.com/thmb/sPIX7usm_Q2CfR51TtVlbd6hFio=/8093x0/filters:no_upscale():strip_icc()/day-geckos-as-pets-1236908-hero-eac0bb91e96548c18066fd58bbb26772.jpg",
-    "https://ottawa.citynews.ca/wp-content/blogs.dir/sites/4/2024/03/22/gecko-verdian-chua-unsplash-scaled-1024x576.jpg",
-    "https://www.sciencealert.com/images/2024/10/happy_gecko-642x260.jpg",
-    "https://news.uga.edu/wp-content/uploads/2017/12/UGA-BlueGecko-960.jpg",
+    appImg1,
+    appImg2,
+    appImg3,
+    appImg1,
+    appImg2,
+    appImg3,
 ];
+
 
 const NextArrow = (props) => {
     const { className, style, onClick } = props;
@@ -68,7 +82,7 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
         dots: true,
         infinite: true,
         centerMode: true,
-        // centerPadding: "60px",
+        centerPadding: "80px",
         // adaptiveHeight: true,   
         speed: 500,
         slidesToShow: 3,
@@ -93,7 +107,7 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
                 className="slider-container"
                 style={{ 
                     width: '75%', 
-                    backgroundColor: 'black'
+                    // backgroundColor: 'black'
                 }}
             >
                 <Slider ref={sliderRef} {...settings} className='img-slider'>

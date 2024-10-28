@@ -129,7 +129,7 @@ const ProjectAbout = ({project, setProject, styles}) => {
 
     return (
         // <ProjectSectionWrapper project={project} setProject={setProject}>
-            <div className='v-center-center'>
+            <div className='v-center-center' id="project-about-root">
             
                 <PortfolioItemWithPopupWrapper
                     popoverOpen={namePopoverOpen}
@@ -163,6 +163,7 @@ const ProjectAbout = ({project, setProject, styles}) => {
                                 // fontWeight: `${styles?.fontWeight || 'normal'}`,
                                 // fontSize: "24px",
                                 // fontWeight: "normal",
+                                color: "red"
                             }}
                             value={tempName || ""}
                             onChange={() => setTempName(event.target.value)}
@@ -180,8 +181,15 @@ const ProjectAbout = ({project, setProject, styles}) => {
                     setPopoverOpen={setDescriptionPopoverOpen}
                     popupLocation="top"
                     useContentClick={true}
+                    wrapperStyles={{width: '100%'}}
+                    childrenContainerClasses='hz-center'
+                    childrenContainerStyles={{width: '100%'}}
                     popoverContent={
-                        <div ref={descriptionPopoverRef} className='portfolio-textarea-popup-content hz-center'>
+                        <div 
+                            ref={descriptionPopoverRef}
+                            className='portfolio-textarea-popup-content hz-center'
+                            style={{width: '100%'}}
+                        >
                             <TextSizeOptionsMenu 
                                 changeFontSize={changeDescriptionFontSize}
                                 changeTextAlign={changeDescriptionTextAlign}
@@ -195,27 +203,28 @@ const ProjectAbout = ({project, setProject, styles}) => {
                         mouseEvent="onMouseDown"
                         // onClickAway={handleDescriptionTextAreaClickAway}
                     >
-                        <TextareaAutosize
-                            ref={descriptionTextAreaRef}
-                            className={[
-                                'portfolio-textarea',
-                                styles?.description?.font || '',
-                                styles?.description?.textAlign || '',
-                                !editMode ? 'disabled-textarea' : ''
-                            ].join(' ')}
-                            sx={{
-                                // fontSize: `${styles?.fontSize || '1em'}`,
-                                // fontWeight: `${styles?.fontWeight || 'normal'}`,
-                                // fontSize: "24px",
-                                // fontWeight: "normal",
-                            }}
-                            value={tempDescription || ""}
-                            onChange={() => setTempDescription(event.target.value)}
-                            onBlur={handleDescriptionChange}
-                            aria-label="minimum height"
-                            minRows={1}
-                            placeholder="Enter a short description of the project here"
-                        />  
+                            <TextareaAutosize
+                                ref={descriptionTextAreaRef}
+                                className={[
+                                    'portfolio-textarea .description',
+                                    styles?.description?.font || '',
+                                    styles?.description?.textAlign || '',
+                                    !editMode ? 'disabled-textarea' : ''
+                                ].join(' ')}
+                                style={{
+                                    // fontSize: `${styles?.fontSize || '1em'}`,
+                                    // fontWeight: `${styles?.fontWeight || 'normal'}`,
+                                    // fontSize: "24px",
+                                    // fontWeight: "normal",
+                                    width: '70%'
+                                }}
+                                value={tempDescription || ""}
+                                onChange={() => setTempDescription(event.target.value)}
+                                onBlur={handleDescriptionChange}
+                                aria-label="minimum height"
+                                minRows={1}
+                                placeholder="Enter a short description of the project here"
+                            />      
                     </ClickAwayListener>
                 </PortfolioItemWithPopupWrapper> 
 

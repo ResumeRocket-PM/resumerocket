@@ -15,7 +15,7 @@ import PagesContent from "../portfolio-menu_content/PagesContent";
 import PortfolioContent from "../PortfolioContent";
 import * as ph from "../../utils/portfolioHelpers"
 import { useApi } from "../../hooks";
-import {portfolioContentExample, portfolioContentDefault} from "../../example_responses/portfolioContent";
+import {portfolioContentDefault} from "../../example_responses/portfolioContent";
 import Switch from '@mui/material/Switch';
 import { useNavigate } from 'react-router-dom';
 import { UserInfoContext } from "../../context/UserInfoProvider";
@@ -76,26 +76,33 @@ function LeftMenu({
     return (
         <>
             <div id="portfolio-left_menu_buttons_container">
-                <Button onClick={() => menuButtonClicked("pages")} id="pages_button" classes={buttonStyles} className="portfolio-left_button" sx={{ ...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                <Button 
+                    onClick={() => menuButtonClicked("pages")} 
+                    id="pages_button" classes={buttonStyles} 
+                    className="portfolio-left_button" 
+                    sx={{ ...buttonStyles, color:'black',
+                    textTransform:'none', padding: '0',
+                    }}
+                >
                     <img src={siteMapIcon} alt="Pages" />
                     <p>Pages</p>
                 </Button>
-                <Button onClick={() => menuButtonClicked("add")} id="add_section_button" className="portfolio-left_button" sx={{ ...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                {/* <Button onClick={() => menuButtonClicked("add")} id="add_section_button" className="portfolio-left_button" sx={{ ...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={penToSquareIcon} alt="Add section" />
                     <p>Add section</p>
-                </Button>
-                <Button onClick={() => menuButtonClicked("arrange")} id="arrange_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                </Button> */}
+                {/* <Button onClick={() => menuButtonClicked("arrange")} id="arrange_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={arrangeIcon} alt="Rearange" />
                     <p>Rearange</p>
-                </Button>
+                </Button> */}
                 <Button onClick={() => menuButtonClicked("layouts")} id="layouts_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={templatesIcon} alt="Layouts" />
                     <p>Layouts</p>
                 </Button>
-                <Button onClick={() => menuButtonClicked("ai")} id="ai_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                {/* <Button onClick={() => menuButtonClicked("ai")} id="ai_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={openAI_Icon} alt="OpenAI" />
                     <p>AI assistant</p>
-                </Button>
+                </Button> */}
                 <Button onClick={() => menuButtonClicked("link")} id="share_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={linkIcon} alt="Share" />
                     <p>Share</p>
@@ -339,7 +346,7 @@ export default function PortfolioPage() {
                     {/* </PortfolioEditProvider> */}
                 </div>
             </div>
-            <PortfolioStylesBar/>
+            {/* <PortfolioStylesBar/> */}
         </div>
     )
 }

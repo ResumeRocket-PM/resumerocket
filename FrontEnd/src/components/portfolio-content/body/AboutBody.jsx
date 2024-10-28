@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { aboutExample } from '../../../example_responses/portfolioBodies';
 import '../../../styles/AboutBodyDefault.css';
 import PortfolioNavbar from '../PortfolioNavbar';
@@ -21,6 +21,8 @@ import TextField from '@mui/material/TextField';
 import { PortfolioEditContext } from '../../../context/PortfolioEditProvider';
 import PortfolioItemWithPopupWrapper from '../PortfolioItemWithPopupWrapper';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useApi, useAuth } from '../../../hooks';
+import { ImageContext } from '../../../context/ImageProvider';
 
 
 
@@ -104,13 +106,20 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         updateTextAreaSizes, 
         anchorEl 
     } = useContext(PortfolioEditContext); 
-    
-    const [tempValue, setTempValue] = useState({ name: about.name, title: about.title });
+    const { showImage } = useContext(ImageContext);
 
+    const { imageSASToken } = useAuth();
+    
+    const api = useApi();
+    const [tempValue, setTempValue] = useState({ name: about.name, title: about.title });
     const handleTempChange = (e) => {
         const { name, value } = e.target;
         setTempValue(prevTempValue => ({...prevTempValue, [name]: value}));
     };
+    const [profilePic, setProfilePic] = useState(null);
+    const [backgroundPic, setBackgroundPic] = useState(null);
+    const profilePicInputRef = useRef(null); // currently just used by profile pic click handler
+
 
     // const handleTextChange = (e) => {
     //     const { name, value } = e.target;
@@ -135,9 +144,74 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         updateTextAreaSizes();
     }, [about.name, about.title]); // Add dependencies for all fields that might change
 
-    const handleAddProfilePicture = () => {
-        // Add code to handle adding a profile picture
-    }
+    const handleImageClick = () => {
+        if (editMode) {
+            profilePicInputRef.current.click();
+        }
+    };
+
+    const handleChangeProfilePicture = async () => {
+        if (profilePicInputRef.current.files.length === 0) return;
+        const file = profilePicInputRef.current.files[0];
+        const formData = new FormData();
+        formData.append('File', file); // Append the file to FormData
+        formData.append('imageId', about.profilePictureId); // Append the imageId to FormData
+    
+        try {
+            const response = await api.postFileForm('/image/upload', formData);
+            const data = await response.json();
+            console.log(data);
+            const url = data.imageUrl; // Use the correct property name
+            const imageId = data.imageId;
+    
+            const updatedAbout = { ...about, profilePicture: url, profilePictureId: imageId };
+            setAbout(updatedAbout);
+    
+            setPortfolioContent((prevContent) => ({
+                ...prevContent,
+                pages: {
+                    ...prevContent.pages,
+                    about: updatedAbout,
+                },
+            }));
+            const newImage = await showImage(url, about.profilePictureId);
+            setProfilePic(URL.createObjectURL(newImage));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleChangeBackgroundImage = async (files) => {
+        if (files.length === 0) return;
+        const file = files[0];
+        const formData = new FormData();
+        formData.append('File', file); // Append the file to FormData
+        formData.append('imageId', about.backgroundPictureId); // Append the imageId to FormData
+    
+        try {
+            const response = await api.postFileForm('/image/upload', formData);
+            const data = await response.json();
+            console.log(data);
+            const url = data.imageUrl; // Use the correct property name
+            const imageId = data.imageId;
+    
+            const updatedAbout = { ...about, backgroundPicture: url, backgroundPictureId: imageId };
+            setAbout(updatedAbout);
+    
+            setPortfolioContent((prevContent) => ({
+                ...prevContent,
+                pages: {
+                    ...prevContent.pages,
+                    about: updatedAbout,
+                },
+            }));
+    
+            const newImage = await showImage(url, about.backgroundPictureId);
+            setBackgroundPic(URL.createObjectURL(newImage));
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const handleContactMethodSelected = (contactMethod) => {
         setSelectedContactMethod(contactMethod);
@@ -158,9 +232,56 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         setAddContactMethodOpen(false);
     }
 
+    useEffect(() => {
+        // if there is an image URL and imageId is not empty
+        if (userAbout.profilePicture && userAbout.profilePictureId !== "") {
+            showImage(userAbout.profilePicture, userAbout.profilePictureId)
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    setProfilePic(objectUrl);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+        // else {
+        //     setProfilePic(userAbout.profilePicture);
+        // }
+    }, []);
+
+    useEffect(() => {
+        // if there is an image URL and imageId is not empty
+        if (userAbout.backgroundPicture && userAbout.backgroundPictureId !== "") {
+            showImage(userAbout.backgroundPicture, userAbout.backgroundPictureId)
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    setBackgroundPic(objectUrl);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+        // else {
+        //     setBackgroundPic(userAbout.backgroundPicture);
+        // }
+    }, []);
+
+    console.log('profilePicture', about.profilePicture);
+    console.log('profilePictureId', about.profilePictureId);
+    console.log('backgroundPicture', about.backgroundPicture);
+    console.log('backgroundPictureId', about.backgroundPictureId);  
+
     return (
         <>
-            <div id='portfolio-about-root'>
+            <div 
+                id='portfolio-about-root'
+                style={{
+                    // backgroundImage: "url('https://st2.depositphotos.com/1084193/8215/v/450/depositphotos_82151626-stock-illustration-abstract-tech-background-futuristic-technology.jpg')",
+                    // backgroundSize: 'cover',
+                    // backgroundPosition: 'center',
+                    // backgroundRepeat: 'no-repeat'
+                }}
+            >
                 {editMode && (
                         <IconButton 
                             aria-label='add background picture'
@@ -173,7 +294,8 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             <VisuallyHiddenInput 
                                 type='file' 
                                 accept='image/*' 
-                                onChange={(event) => console.log(event.target.files)}
+                                multiple={false}
+                                onChange={(event) => handleChangeBackgroundImage(event.target.files)}
                             />
                         </IconButton>                        
                 )}
@@ -182,24 +304,30 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                     id='portfolio-about-header'
                     className={`${!editMode ? 'hz-center' : ''}`}
                     style={{
-                        backgroundImage: about.backgroundPicture
-                            ? `url(${about.backgroundPicture})`
-                            : 'none',
-                        backgroundColor: about.backgroundPicture ? 'transparent' : 'lightgreen',
+                        backgroundImage: `url(${backgroundPic})`,
+                        // backgroundColor: about.backgroundPicture ? 'transparent' : 'lightgreen',
                         backgroundSize: 'cover', // Ensures the image covers the div area
                         backgroundPosition: 'center', // Centers the image within the div
                     }}
                 >
 
                     {about.profilePicture ? (
-                        <div className='hz-center' id='portfolio-profile-picture-container'>
+                        <div className='hz-center' id='portfolio-profile-picture-container'>   
                             <img 
                                 id='portfolio-profile-picture'
-                                src={about.profilePicture}
+                                className={`${editMode ? 'can-hover border-glow' : ''}`}
+                                onClick={editMode ? handleImageClick : null}
+                                src={profilePic}
                                 alt="profile picture" 
                             />
-                        </div>                        
-
+                            <VisuallyHiddenInput 
+                                type='file' 
+                                accept='image/*' 
+                                multiple={false}
+                                ref={profilePicInputRef}
+                                onChange={(event) => handleChangeProfilePicture(event.target.files)}
+                            />  
+                        </div>                          
                     ) : (
                         editMode && (
                             <div className='hz-center' id='portfolio-profile-picture-container'>
@@ -215,7 +343,9 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                     <VisuallyHiddenInput 
                                         type='file' 
                                         accept='image/*' 
-                                        onChange={(event) => console.log(event.target.files)}
+                                        multiple={false}
+                                        ref={profilePicInputRef}
+                                        onChange={(event) => handleChangeProfilePicture(event.target.files)}
                                     />
                                 </Button>
                             </div>
@@ -237,7 +367,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         />
                         <textarea
                             name="title" // *this MUST match name of the field in portfolioContent!
-                            className={`portfolio-textarea h2 ${!editMode ? 'disabled-textarea' : ''}`}
+                            className={`portfolio-textarea p ${!editMode ? 'disabled-textarea' : ''}`}
                             id="portfolio-about-title"
                             rows="2"
                             cols="30"
@@ -331,10 +461,9 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 <DialogButton 
                                     id='portfolio-add-contact-button'
                                     text={Object.keys(about.contactInfo).length === 0 ? 'Add Contact Method' : ''}                                    title='Add Contact Method'
-                                    startIcon={<AddIcon />}
+                                    icon={<AddIcon />}
                                     isOpen={addContactMethodOpen}
                                     setIsOpen={setAddContactMethodOpen}
-                                    buttonStyles={{}}
                                     content={
                                         <div id="portfolio-add-contact-dialog">
                                             {selectedContactMethod ? (

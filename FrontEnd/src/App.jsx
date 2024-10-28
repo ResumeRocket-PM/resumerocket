@@ -13,7 +13,7 @@ import { UserInfoProvider} from './context/UserInfoProvider.jsx';
 import PrivateRoute from './route/PrivateRoute.jsx'; // Update the path as needed
 import AccountPage from './components/pages/AccountPage/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
-import {portfolioContentExample} from './example_responses/portfolioContent';
+// import {portfolioContentExample} from './example_responses/portfolioContent';
 import { useContext } from 'react';
 import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
 import { ResumeProvider } from './context/ResumeProvider.jsx';

@@ -21,6 +21,8 @@ import ColumnsIcon from "../../assets/portfolio/project sections/columns.png";
 import { 
     projectColumnsContentDefault,
     projectTextAreaStylesDefault,
+    projectImageContentDefault, 
+    projectTextAreaContentDefault,
 } from '../../example_responses/portfolioContent';
 
 const SectionIcons = [ 
@@ -32,12 +34,14 @@ const SectionIcons = [
     { icon: FigmaIcon, name: "figma" },
     { icon: JupyterIcon, name: "jupyter" },
     { icon: GoogleSlidesIcon, name: "google slides" },
-    { icon: WebsitePreview, name: "website preview" },
+    // { icon: WebsitePreview, name: "website preview" },
     { icon: ColumnsIcon, name: "columns" },
 ];
 
 const defaultContent = {
     "columns": projectColumnsContentDefault,
+    "image": projectImageContentDefault,
+
 }
 
 const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setProject, sectionIndex }) => {
@@ -62,11 +66,16 @@ const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setPr
             }
 
             if (section.name === 'image and text') {
+                newSection.content = defaultContent.image, defaultContent.text;
                 newSection.styles = projectTextAreaStylesDefault;
             }
     
             if (section.name === 'columns') {
                 newSection.content = defaultContent.columns;
+            }
+
+            if (section.name === 'image') {
+                newSection.content = defaultContent.image;
             }
     
             newSections.splice(sectionIndex + 1, 0, newSection);

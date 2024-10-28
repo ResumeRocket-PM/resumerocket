@@ -186,11 +186,11 @@ export default function CreateResume({resumeId=null}) {
             chatOpen ? "chatOpen" : ""}
         >
             <div id='left_menu_section'>
-                <LeftBarResume 
+                {/* <LeftBarResume 
                     handleShareDialogOpen={handleShareDialogOpen} 
                     handleChatOpen={handleChatOpen} 
                     handleVersionHistoryOpen={handleVersionHistoryOpen}
-                />
+                /> */}
                 {chatOpen && <Chat/>}
                 <Button 
                 style={{ marginLeft: '20px' }}
