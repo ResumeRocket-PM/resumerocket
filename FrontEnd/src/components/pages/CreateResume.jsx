@@ -38,7 +38,7 @@ ShareDialog.propTypes = {
 export default function CreateResume({resumeId=null}) {
 
     let { id } = useParams();
-    id = resumeId || id; // use resumeId if provided, otherwise use id from URL
+    id = resumeId || id;
     const api = useApi();
 
     const [resume, setResume] = useState(null);
@@ -60,11 +60,11 @@ export default function CreateResume({resumeId=null}) {
     {
         if(id !== undefined)
         {
-            api.get(`/resume/${id}`)
+            api.get(`/resume/${id}/suggestions`)
             .then(response => response.json())
             .then(data => {
                 console.log('data', data);
-                setResume(removePageContainer(data.result));
+                setResume(removePageContainer(data.result.resumeHTML));
 
                 setTimeout(() => {
                     handleResize();
@@ -108,9 +108,6 @@ export default function CreateResume({resumeId=null}) {
         setVersionHistoryOpen(!versionHistoryOpen);
     }
 
-    // console.log("pdf:", pdf);
-    // console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
-
     const downloadPdf = () => {
         api.get(`/resume/${id}/pdf`)
         .then(response => {
@@ -122,7 +119,6 @@ export default function CreateResume({resumeId=null}) {
             return response.blob(); 
         })
         .then(pdfBlob => {
-            // Create a URL from the Blob
             const blobUrl = URL.createObjectURL(pdfBlob);
 
             const link = document.createElement('a');
@@ -160,10 +156,6 @@ export default function CreateResume({resumeId=null}) {
             return null; 
         }
     };
-
-    // const handleResumeHtmlContentChange = (event) => {
-    //     setResume(event.target.innerHTML);
-    // };
 
     const debouncedSetResume = useCallback(
         debounce((newHtml) => {
@@ -225,22 +217,6 @@ export default function CreateResume({resumeId=null}) {
                                 onInput={handleResumeHtmlContentChange}
                             />
                         </CardContent>
-
-                        {/* {pdf && <CardContent>
-                            <iframe id="resumePDFViewer" ref={iframeRef}
-                                src={`data:application/pdf;base64,${pdf["resumeContent"]["FileBytes"]}#toolbar=0&navpanes=0`}
-                                width="100%"
-                                height="1058px"
-                                style={{ border: 'none' }}
-                                title="PDF Viewer"
-                                scrolling="no"
-                            />
-
-                            { pdf["resumeContent"]["Recommendations"].split('\n').slice(0,5).map((result, index) => (
-                                <Bubble key={ pdf.ResumeId + '_index' + index} content={result} index={index+1} targetRect={iframeRef} />
-                            ))}
-
-                        </CardContent> } */}
                     </Card>                
                 }
                 {versionHistoryOpen && 
