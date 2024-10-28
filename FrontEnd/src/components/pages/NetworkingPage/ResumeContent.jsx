@@ -41,26 +41,10 @@ const ResumeContent = ({ accountId }) => {
     return <div>No user details available.</div>;
   }
 
-  // Handler functions for editing
-  const handleEditProfilePhoto = () => {
-    // Implement logic to open edit profile photo dialog
-  };
-
-  const handleEditTitle = () => {
-    // Implement logic to open edit title dialog
-  };
-
-  const handleEditLocation = () => {
-    // Implement logic to open edit location dialog
-  };
-
   return (
     <div id="networking-page-content">
       <UserProfileHeader
         userDetails={selectedUserDetails}
-        onEditProfilePhoto={handleEditProfilePhoto}
-        onEditTitle={handleEditTitle}
-        onEditLocation={handleEditLocation}
       />
       {/* Additional content like Experience and Education goes here */}
 

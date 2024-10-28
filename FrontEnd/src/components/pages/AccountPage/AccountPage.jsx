@@ -1,8 +1,9 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
 import { ClipLoader } from 'react-spinners'; 
 import { useApi } from "../../../hooks.js";
 
 import userSolidOrange from "../../../assets/user-solid-orange.svg"
+// import userSolidOrange from "../../../assets/RR_logo1.png";
 import "../../../styles/AccountPage.css";
 import accountBanner from '../../../assets/account-banner.png';
 import AccountSectionCard from './AccountSectionCard'; 
@@ -14,15 +15,26 @@ import EditExperienceDialog from './Dialog/EditExperienceDialog.jsx';
 import EditFieldModal from './Dialog/EditFieldModal.jsx'; 
 import EditSkillsDialog from './Dialog/EditSkillsDialog.jsx'; 
 import UploadPDFButton from './UploadPDFButton.jsx';
+import { VisuallyHiddenInput } from '../../../utils/muiHelpers';
+import { inputClasses } from '@mui/material';
+import { ImageContext } from '../../../context/ImageProvider';
 
 
 const AccountPage = () => {
 
     const api = useApi()
+    const { showImage } = useContext(ImageContext);
 
     const [isLoading, setIsLoading] = useState(true);
     const [userDetails, setUserDetails] = useState(null);
     const [dialogOpen, setDialogOpen] = useState('none');
+    const currentInputRef = useRef(null);
+
+    const profilePicInputRef = useRef(null);
+    const backgroundPicInputRef = useRef(null);
+
+    const [profilePhoto, setProfilePhoto] = useState(null);
+    const [backgroundPhoto, setBackgroundPhoto] = useState(null);
     
     const updateAccount = () => {
         api.get('/account/details').then(response => {
@@ -70,6 +82,69 @@ const AccountPage = () => {
         updateAccount();
     }, []);
 
+    const handleChangePicture = (files, photoInput) => {
+        if (files.length === 0) {
+            return;
+        }
+
+        let imageId = '';
+        if (photoInput === 'profile-photo-input') {
+            imageId = userDetails.profilePhotoLink ? userDetails.profilePhotoLink.split('/').pop() : '';
+        } else if (photoInput === 'background-photo-input') {
+            imageId = userDetails.backgroundPhotoLink ? userDetails.backgroundPhotoLink.split('/').pop() : '';
+        }
+
+        const formData = new FormData();
+        formData.append('file', files[0]);
+        formData.append('imageId', imageId);
+
+        try {
+            api.postFileForm('/image/upload', formData).then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        console.log(data);
+                        const url = data.imageUrl;
+                        if(photoInput === 'background-photo-input') {
+                            updateField('BackgroundImageLink', url)
+                        } else {
+                            updateField('ProfilePhotoLink', url)
+                        }
+                    });
+                }
+                else {
+                    console.log("Failed to save account");
+                }
+            });
+        } catch (error) {
+            console.error(`Error uploading to ${photoInput}`, error);
+        }
+    };
+
+    const handleImageChangeClick = (inputRef) => {
+        currentInputRef.current = inputRef.current;
+        currentInputRef.current.click();
+    };
+
+    useEffect(() => {
+        // if there is an image URL and imageId is not empty
+        if (userDetails?.profilePhotoLink) {
+            const imageId = userDetails.profilePhotoLink.split('/').pop();
+            showImage(userDetails.profilePhotoLink, imageId)
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    setProfilePhoto(objectUrl);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+        else {
+            setProfilePhoto(userSolidOrange);
+        }
+    }, [userDetails]);
+
+    console.log('userDetails', userDetails)
+
     return (
         <>
             { isLoading &&
@@ -84,6 +159,8 @@ const AccountPage = () => {
                     <div style={{ position: 'relative', margin: 0, padding: 0 }}>
                             {/* Background Image */}
                             <div 
+                                id='account-page-background-image'
+                                onClick={handleImageChangeClick}
                                 style={{
                                     position: 'relative',
                                     height: '200px', 
@@ -109,22 +186,32 @@ const AccountPage = () => {
                             </div>
 
                             {/* Profile Picture */}
-                            <img 
-                                id='account-page-profile-picture'
-                                src={userDetails.profilePhotoLink != null ? userDetails.profilePhotoLink : userSolidOrange}
-                                alt="profile picture" 
+                            <div 
+                                id='account-page-profile-image'
+                                className='can-hover border-glow'
+                                onClick={() => handleImageChangeClick(profilePicInputRef)}
                                 style={{
                                     position: 'absolute',
                                     top: '70px',
                                     left: '20px',
-                                    width: '150px', 
+                                    width: '150px',
                                     height: '150px',
-                                    borderRadius: '50%', 
-                                    border: '3px solid white',
-                                    zIndex: 1 
-                                }} 
-                                onClick={() => setDialogOpen('editProfilePhotoLink')}
-                            />
+                                    borderRadius: '50%',
+                                    border: '3px solid #30678e',
+                                    zIndex: 1,
+                                    backgroundColor: 'white' // Set the background color to white
+                                }}
+                            >
+                                <img 
+                                    src={profilePhoto}
+                                    alt="profile picture" 
+                                    style={{
+                                        width: '100%', 
+                                        height: '100%',
+                                        borderRadius: '50%',
+                                    }}
+                                />
+                            </div>
 
                             <div id="account-page-main-header-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 {/* User details */}
@@ -237,7 +324,23 @@ const AccountPage = () => {
                     />
 
                 </div>
-            }        
+            }   
+                <VisuallyHiddenInput 
+                    id="profile-photo-input"
+                    type='file' 
+                    accept='image/*' 
+                    multiple={false}
+                    ref={profilePicInputRef}
+                    onChange={(event) => handleChangePicture(event.target.files, "profile-photo-input")}
+                />
+                <VisuallyHiddenInput 
+                    id="background-photo-input"
+                    type='file' 
+                    accept='image/*' 
+                    multiple={false}
+                    ref={backgroundPicInputRef}
+                    onChange={(event) => handleChangePicture(event.target.files, "background-photo-input")}
+                />     
         </>
 
     );

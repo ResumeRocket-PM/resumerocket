@@ -1,7 +1,38 @@
-import React from 'react';
+import { useContext, useState, useEffect } from 'react';
 import userSolidOrange from "../../../assets/user-solid-orange.svg"
+import { ImageContext } from '../../../context/ImageProvider';
+
 
 const UserCard = ({ userDetails, onClick, isSelected }) => {
+
+    const { showImage } = useContext(ImageContext);
+    const [profilePhoto, setProfilePhoto] = useState(null);
+
+    useEffect(() => {
+        // if there is an image URL
+        if (userDetails?.ProfilePhotoLink) {
+            const url = userDetails.ProfilePhotoLink;
+            const regex = /https:\/\/resumerocketimages\.blob\.core\.windows\.net\/images\/[a-f0-9-]+$/;
+            let imageId = '';
+    
+            if (regex.test(url)) {
+                imageId = url.split('/').pop();
+                showImage(url, imageId)
+                    .then(blob => {
+                        const objectUrl = URL.createObjectURL(blob);
+                        setProfilePhoto(objectUrl);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            } else {
+                setProfilePhoto(url);
+            }
+        } else {
+            setProfilePhoto(userSolidOrange);
+        }
+    }, [userDetails]);
+
     return (
         <div
             style={{
@@ -12,8 +43,9 @@ const UserCard = ({ userDetails, onClick, isSelected }) => {
         >
             {/* Profile Picture */}
             <img
-                id='account-page-profile-picture'
-                src={userDetails.ProfilePhotoLink != null ? userDetails.ProfilePhotoLink : userSolidOrange}
+                className='networking-page-card-profile-picture'
+                // src={userDetails.ProfilePhotoLink != null ? userDetails.ProfilePhotoLink : userSolidOrange}
+                src={profilePhoto}
                 alt="profile"
                 style={styles.profilePicture}
             />

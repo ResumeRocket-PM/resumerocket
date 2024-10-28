@@ -1,9 +1,40 @@
-import React from 'react';
+import {useEffect, useContext, useState} from 'react';
 import userSolidOrange from "../../../assets/user-solid-orange.svg"; // Default image
 import accountBanner from '../../../assets/account-banner.png';
 import { Link } from 'react-router-dom';
+import { ImageContext } from '../../../context/ImageProvider';
 
-const UserProfileHeader = ({ userDetails, onEditProfilePhoto, onEditTitle, onEditLocation }) => {
+const UserProfileHeader = ({userDetails}) => {
+
+  const { showImage } = useContext(ImageContext);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+
+
+  useEffect(() => {
+    // if there is an image URL
+    if (userDetails?.profilePhotoLink) {
+        const url = userDetails.profilePhotoLink;
+        const regex = /https:\/\/resumerocketimages\.blob\.core\.windows\.net\/images\/[a-f0-9-]+$/;
+        let imageId = '';
+
+        if (regex.test(url)) {
+            imageId = url.split('/').pop();
+            showImage(url, imageId)
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    setProfilePhoto(objectUrl);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        } else {
+            setProfilePhoto(url);
+        }
+    } else {
+        setProfilePhoto(userSolidOrange);
+    }
+}, [userDetails]);
+
   return (
     <div style={{ position: 'relative', margin: 0, padding: 0 }}>
       {/* Background Image */}
@@ -35,7 +66,7 @@ const UserProfileHeader = ({ userDetails, onEditProfilePhoto, onEditTitle, onEdi
       {/* Profile Picture */}
       <img
         id='account-page-profile-picture'
-        src={userDetails.profilePhotoLink || userSolidOrange}
+        src={profilePhoto}
         alt="profile picture"
         style={{
           position: 'absolute',
@@ -47,7 +78,6 @@ const UserProfileHeader = ({ userDetails, onEditProfilePhoto, onEditTitle, onEdi
           border: '3px solid white',
           zIndex: 1,
         }}
-        onClick={onEditProfilePhoto}
       />
 
       <div id="account-page-main-header-section">

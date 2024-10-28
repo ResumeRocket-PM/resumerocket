@@ -16,7 +16,7 @@ const ImageProvider = ({ children }) => {
     try {
       const response = await api.get('/image/generateSasToken');
       const data = await response.json();
-      const newToken = data.result.sasToken;
+      const newToken = data.sasToken.split('?')[1]; 
       storeImageSASToken(newToken);
       return newToken;
     } catch (error) {
@@ -60,7 +60,7 @@ const ImageProvider = ({ children }) => {
       value=
       {{ 
           imageSASToken,
-          storeImageSASToken, 
+          fetchNewSASToken,
           showImage,
       }}
     >

@@ -13,7 +13,7 @@ import { ImageContext } from '../../context/ImageProvider.jsx';
 
 const LoginForm = () => {
   const { login } = useAuth();
-  const { storeImageSASToken } = useContext(ImageContext);
+  const { fetchNewSASToken } = useContext(ImageContext);
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const api = useApiWithoutToken();
@@ -75,6 +75,7 @@ const LoginForm = () => {
               console.log('data', data)
               login(data.result.jsonWebToken);
               navigate('/account', { replace: true });
+              fetchNewSASToken();
             }
             
           });
@@ -128,15 +129,7 @@ const LoginForm = () => {
           console.log("Failed to save account");
         }
       }).then(response => {
-          api.get('/image/generateSasToken')
-          .then(sasResponse => sasResponse.json())
-          .then(sasData => {
-            console.log('sasData', sasData);  
-            storeImageSASToken(sasData.sasToken.split('?')[1]);
-          })
-          .catch(err => {
-              console.error('Error generating SAS token:', err);
-          });
+        fetchNewSASToken();
       })
     }
 
