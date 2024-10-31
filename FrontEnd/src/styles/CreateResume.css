@@ -193,3 +193,9 @@
   .application-details a:hover {
     text-decoration: underline;
   }
+
+
+  .editor-container {
+    height: 100%; /* Set the desired height */
+    border: 1px solid #ccc; /* Optional styling */
+}
