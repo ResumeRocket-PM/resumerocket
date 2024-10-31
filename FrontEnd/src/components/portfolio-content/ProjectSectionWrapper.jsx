@@ -13,7 +13,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TrashIcon from "../../assets/trash-solid.svg";
 import UpDownArrows from "../../assets/up-down.png";
 import AddSectionDialog from './AddSectionDialog';
-import RearrangeSectionsDialog from './RearrangeSectionsDialog';
+import RearrangeItemsDialog from './RearrangeItemsDialog';
 
 
 const ProjectSectionWrapper = ({ children, project, setProject, sectionIndex, type=null }) => {
@@ -39,6 +39,12 @@ const ProjectSectionWrapper = ({ children, project, setProject, sectionIndex, ty
             return { ...prevProject, sections: updatedSections };
         });
     };
+
+    const setProjectSections = (newSections) => {
+        setProject(prevProject => {
+            return { ...prevProject, sections: newSections };
+        }
+    )}
 
 
     return (
@@ -108,11 +114,11 @@ const ProjectSectionWrapper = ({ children, project, setProject, sectionIndex, ty
                         setProject={setProject}
                         sectionIndex={sectionIndex}
                     />
-                    <RearrangeSectionsDialog // New rearrange dialog component
-                        rearrangeDialogOpen={rearrangeDialogOpen}
-                        setRearrangeDialogOpen={setRearrangeDialogOpen}
-                        project={project}
-                        setProject={setProject}
+                    <RearrangeItemsDialog // New rearrange dialog component
+                        open={rearrangeDialogOpen}
+                        setOpen={setRearrangeDialogOpen}
+                        items={project?.sections}
+                        setItems={setProjectSections}
                     />                
                 </>
             )}

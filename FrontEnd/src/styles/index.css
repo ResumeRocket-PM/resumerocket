@@ -82,8 +82,12 @@ p {
   visibility: hidden;
 }
 
-.bold {
+.weight-bold {
   font-weight: bold;
+}
+
+.weight-normal {
+  font-weight: normal;
 }
 
 .no-padding {
@@ -96,4 +100,16 @@ p {
 
 .border-glow:hover {
   box-shadow: 0 0 5px 5px #48abe0;
+}
+
+.selected {
+  border: 1px solid blue;
+}
+
+.grabbing {
+  cursor: grabbing;
+}
+
+.on-hover-background-color:hover {
+  background-color: lightgreen;
 }

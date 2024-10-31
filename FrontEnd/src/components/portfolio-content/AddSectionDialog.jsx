@@ -23,6 +23,7 @@ import {
     projectTextAreaStylesDefault,
     projectImageContentDefault, 
     projectTextAreaContentDefault,
+    projectGalleryContentDefault,
 } from '../../example_responses/portfolioContent';
 
 const SectionIcons = [ 
@@ -76,6 +77,10 @@ const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setPr
 
             if (section.name === 'image') {
                 newSection.content = defaultContent.image;
+            }
+
+            if (section.name === 'gallery') {
+                newSection.content = projectGalleryContentDefault;
             }
     
             newSections.splice(sectionIndex + 1, 0, newSection);

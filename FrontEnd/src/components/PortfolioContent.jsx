@@ -133,23 +133,6 @@ export default function PortfolioContent({
                             portfolioContent={contentToRender}
                             setPortfolioContent={setPortfolioContent}
                         />
-                        
-                        {/* IntroductionBody */}
-
-                        <div 
-                            id='temporary' 
-                            className='c-venter-center'
-                        >
-                            <div id='temporary-inside'>
-                                <div className='hz-left' style={{marginBottom: '2rem'}}>
-                                    <h1>Hi, I'm John</h1>
-                                </div>
-                                <div className='hz-left'> 
-                                    <p>I'm a UX designer with a passion for creating intuitive and engaging user experiences.</p>
-                                </div>
-                            </div>
-                        </div>
-
 
                         {contentToRender.pages.projects && (
                             <ProjectsPreviewBody 

@@ -138,19 +138,19 @@ export default function TextSizeOptionsMenu({
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} style={{ padding: '0', zIndex: '1000' }}                                >
                                     <MenuItem  onClick={() => handleFontSizeItemClick('h1')}>
-                                        <div className='bold'>h1</div>
+                                        <div className='weight-bold'>h1</div>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleFontSizeItemClick('h2')}>
-                                        <div className='bold'>h2</div>
+                                        <div className='weight-bold'>h2</div>
                                     </MenuItem>
                                     <MenuItem  onClick={() => handleFontSizeItemClick('h3')}>
-                                        <div className='bold'>h3</div>
+                                        <div className='weight-bold'>h3</div>
                                     </MenuItem>
                                     <MenuItem onClick={() => handleFontSizeItemClick('h4')}>
-                                        <div className='bold'>h4</div>
+                                        <div className='weight-bold'>h4</div>
                                     </MenuItem>
                                     <MenuItem  onClick={() => handleFontSizeItemClick('p')}>
-                                        <div className='bold'>p</div>
+                                        <div className='weight-bold'>p</div>
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>

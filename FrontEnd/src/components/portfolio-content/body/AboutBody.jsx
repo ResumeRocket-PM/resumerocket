@@ -23,6 +23,7 @@ import PortfolioItemWithPopupWrapper from '../PortfolioItemWithPopupWrapper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useApi, useAuth } from '../../../hooks';
 import { ImageContext } from '../../../context/ImageProvider';
+import TextAreaAutoSizeCustom from '../TextAreaAutoSizeCustom';
 
 
 
@@ -107,8 +108,6 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         anchorEl 
     } = useContext(PortfolioEditContext); 
     const { showImage } = useContext(ImageContext);
-
-    const { imageSASToken } = useAuth();
     
     const api = useApi();
     const [tempValue, setTempValue] = useState({ name: about.name, title: about.title });
@@ -266,10 +265,35 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         // }
     }, []);
 
-    console.log('profilePicture', about.profilePicture);
-    console.log('profilePictureId', about.profilePictureId);
-    console.log('backgroundPicture', about.backgroundPicture);
-    console.log('backgroundPictureId', about.backgroundPictureId);  
+    const updatePersonalSummary = (newSections) => {
+        const updatedAbout = { ...about, personalSummary: {...about.personalSummary, sections: newSections} };
+        setAbout(updatedAbout);
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                about: updatedAbout,
+            },
+        }));
+    };
+
+    const updatePersonalSummaryStyles = (newStyles) => {
+        const updatedAbout = { ...about, personalSummary: {...about.personalSummary, styles: newStyles} };
+        setAbout(updatedAbout);
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                about: updatedAbout,
+            },
+        }));
+    };
+
+    // console.log('profilePicture', about.profilePicture);
+    // console.log('profilePictureId', about.profilePictureId);
+    // console.log('backgroundPicture', about.backgroundPicture);
+    // console.log('backgroundPictureId', about.backgroundPictureId);  
+    console.log('about.personalSummary', about.personalSummary);
 
     return (
         <>
@@ -282,238 +306,261 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                     // backgroundRepeat: 'no-repeat'
                 }}
             >
-                {editMode && (
-                        <IconButton 
-                            aria-label='add background picture'
-                            component='label'
-                            role={undefined}
-                            tabIndex={-1}
-                            sx={{position: 'absolute', bottom: '10px', right: '10px', ...addButtonStyles}}
-                        >
-                            <img style={{height:'1.5rem', width: '1.5rem' }} src={cameraIcon} alt="add background picture" />
-                            <VisuallyHiddenInput 
-                                type='file' 
-                                accept='image/*' 
-                                multiple={false}
-                                onChange={(event) => handleChangeBackgroundImage(event.target.files)}
-                            />
-                        </IconButton>                        
-                )}
-
-                <div 
-                    id='portfolio-about-header'
-                    className={`${!editMode ? 'hz-center' : ''}`}
-                    style={{
-                        backgroundImage: `url(${backgroundPic})`,
-                        // backgroundColor: about.backgroundPicture ? 'transparent' : 'lightgreen',
-                        backgroundSize: 'cover', // Ensures the image covers the div area
-                        backgroundPosition: 'center', // Centers the image within the div
-                    }}
-                >
-
-                    {about.profilePicture ? (
-                        <div className='hz-center' id='portfolio-profile-picture-container'>   
-                            <img 
-                                id='portfolio-profile-picture'
-                                className={`${editMode ? 'can-hover border-glow' : ''}`}
-                                onClick={editMode ? handleImageClick : null}
-                                src={profilePic}
-                                alt="profile picture" 
-                            />
-                            <VisuallyHiddenInput 
-                                type='file' 
-                                accept='image/*' 
-                                multiple={false}
-                                ref={profilePicInputRef}
-                                onChange={(event) => handleChangeProfilePicture(event.target.files)}
-                            />  
-                        </div>                          
-                    ) : (
-                        editMode && (
-                            <div className='hz-center' id='portfolio-profile-picture-container'>
-                                <Button 
-                                    component='label'
-                                    role={undefined}
-                                    tabIndex={-1}
-                                    variant='outlined' 
-                                    startIcon={<AddIcon/>} 
-                                    sx={{...addButtonStyles, marginTop: '1rem', height: '15rem', width: '15rem', borderRadius: '50%'}}
-                                >
-                                    Add Profile Picture
-                                    <VisuallyHiddenInput 
-                                        type='file' 
-                                        accept='image/*' 
-                                        multiple={false}
-                                        ref={profilePicInputRef}
-                                        onChange={(event) => handleChangeProfilePicture(event.target.files)}
-                                    />
-                                </Button>
-                            </div>
-                        )
+                <div id='portfolio-about-header-container'>
+                    {editMode && (
+                            <IconButton 
+                                aria-label='add background picture'
+                                component='label'
+                                role={undefined}
+                                tabIndex={-1}
+                                sx={{position: 'absolute', bottom: '10px', right: '10px', ...addButtonStyles}}
+                            >
+                                <img style={{height:'1.5rem', width: '1.5rem' }} src={cameraIcon} alt="add background picture" />
+                                <VisuallyHiddenInput 
+                                    type='file' 
+                                    accept='image/*' 
+                                    multiple={false}
+                                    onChange={(event) => handleChangeBackgroundImage(event.target.files)}
+                                />
+                            </IconButton>                        
                     )}
-                    <div id='portfolio-about-header-details' className='hz-center'>
-                        <div className='v-center-center'>
-                        <textarea
-                            name="name" // *this MUST match name of the field in portfolioContent!
-                            className={`portfolio-textarea h1 ${!editMode ? 'disabled-textarea' : ''}`}
-                            id="portfolio-about-name"
-                            rows="2"
-                            cols="20"
-                            value={tempValue.name || ""}
-                            onChange={handleTempChange}
-                            onBlur={handleTextChange}
-                            onInput={autoResizeTextArea}    
-                            placeholder="Name" /* Placeholder text shown when about.name is empty */
-                        />
-                        <textarea
-                            name="title" // *this MUST match name of the field in portfolioContent!
-                            className={`portfolio-textarea p ${!editMode ? 'disabled-textarea' : ''}`}
-                            id="portfolio-about-title"
-                            rows="2"
-                            cols="30"
-                            value={tempValue.title || ""}
-                            onChange={handleTempChange}
-                            onBlur={handleTextChange}
-                            onInput={autoResizeTextArea}    
-                            placeholder="Title (Engineer, Graphic Designer, etc)" /* Placeholder text shown when about.name is empty */
-                        />
+
+                    <div 
+                        id='portfolio-about-header'
+                        className={`${!editMode ? 'hz-center' : ''}`}
+                        style={{
+                            backgroundImage: `url(${backgroundPic})`,
+                            // backgroundColor: about.backgroundPicture ? 'transparent' : 'lightgreen',
+                            backgroundSize: 'cover', // Ensures the image covers the div area
+                            backgroundPosition: 'center', // Centers the image within the div
+                        }}
+                    >
+
+                        {about.profilePicture ? (
+                            <div className='hz-center' id='portfolio-profile-picture-container'>   
+                                <img 
+                                    id='portfolio-profile-picture'
+                                    className={`${editMode ? 'can-hover border-glow' : ''}`}
+                                    onClick={editMode ? handleImageClick : null}
+                                    src={profilePic}
+                                    alt="profile picture" 
+                                />
+                                <VisuallyHiddenInput 
+                                    type='file' 
+                                    accept='image/*' 
+                                    multiple={false}
+                                    ref={profilePicInputRef}
+                                    onChange={(event) => handleChangeProfilePicture(event.target.files)}
+                                />  
+                            </div>                          
+                        ) : (
+                            editMode && (
+                                <div className='hz-center' id='portfolio-profile-picture-container'>
+                                    <Button 
+                                        component='label'
+                                        role={undefined}
+                                        tabIndex={-1}
+                                        variant='outlined' 
+                                        startIcon={<AddIcon/>} 
+                                        sx={{...addButtonStyles, marginTop: '1rem', height: '15rem', width: '15rem', borderRadius: '50%'}}
+                                    >
+                                        Add Profile Picture
+                                        <VisuallyHiddenInput 
+                                            type='file' 
+                                            accept='image/*' 
+                                            multiple={false}
+                                            ref={profilePicInputRef}
+                                            onChange={(event) => handleChangeProfilePicture(event.target.files)}
+                                        />
+                                    </Button>
+                                </div>
+                            )
+                        )}
+                        <div id='portfolio-about-header-details' className='hz-center'>
+                            <div className='v-center-center'>
+                            <textarea
+                                name="name" // *this MUST match name of the field in portfolioContent!
+                                className={`portfolio-textarea h1 ${!editMode ? 'disabled-textarea' : ''}`}
+                                id="portfolio-about-name"
+                                rows="2"
+                                cols="20"
+                                value={tempValue.name || ""}
+                                onChange={handleTempChange}
+                                onBlur={handleTextChange}
+                                onInput={autoResizeTextArea}    
+                                placeholder="Name" /* Placeholder text shown when about.name is empty */
+                            />
+                            <textarea
+                                name="title" // *this MUST match name of the field in portfolioContent!
+                                className={`portfolio-textarea p ${!editMode ? 'disabled-textarea' : ''}`}
+                                id="portfolio-about-title"
+                                rows="2"
+                                cols="30"
+                                value={tempValue.title || ""}
+                                onChange={handleTempChange}
+                                onBlur={handleTextChange}
+                                onInput={autoResizeTextArea}    
+                                placeholder="Title (Engineer, Graphic Designer, etc)" /* Placeholder text shown when about.name is empty */
+                            />
+                            </div>
+                        </div>
+                        <div id="portfolio-about-header-contact">
+                        {about.contactInfo.email && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={`mailto:${about.contactInfo.email}`}>
+                                    <img 
+                                        src={emailLogo}
+                                        alt="email" 
+                                        style={about.styles.contactLogos}
+                                    />
+                                </a>
+                            </PortfolioItemWithPopupWrapper>
+                        )}
+                        {about.contactInfo.instagram && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={about.contactInfo.instagram}>
+                                    <img 
+                                        src={instagramLogo} 
+                                        alt="instagram" 
+                                        style={about.styles.contactLogos} 
+                                    />
+                                </a>                            
+                            </PortfolioItemWithPopupWrapper>    
+                        )}
+                        {about.contactInfo.linkedin && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={about.contactInfo.linkedin}>
+                                    <img 
+                                        src={linkedinLogo} 
+                                        alt="linkedin" 
+                                        style={about.styles.contactLogos} 
+                                    />
+                                </a>
+                            </PortfolioItemWithPopupWrapper>
+                        )}
+                        {about.contactInfo.github && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={about.contactInfo.github}>
+                                    <img 
+                                        src={githubLogo} 
+                                        alt="github" 
+                                        style={about.styles.contactLogos} 
+                                    />
+                                </a>
+                            </PortfolioItemWithPopupWrapper>
+                        )}
+                        {about.contactInfo.twitter && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={about.contactInfo.twitter}>
+                                    <img 
+                                        src={twitterLogo} 
+                                        alt="twitter" 
+                                        style={about.styles.contactLogos} 
+                                    />
+                                </a>
+                            </PortfolioItemWithPopupWrapper>
+                        )}
+                        {about.contactInfo.facebook && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={about.contactInfo.facebook}>
+                                    <img 
+                                        src={facebookLogo} 
+                                        alt="facebook" 
+                                        style={about.styles.contactLogos} 
+                                    />
+                                </a>
+                            </PortfolioItemWithPopupWrapper>
+                        )}
+                        {about.contactInfo.discord && (
+                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                                <a href={about.contactInfo.discord}>
+                                    <img 
+                                        src={discordLogo} 
+                                        alt="discord" 
+                                        style={about.styles.contactLogos} 
+                                    />
+                                </a>
+                            </PortfolioItemWithPopupWrapper>
+                        )}
+                                {editMode && (
+                                    <DialogButton 
+                                        id='portfolio-add-contact-button'
+                                        text={Object.keys(about.contactInfo).length === 0 ? 'Add Contact Method' : ''}                                    title='Add Contact Method'
+                                        icon={<AddIcon />}
+                                        isOpen={addContactMethodOpen}
+                                        setIsOpen={setAddContactMethodOpen}
+                                        content={
+                                            <div id="portfolio-add-contact-dialog">
+                                                {selectedContactMethod ? (
+                                                    <>
+                                                        <AddContactMethodFields 
+                                                            contactMethod={selectedContactMethod} 
+                                                            newContactMethodValue={newContactMethodValue} 
+                                                            setNewContactMethodValue={setNewContactMethodValue} 
+                                                        />
+                                                        <Button
+                                                            variant="contained"
+                                                            onClick={() => setSelectedContactMethod(null)}
+                                                            sx={{marginRight: '1rem', backgroundColor: 'red', "&:hover": {backgroundColor: '#FF6666'}}}
+                                                        >     
+                                                        Back
+                                                        </Button>  
+                                                        <Button
+                                                            variant="contained"
+                                                            onClick={() => handleAddContactMethod(selectedContactMethod, document.getElementById(`portfolio-add-${selectedContactMethod}`).value)}
+                                                            sx={{backgroundColor: 'green', "&:hover": {backgroundColor: '#90EE90'}}}
+                                                        >
+                                                        Add
+                                                        </Button>                                            
+                                                    </>
+                                                ) : (
+                                                    <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
+                                                        {Object.entries(ContactMethodIcons).map(([key, value], index) => (
+                                                            <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
+                                                        ))}
+                                                    </FormControl>
+                                                )}
+                                                {/* <div id="portfolio-add-project-dialog">
+                                                    <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
+                                                        {Object.entries(ContactMethodIcons).map(([key, value], index) => (
+                                                            <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
+                                                        ))}
+                                                    </FormControl>
+                                                </div> */}
+                                            </div>
+                                        }
+                                    />                              
+                                )}
                         </div>
                     </div>
-                    <div id="portfolio-about-header-contact">
-                    {about.contactInfo.email && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={`mailto:${about.contactInfo.email}`}>
-                                <img 
-                                    src={emailLogo}
-                                    alt="email" 
-                                    style={about.styles.contactLogos}
-                                />
-                            </a>
-                        </PortfolioItemWithPopupWrapper>
-                    )}
-                    {about.contactInfo.instagram && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={about.contactInfo.instagram}>
-                                <img 
-                                    src={instagramLogo} 
-                                    alt="instagram" 
-                                    style={about.styles.contactLogos} 
-                                />
-                            </a>                            
-                        </PortfolioItemWithPopupWrapper>    
-                    )}
-                    {about.contactInfo.linkedin && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={about.contactInfo.linkedin}>
-                                <img 
-                                    src={linkedinLogo} 
-                                    alt="linkedin" 
-                                    style={about.styles.contactLogos} 
-                                />
-                            </a>
-                        </PortfolioItemWithPopupWrapper>
-                    )}
-                    {about.contactInfo.github && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={about.contactInfo.github}>
-                                <img 
-                                    src={githubLogo} 
-                                    alt="github" 
-                                    style={about.styles.contactLogos} 
-                                />
-                            </a>
-                        </PortfolioItemWithPopupWrapper>
-                    )}
-                    {about.contactInfo.twitter && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={about.contactInfo.twitter}>
-                                <img 
-                                    src={twitterLogo} 
-                                    alt="twitter" 
-                                    style={about.styles.contactLogos} 
-                                />
-                            </a>
-                        </PortfolioItemWithPopupWrapper>
-                    )}
-                    {about.contactInfo.facebook && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={about.contactInfo.facebook}>
-                                <img 
-                                    src={facebookLogo} 
-                                    alt="facebook" 
-                                    style={about.styles.contactLogos} 
-                                />
-                            </a>
-                        </PortfolioItemWithPopupWrapper>
-                    )}
-                    {about.contactInfo.discord && (
-                        <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
-                            <a href={about.contactInfo.discord}>
-                                <img 
-                                    src={discordLogo} 
-                                    alt="discord" 
-                                    style={about.styles.contactLogos} 
-                                />
-                            </a>
-                        </PortfolioItemWithPopupWrapper>
-                    )}
-                            {editMode && (
-                                <DialogButton 
-                                    id='portfolio-add-contact-button'
-                                    text={Object.keys(about.contactInfo).length === 0 ? 'Add Contact Method' : ''}                                    title='Add Contact Method'
-                                    icon={<AddIcon />}
-                                    isOpen={addContactMethodOpen}
-                                    setIsOpen={setAddContactMethodOpen}
-                                    content={
-                                        <div id="portfolio-add-contact-dialog">
-                                            {selectedContactMethod ? (
-                                                <>
-                                                    <AddContactMethodFields 
-                                                        contactMethod={selectedContactMethod} 
-                                                        newContactMethodValue={newContactMethodValue} 
-                                                        setNewContactMethodValue={setNewContactMethodValue} 
-                                                    />
-                                                    <Button
-                                                        variant="contained"
-                                                        onClick={() => setSelectedContactMethod(null)}
-                                                        sx={{marginRight: '1rem', backgroundColor: 'red', "&:hover": {backgroundColor: '#FF6666'}}}
-                                                    >     
-                                                    Back
-                                                    </Button>  
-                                                    <Button
-                                                        variant="contained"
-                                                        onClick={() => handleAddContactMethod(selectedContactMethod, document.getElementById(`portfolio-add-${selectedContactMethod}`).value)}
-                                                        sx={{backgroundColor: 'green', "&:hover": {backgroundColor: '#90EE90'}}}
-                                                    >
-                                                    Add
-                                                    </Button>                                            
-                                                </>
-                                            ) : (
-                                                <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
-                                                    {Object.entries(ContactMethodIcons).map(([key, value], index) => (
-                                                        <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
-                                                    ))}
-                                                </FormControl>
-                                            )}
-                                            {/* <div id="portfolio-add-project-dialog">
-                                                <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
-                                                    {Object.entries(ContactMethodIcons).map(([key, value], index) => (
-                                                        <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
-                                                    ))}
-                                                </FormControl>
-                                            </div> */}
-                                        </div>
-                                    }
-                                />                              
-                            )}
+                </div>
+                <div id='portfolio-about-summary'>
+                    <TextAreaAutoSizeCustom
+                        sections={about.personalSummary.sections}
+                        setSections={updatePersonalSummary}
+                        textAreaStyles={about.personalSummary.styles}
+                        setTextAreaStyles={updatePersonalSummaryStyles}
+                        placeholder="Enter a summary about yourself"
+                        editMode={editMode}
+                    />
+                </div>
+            </div> 
+            {/* {about.personalSummary !== '' && ( */}
+  
+            {/* )} */}
+            {/* <div 
+                id='temporary' 
+                className='c-venter-center'
+            >
+                <div id='temporary-inside'>
+                    <div className='hz-left' style={{marginBottom: '2rem'}}>
+                        <h1>Hi, I'm John</h1>
+                    </div>
+                    <div className='hz-left'> 
+                        <p>I'm a UX designer with a passion for creating intuitive and engaging user experiences.</p>
                     </div>
                 </div>
-                {about.personalSummary !== '' && (
-                    <div id='portfolio-about-summary'>
-                        <p>{about.personalSummary}</p>
-                    </div>
-                )}
-            </div>        
+            </div>        */}
         </>
 
     );

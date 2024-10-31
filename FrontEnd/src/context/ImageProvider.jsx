@@ -52,7 +52,28 @@ const ImageProvider = ({ children }) => {
       }
     }
     throw new Error('Unable to fetch image');
-};
+  };
+
+  const uploadImage = async (file, imageId="") => {
+    const formData = new FormData();
+    
+    formData.append('file', file); 
+    formData.append('imageId', imageId);
+
+    try {
+        const response = await api.postFileForm('/image/upload', formData);
+        const data = await response.json();
+        
+        console.log(data);
+        const url = data.imageUrl;
+        const imageId = data.imageId;
+
+        return { url, imageId };
+
+    } catch (err) {
+        console.error(err);
+    }
+  };
 
 
   return (
@@ -62,6 +83,7 @@ const ImageProvider = ({ children }) => {
           imageSASToken,
           fetchNewSASToken,
           showImage,
+          uploadImage,
       }}
     >
       {children}

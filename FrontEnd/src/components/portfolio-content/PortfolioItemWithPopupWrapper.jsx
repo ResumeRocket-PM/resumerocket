@@ -11,6 +11,7 @@ const PortfolioItemWithPopupWrapper = ({
     useContentClick = false,
     popupLocation = "top",
     popupContentClasses = "",
+    popupStyles = {},
     childrenContainerClasses = "",
     childrenContainerStyles = {},
     wrapperClasses = "",
@@ -166,6 +167,7 @@ const PortfolioItemWithPopupWrapper = ({
                     >
                         <div 
                             className={`portfolio-popup-content ` + popupContentClasses}
+                            style={popupStyles}
                             ref={popupContentRef}
                         >
                             {popoverContent}

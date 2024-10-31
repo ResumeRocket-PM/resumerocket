@@ -21,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import { UserInfoContext } from "../../context/UserInfoProvider";
 import PortfolioStylesBar from "../portfolio-styles-bar/PortfolioStylesBar";    
 import { PortfolioEditContext } from "../../context/PortfolioEditProvider";
+import PaletteIcon from '@mui/icons-material/Palette';
+import DesignContent from "../portfolio-menu_content/DesignContent";
 
 
 
@@ -43,7 +45,7 @@ function LeftMenu({
             return;
         }
 
-        if (buttonID === "add" || buttonID === "layouts" || buttonID === "pages") {
+        if (buttonID === "add" || buttonID === "layouts" || buttonID === "pages" || buttonID === "design") {
             if(showPopout){
                 if(selectedButton === buttonID){
                     setShowPopout(false);
@@ -87,6 +89,10 @@ function LeftMenu({
                     <img src={siteMapIcon} alt="Pages" />
                     <p>Pages</p>
                 </Button>
+                <Button onClick={() => menuButtonClicked("design")} id="layouts_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                    <PaletteIcon />
+                    <p>Design</p>
+                </Button>
                 {/* <Button onClick={() => menuButtonClicked("add")} id="add_section_button" className="portfolio-left_button" sx={{ ...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={penToSquareIcon} alt="Add section" />
                     <p>Add section</p>
@@ -125,6 +131,13 @@ function LeftMenu({
                             />
                         </div>
                     )}
+                    {selectedButton === "design" && (
+                        <div id="portfolio-popout_section" >
+                            <DesignContent
+                                handlePortfolioContentChange={handlePortfolioContentChange}
+                            />
+                        </div>
+                    )}                                
                     {selectedButton === "add" && (
                         <div id="portfolio-popout_section" >
                             <AddSectionContent 

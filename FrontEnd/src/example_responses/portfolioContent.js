@@ -51,41 +51,7 @@ const portfolioContentExample = {
     }
 };
 
-const portfolioContentDefault = {
-    "navbar": {
-        "styles": {
-            "container": {
-                "display": "flex",
-                "justifyContent": "flex-end",
-                "alignItems": "flex-start",
-                "gap": ".5rem",
-            },
-            "links": {
-                "textDecoration": "none",
-                "color": "black",
-            },
-        }
-    },
-    "pages": {
-        "about": {
-            "name": "",
-            "title": "",
-            "personalSummary": "",
-            "profilePicture": "",
-            "profilePictureId": "",
-            "backgroundPicture": "", //../assets/code-background.jpg
-            "backgroundPictureId": "",
-            "contactInfo": {
-            },
-            "styles": {
-                "contactLogos": {
-                    "width": "2rem",
-                    "height": "2rem",
-                }
-            }
-        },
-    }
-};
+// ##########################################
 
 const projectsDefault = {
         "projectsData": [],
@@ -114,17 +80,7 @@ const projectDefault = {
     "sections": [],
 };
 
-const projectTextAreaStylesDefault = {
-    // "font": "h1",
-    // "fontSize": "1em", // these aren't getting used rn
-    // "fontWeight": "normal" // these aren't getting used rn
-    textarea: {
-        "font": "p",
-        "textAlign": "text-align-center",
-        // "horizontalAlign": "",
-        // "verticalAlign": "",
-    }
-}
+
 
 const projectColumnsContentDefault = [
     {
@@ -181,10 +137,99 @@ const projectTextAreaContentDefault = {
     "text": ""
 }
 
+
+
+const projectTextAreaStylesDefault = {
+    // "font": "h1",
+    // "fontSize": "1em", // these aren't getting used rn
+    // "fontWeight": "normal" // these aren't getting used rn
+    textarea: {
+        "font": "p",
+        "textAlign": "text-align-center",
+        // "horizontalAlign": "",
+        // "verticalAlign": "",
+    }
+}
+
+const textareaSectionContentDefault = {
+    text: "",
+    styles: {
+        tagType: "p",
+    }
+};
+
+const textareaContentDefaultNew = {
+    sections: [
+        { ...textareaSectionContentDefault }
+    ],
+    styles: {
+        textAlign: "text-align-center",
+    }
+};
+
 const projectImageContentDefault = {
     "imageUrl": "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
     "imageId": "",
 }
+
+const projectGalleryContentDefault = {
+    "images": [
+        {
+            "imageUrl": "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
+            "imageId": "",
+        },
+        {
+            "imageUrl": "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
+            "imageId": "",
+        },
+        {
+            "imageUrl": "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
+            "imageId": "",
+        },
+    ],
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "backgroundColor": "black"
+        },
+    }
+}
+
+const portfolioContentDefault = {
+    "navbar": {
+        "styles": {
+            "container": {
+                "display": "flex",
+                "justifyContent": "flex-end",
+                "alignItems": "flex-start",
+                "gap": ".5rem",
+            },
+            "links": {
+                "textDecoration": "none",
+                "color": "black",
+            },
+        }
+    },
+    "pages": {
+        "about": {
+            "name": "",
+            "title": "",
+            "personalSummary": textareaContentDefaultNew,
+            "profilePicture": "",
+            "profilePictureId": "",
+            "backgroundPicture": "", //../assets/code-background.jpg
+            "backgroundPictureId": "",
+            "contactInfo": {
+            },
+            "styles": {
+                "contactLogos": {
+                    "width": "2rem",
+                    "height": "2rem",
+                }
+            }
+        },
+    }
+};
 
 // #############################################
 // #############################################
@@ -258,6 +303,9 @@ export {
     projectColumnsContentDefault,
     projectImageContentDefault,
     projectTextAreaContentDefault,
+    textareaContentDefaultNew,
+    textareaSectionContentDefault,
+    projectGalleryContentDefault,
 
     experienceDefault,
     experienceItemDefault,
