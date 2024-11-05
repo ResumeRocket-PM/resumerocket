@@ -8,10 +8,21 @@ import { projectDefault, projectsPreviewDefault } from '../../../example_respons
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import { useNavigate } from 'react-router-dom';
 
 
 
-const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, setSelectedPage, projectRef}) => {
+const ProjectsPreviewBody = ({
+    editMode, 
+    portfolioContent, 
+    setPortfolioContent, 
+    setSelectedPage, 
+    projectRef,
+    previewMode=false,
+}) => {
+
+    const navigate = useNavigate();
+
 
     const [projects, setProjects] = useState(portfolioContent.pages.projects.projectsData);
     useEffect(() => {
@@ -59,26 +70,27 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, s
         setAddProjectOpen(false);
     };
 
-    const handleGoToProject = (project) => {
+    const handleGoToProject = (project, index) => {
+        if (previewMode) {
+            // navigate to /portfolio/preview/project/{index}
+            navigate(`/portfolio/preview/project/${index}`);
+        }
         setSelectedPage(project);
     };
 
-    
-
-
     return (
-        <div id='portfolio-projects-preview-root' ref={projectRef}>
+        <div id='portfolio-projects-preview-root' ref={projectRef} style={{backgroundColor: portfolioContent.styles.backgroundColor}}>
             <h1 id='portfolio-pp-header' style={portfolioContent.pages.projectsPreview.styles} >Projects</h1>
             <div id='portfolio-pp-projects-container'>
                 {projects && projects.map((project, index) => (
                     <div 
                         className='portfolio-pp-project' 
                         key={index}
-                        onClick={() => handleGoToProject(`project${index}`)}
+                        onClick={() => handleGoToProject(`project${index}`, index)}
                     >
                         <div>
-                            <h1>{project.name}</h1>
-                            <p>{project.description}</p>
+                            <h1 style={{color: portfolioContent.styles.color}}>{project.name}</h1>
+                            <p style={{color: portfolioContent.styles.color}}>{project.description}</p>
                             {/* <a href={project.projectLink}>Link</a> */}
                         </div>
                     </div>

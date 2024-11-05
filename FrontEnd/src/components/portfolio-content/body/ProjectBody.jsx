@@ -13,7 +13,7 @@ import ProjectWebsitePreview from '../project-sections/ProjectWebsitePreview';
 import ProjectColumns from '../project-sections/ProjectColumns';
 import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
-const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNum}) => {
+const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNum, previewMode=false}) => {
 
     // either pass in the project name or the project id
     // idk you'll probs have to manage this from both the navbar and the left menu... 
@@ -29,7 +29,7 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
 
     // whenver the project is updated, update the project in the portfolioContent
     useEffect(() => {
-        if (!isUpdating.current) {
+        if (!previewMode && !isUpdating.current) {
             isUpdating.current = true;
             setPortfolioContent(prevContent => ({
                 ...prevContent,
@@ -55,13 +55,6 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
     // }, [project]);
 
     const renderSection = (section, index) => {
-        // //convert section.styles to json
-        // if (section.styles === undefined) {
-        //     section.styles = {};
-        // }
-        // if (typeof section.styles === 'string') {
-        //     section.styles = JSON.parse(section.styles);
-        // }
 
         const sectionContent = () => {
             switch (section.type) {
@@ -121,10 +114,13 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
             </ProjectSectionWrapper>
         );
     };
+    console.log('portfolioContent:', portfolioContent);
+    console.log('projectNum:', projectNum);
+    console.log('project:', project);
 
 
     return (
-        <div id="portfolio-project-root">
+        <div id="portfolio-project-root" style={{backgroundColor: portfolioContent?.styles?.backgroundColor}}>
             {project ? (
                 <>
                     {/* <ProjectSectionWrapper project={project} setProject={setProject}>
@@ -134,7 +130,7 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
                 </>
 
             ) : (
-                <div>Error: Project not found</div>
+                <div style={{color: 'orange'}}>Error: Project not found</div>
             )}
         </div>
     );

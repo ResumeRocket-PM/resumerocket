@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, Navigate, useParams } from 'react-router-dom';
 import HomePage from './components/pages/HomePage.jsx';
 import NotFoundPage from './components/pages/NotFoundPage.jsx';
 import LoginPage from './components/pages/LoginPage.jsx';
@@ -28,35 +28,30 @@ function App() {
   return (
       <BrowserRouter>
           <Routes>
-            {/* The index route is the Login page which will not render the Navbar */}
-            <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
+              {/* The index route is the Login page which will not render the Navbar */}
+              <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
               <Route 
                 path="/portfolio/preview/about" 
                 element={
-                    <PortfolioContent 
-                        // portfolioContent={portfolioContentExample}
-                        // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
-                        selectedPage="about" // Set the default selected page
-                        editMode={false} // Set editMode to false for preview
-                        previewMode={true} // Set previewMode to true for preview
-                    />
-                } 
-              />  
-              <Route 
-                path="/portfolio/preview/experience" 
-                element={
-                    <PortfolioContent 
-                        // portfolioContent={portfolioContentExample}
-                        // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
-                        selectedPage="experience" // Set the default selected page
-                        editMode={false} // Set editMode to false for preview
-                        previewMode={true} // Set previewMode to true for preview
-                    />
+                    <PortfolioEditProvider>
+                      <PortfolioContent 
+                          // portfolioContent={portfolioContentExample}
+                          // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
+                          selectedPage="about" // Set the default selected page
+                          editMode={false} // Set editMode to false for preview
+                          previewMode={true} // Set previewMode to true for preview
+                      />
+                    </PortfolioEditProvider>
+
                 } 
               />   
             <Route 
-                path="/portfolio/preview/projects" 
-                element={<Navigate to="/portfolio/preview/about" state={{ scrollToProjects: true }} />} 
+                path="/portfolio/preview/project/:projectNum" 
+                element={
+                    <PortfolioEditProvider>
+                        <PortfolioProjectWrapper/>
+                    </PortfolioEditProvider>
+                }
             />
            
             {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
@@ -81,5 +76,16 @@ const LayoutWithNavbar = () => (
     <Outlet />
   </>
 );
+
+const PortfolioProjectWrapper = () => {
+  const { projectNum } = useParams();
+  return (
+      <PortfolioContent
+          selectedPage={`project${projectNum}`}
+          editMode={false} 
+          previewMode={true} 
+      />
+  );
+};
 
 export default App;

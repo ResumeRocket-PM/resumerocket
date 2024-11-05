@@ -157,6 +157,7 @@ const TextAreaAutoSizeCustom = ({
                 className={[
                     'portfolio-textarea-container',
                     isSelected ? 'selected' : '',
+                    !editMode ? 'disabled' : '',
                 ].join(' ')}
             >
                 {sections && tempValues && sections.map((section, index) => (
