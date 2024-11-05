@@ -265,8 +265,32 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         // }
     }, []);
 
-    const updatePersonalSummary = (newSections) => {
-        const updatedAbout = { ...about, personalSummary: {...about.personalSummary, sections: newSections} };
+    const updatePersonalSummary = (newContent) => {
+        const updatedAbout = { 
+            ...about, 
+            personalSummary: { 
+                ...about.personalSummary, 
+                content: newContent 
+            }
+        };
+        setAbout(updatedAbout);
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                about: updatedAbout,
+            },
+        }));
+    };
+    
+    const updatePersonalSummaryStyles = (newStyles) => {
+        const updatedAbout = { 
+            ...about, 
+            personalSummary: { 
+                ...about.personalSummary, 
+                styles: newStyles 
+            }
+        };
         setAbout(updatedAbout);
         setPortfolioContent((prevContent) => ({
             ...prevContent,
@@ -277,8 +301,14 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         }));
     };
 
-    const updatePersonalSummaryStyles = (newStyles) => {
-        const updatedAbout = { ...about, personalSummary: {...about.personalSummary, styles: newStyles} };
+    const updateNameAndTitle = (newContent) => {
+        const updatedAbout = {
+            ...about,
+            nameAndTitle: {
+                ...about.nameAndTitle,
+                content: newContent
+            }
+        };
         setAbout(updatedAbout);
         setPortfolioContent((prevContent) => ({
             ...prevContent,
@@ -288,6 +318,25 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
             },
         }));
     };
+
+    const updateNameAndTitleStyles = (newStyles) => {
+        const updatedAbout = {
+            ...about,
+            nameAndTitle: {
+                ...about.nameAndTitle,
+                styles: newStyles
+            }
+        };
+        setAbout(updatedAbout);
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                about: updatedAbout,
+            },
+        }));
+    };
+
 
     // console.log('profilePicture', about.profilePicture);
     // console.log('profilePictureId', about.profilePictureId);
@@ -377,32 +426,15 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             )
                         )}
                         <div id='portfolio-about-header-details' className='hz-center'>
-                            <div className='v-center-center'>
-                            <textarea
-                                name="name" // *this MUST match name of the field in portfolioContent!
-                                className={`portfolio-textarea h1 ${!editMode ? 'disabled-textarea' : ''}`}
-                                id="portfolio-about-name"
-                                rows="2"
-                                cols="20"
-                                value={tempValue.name || ""}
-                                onChange={handleTempChange}
-                                onBlur={handleTextChange}
-                                onInput={autoResizeTextArea}    
-                                placeholder="Name" /* Placeholder text shown when about.name is empty */
+                            <TextAreaAutoSizeCustom
+                                sections={about.nameAndTitle.content}
+                                setSections={updateNameAndTitle}
+                                textAreaStyles={about.nameAndTitle.styles}
+                                setTextAreaStyles={updateNameAndTitleStyles}
+                                placeholder="Enter a summary about yourself"
+                                editMode={editMode}
+                                portfolioStyles={portfolioContent.styles}
                             />
-                            <textarea
-                                name="title" // *this MUST match name of the field in portfolioContent!
-                                className={`portfolio-textarea p ${!editMode ? 'disabled-textarea' : ''}`}
-                                id="portfolio-about-title"
-                                rows="2"
-                                cols="30"
-                                value={tempValue.title || ""}
-                                onChange={handleTempChange}
-                                onBlur={handleTextChange}
-                                onInput={autoResizeTextArea}    
-                                placeholder="Title (Engineer, Graphic Designer, etc)" /* Placeholder text shown when about.name is empty */
-                            />
-                            </div>
                         </div>
                         <div id="portfolio-about-header-contact">
                         {about.contactInfo.email && (
@@ -536,12 +568,13 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                 </div>
                 <div id='portfolio-about-summary'>
                     <TextAreaAutoSizeCustom
-                        sections={about.personalSummary.sections}
+                        sections={about.personalSummary.content}
                         setSections={updatePersonalSummary}
                         textAreaStyles={about.personalSummary.styles}
                         setTextAreaStyles={updatePersonalSummaryStyles}
                         placeholder="Enter a summary about yourself"
                         editMode={editMode}
+                        portfolioStyles={portfolioContent.styles}
                     />
                 </div>
             </div> 

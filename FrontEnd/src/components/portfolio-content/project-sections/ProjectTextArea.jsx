@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import ProjectSectionWrapper from '../ProjectSectionWrapper';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import TextAreaAutoSizeCustom from '../TextAreaAutoSizeCustom';
 import { PortfolioEditContext } from '../../../context/PortfolioEditProvider';
 import PortfolioItemWithPopupWrapper from '../PortfolioItemWithPopupWrapper';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -8,61 +9,22 @@ import TextSizeOptionsMenu from '../TextSizeOptionsMenu';
 import { createTheme } from '@mui/material/styles';
 
 
-const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles }) => {
+const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles, portfolioStyles }) => {
     const { editMode } = useContext(PortfolioEditContext);
 
-    const [tempValue, setTempValue] = useState(content);
-    const [fontSelected, setFontSelected] = useState(styles.textarea.font || 'p');
-    const [popoverOpen, setPopoverOpen] = useState(false);
+    // const [tempValue, setTempValue] = useState(content);
+    // const [fontSelected, setFontSelected] = useState(styles.textarea.font || 'p');
+    // const [popoverOpen, setPopoverOpen] = useState(false);
 
+    /////////// new stuff //////////////
 
-    const handleTempChange = (e) => {
-        setTempValue(e.target.value);
-    };
-
-    const handleTextChange = () => {
+    const updateSectionsInProject = (newSections) => {
         setProject(prevProject => {
             const updatedSections = prevProject.sections.map((section, index) => {
                 if (section.type === 'text area' && index === sectionIndex) {
-                    return { ...section, content: tempValue };
-                }
-                return section;
-            });
-            return { ...prevProject, sections: updatedSections };
-        });
-    };
-
-    const changeFontSize = (size) => {
-        // Convert size to lowercase
-        size = size.toLowerCase();
-        setFontSelected(size);
-    
-        // let newStyles = {};
-        // if (size === 'h1') {
-        //     newStyles = { font: 'h1' };
-        // } else if (size === 'h2') {
-        //     newStyles = { font: 'h2' };
-        // } else if (size === 'h3') {
-        //     newStyles = { font: 'h3' };
-        // } else if (size === 'h4') {
-        //     newStyles = { font: 'h4' };
-        // } else if (size === 'p') {
-        //     newStyles = { font: 'p' };
-        // }
-    
-        setProject(prevProject => {
-            const updatedSections = prevProject.sections.map((section, index) => {
-                if (section.type === 'text area' && index === sectionIndex) {
-                    // Add new styles to only the specific class
                     return { 
-                        ...section, 
-                        styles: {
-                            ...section.styles, 
-                            'textarea': {
-                                ...section.styles.textarea,
-                                font: size
-                            }
-                        }
+                        ...section,
+                        content: newSections
                     };
                 }
                 return section;
@@ -71,30 +33,13 @@ const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles })
         });
     };
 
-    const changeTextAlign = (align) => {
-        
-        // let newStyles = {};
-        // if (align === 'left') {
-        //     newStyles = { textAlign: 'left' };
-        // } else if (align === 'center') {
-        //     newStyles = { textAlign: 'center' };
-        // } else if (align === 'right') {
-        //     newStyles = { textAlign: 'right' };
-        // }
-
+    const updateTextAreaStyles = (newStyles) => {
         setProject(prevProject => {
             const updatedSections = prevProject.sections.map((section, index) => {
                 if (section.type === 'text area' && index === sectionIndex) {
-                    // Add new styles to only the specific class
-                    return {
+                    return { 
                         ...section,
-                        styles: {
-                            ...section.styles,
-                            'textarea': { 
-                                ...section.styles.textarea,
-                                textAlign: align
-                            }
-                        }
+                        styles: newStyles
                     };
                 }
                 return section;
@@ -103,12 +48,115 @@ const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles })
         });
     };
 
+    /////////////////////////////////// OLD STUFF //////////////////////////////////////
+
+
+
+    // const handleTempChange = (e) => {
+    //     setTempValue(e.target.value);
+    // };
+
+    // const handleTextChange = () => {
+    //     setProject(prevProject => {
+    //         const updatedSections = prevProject.sections.map((section, index) => {
+    //             if (section.type === 'text area' && index === sectionIndex) {
+    //                 return { ...section, content: tempValue };
+    //             }
+    //             return section;
+    //         });
+    //         return { ...prevProject, sections: updatedSections };
+    //     });
+    // };
+
+    // const changeFontSize = (size) => {
+    //     // Convert size to lowercase
+    //     size = size.toLowerCase();
+    //     setFontSelected(size);
+    
+    //     // let newStyles = {};
+    //     // if (size === 'h1') {
+    //     //     newStyles = { font: 'h1' };
+    //     // } else if (size === 'h2') {
+    //     //     newStyles = { font: 'h2' };
+    //     // } else if (size === 'h3') {
+    //     //     newStyles = { font: 'h3' };
+    //     // } else if (size === 'h4') {
+    //     //     newStyles = { font: 'h4' };
+    //     // } else if (size === 'p') {
+    //     //     newStyles = { font: 'p' };
+    //     // }
+    
+    //     setProject(prevProject => {
+    //         const updatedSections = prevProject.sections.map((section, index) => {
+    //             if (section.type === 'text area' && index === sectionIndex) {
+    //                 // Add new styles to only the specific class
+    //                 return { 
+    //                     ...section, 
+    //                     styles: {
+    //                         ...section.styles, 
+    //                         'textarea': {
+    //                             ...section.styles.textarea,
+    //                             font: size
+    //                         }
+    //                     }
+    //                 };
+    //             }
+    //             return section;
+    //         });
+    //         return { ...prevProject, sections: updatedSections };
+    //     });
+    // };
+
+    // const changeTextAlign = (align) => {
+        
+    //     // let newStyles = {};
+    //     // if (align === 'left') {
+    //     //     newStyles = { textAlign: 'left' };
+    //     // } else if (align === 'center') {
+    //     //     newStyles = { textAlign: 'center' };
+    //     // } else if (align === 'right') {
+    //     //     newStyles = { textAlign: 'right' };
+    //     // }
+
+    //     setProject(prevProject => {
+    //         const updatedSections = prevProject.sections.map((section, index) => {
+    //             if (section.type === 'text area' && index === sectionIndex) {
+    //                 // Add new styles to only the specific class
+    //                 return {
+    //                     ...section,
+    //                     styles: {
+    //                         ...section.styles,
+    //                         'textarea': { 
+    //                             ...section.styles.textarea,
+    //                             textAlign: align
+    //                         }
+    //                     }
+    //                 };
+    //             }
+    //             return section;
+    //         });
+    //         return { ...prevProject, sections: updatedSections };
+    //     });
+    // };
+
+    // console.log('styles', styles);
+
+    // console.log('content', content);    
     // console.log('styles', styles);
 
     return (
         // <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
-        <div className='project-text-area-root' style={{width: '100%'}}>
-            <PortfolioItemWithPopupWrapper
+        <div className='project-text-area-root' style={{width: '50%'}}>
+
+            <TextAreaAutoSizeCustom
+                sections={content}
+                setSections={updateSectionsInProject}
+                textAreaStyles={styles}
+                setTextAreaStyles={updateTextAreaStyles}
+                editMode={editMode}
+                portfolioStyles={portfolioStyles}
+            />
+            {/* <PortfolioItemWithPopupWrapper
                 popoverOpen={popoverOpen}
                 setPopoverOpen={setPopoverOpen}
                 popupLocation="top"
@@ -148,7 +196,7 @@ const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles })
                     minRows={1}
                     placeholder="Enter information about the project here"
                 />  
-            </PortfolioItemWithPopupWrapper> 
+            </PortfolioItemWithPopupWrapper>  */}
         </div>    
 
         // </ProjectSectionWrapper>

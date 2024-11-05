@@ -51,6 +51,30 @@ const portfolioContentExample = {
     }
 };
 
+// ################  Text area defaults  #########################
+
+const textAreaAboutContentDefault = {
+    type: "text area",
+    content: [
+            {
+                text: "Project Name",
+                styles: {
+                    tagType: "h1",
+                },
+            },
+            {
+                text: "Project Description",
+                styles: {
+                    tagType: "p",
+                }
+            }
+        ],
+    styles: {
+        textAlign: "text-align-center",
+    }
+};
+
+
 // ##########################################
 
 const projectsDefault = {
@@ -67,77 +91,77 @@ const projectDefault = {
     "name": "",
     "description": "",
     "styles": {},
-    "aboutStyles": {
-        "name": {
-            "font": "h1",
-            "textAlign": "text-align-center",
-        },
-        "description": {
-            "font": "p",
-            "textAlign": "text-align-center",
-        }
-    },
-    "sections": [],
+    // "aboutStyles": {
+    //     "name": {
+    //         "font": "h1",
+    //         "textAlign": "text-align-center",
+    //     },
+    //     "description": {
+    //         "font": "p",
+    //         "textAlign": "text-align-center",
+    //     }
+    // },
+    "sections": [
+        textAreaAboutContentDefault,
+    ],
 };
 
 
 
-const projectColumnsContentDefault = [
-    {
-        "title": {
-            "text": "",
-            styles: {
-                "font": "h1",
-                "textAlign": "text-align-center",
-            }
-        },
-        "description": {
-            "text": "",
-            styles: {
-                "font": "p",
-                "textAlign": "text-align-center",
-            }
-        }
-    },
-    {
-        "title": {
-            "text": "",
-            styles: {
-                "font": "h1",
-                "textAlign": "text-align-center",
-            }
-        },
-        "description": {
-            "text": "",
-            styles: {
-                "font": "p",
-                "textAlign": "text-align-center",
-            }
-        }
-    },
-    {
-        "title": {
-            "text": "",
-            styles: {
-                "font": "h1",
-                "textAlign": "text-align-center",
-            }
-        },
-        "description": {
-            "text": "",
-            styles: {
-                "font": "p",
-                "textAlign": "text-align-center",
-            }
-        }
-    }
-]
+// const projectColumnsContentDefault = [
+//     {
+//         "title": {
+//             "text": "",
+//             styles: {
+//                 "font": "h1",
+//                 "textAlign": "text-align-center",
+//             }
+//         },
+//         "description": {
+//             "text": "",
+//             styles: {
+//                 "font": "p",
+//                 "textAlign": "text-align-center",
+//             }
+//         }
+//     },
+//     {
+//         "title": {
+//             "text": "",
+//             styles: {
+//                 "font": "h1",
+//                 "textAlign": "text-align-center",
+//             }
+//         },
+//         "description": {
+//             "text": "",
+//             styles: {
+//                 "font": "p",
+//                 "textAlign": "text-align-center",
+//             }
+//         }
+//     },
+//     {
+//         "title": {
+//             "text": "",
+//             styles: {
+//                 "font": "h1",
+//                 "textAlign": "text-align-center",
+//             }
+//         },
+//         "description": {
+//             "text": "",
+//             styles: {
+//                 "font": "p",
+//                 "textAlign": "text-align-center",
+//             }
+//         }
+//     }
+// ]
 
 const projectTextAreaContentDefault = {
     "text": ""
 }
-
-
 
 const projectTextAreaStylesDefault = {
     // "font": "h1",
@@ -158,19 +182,97 @@ const textareaSectionContentDefault = {
     }
 };
 
-const textareaContentDefaultNew = {
-    sections: [
-        { ...textareaSectionContentDefault }
-    ],
-    styles: {
-        textAlign: "text-align-center",
+const textareaContentDefaultNew = [
+    { 
+        text: "Heading",
+        styles: {
+            tagType: "h3",
+        }
+    },
+    {
+        text: "Insert some text here",
+        styles: {
+            tagType: "p",
+        }
     }
-};
+];
+
+const textareaStylesDefaultNew = {
+    textAlign: "text-align-left",
+}
 
 const projectImageContentDefault = {
     "imageUrl": "https://www.svgrepo.com/show/508699/landscape-placeholder.svg",
     "imageId": "",
 }
+
+const projectImageAndTextContentDefault = {
+    imageContent: projectImageContentDefault, 
+    textContent: {
+        content: textareaContentDefaultNew,
+        styles: textareaStylesDefaultNew,
+    }
+}
+
+const projectColumnsContentDefault = [
+    {
+        "content": [
+            {
+                "text": "Column 1",
+                "styles": {
+                    "tagType": "h1",
+                }
+            },
+            {
+                "text": "Column 1 description",
+                "styles": {
+                    "tagType": "p",
+                }
+            }
+        ],
+        "styles": {
+            "textAlign": "text-align-center",
+        }
+    },
+    {
+        "content": [
+            {
+                "text": "Column 2",
+                "styles": {
+                    "tagType": "h1",
+                }
+            },
+            {
+                "text": "Column 2 description",
+                "styles": {
+                    "tagType": "p",
+                }
+            }
+        ],
+        "styles": {
+            "textAlign": "text-align-center",
+        }
+    },
+    {
+        "content": [
+            {
+                "text": "Column 3",
+                "styles": {
+                    "tagType": "h1",
+                }
+            },
+            {
+                "text": "Column 3 description",
+                "styles": {
+                    "tagType": "p",
+                }
+            }
+        ],
+        "styles": {
+            "textAlign": "text-align-center",
+        }
+    }
+]
 
 const projectGalleryContentDefault = {
     "images": [
@@ -206,15 +308,36 @@ const portfolioContentDefault = {
             },
             "links": {
                 "textDecoration": "none",
-                "color": "black",
+                // "color": "black",
             },
         }
     },
     "pages": {
         "about": {
-            "name": "",
-            "title": "",
-            "personalSummary": textareaContentDefaultNew,
+            "nameAndTitle": {
+                "content":
+                    [
+                        {
+                            "text": "Your Name",
+                            "styles": {
+                                "tagType": "h1",
+                            }
+                        },
+                        {
+                            "text": "Your Title",
+                            "styles": {
+                                "tagType": "h2",
+                            }
+                        }
+                    ],
+                "styles": {
+                    "textAlign": "text-align-center",
+                }
+            },
+            "personalSummary": {
+                "content": textareaContentDefaultNew,
+                "stlyes": textareaStylesDefaultNew,
+            },
             "profilePicture": "",
             "profilePictureId": "",
             "backgroundPicture": "", //../assets/code-background.jpg
@@ -228,8 +351,19 @@ const portfolioContentDefault = {
                 }
             }
         },
+    },
+    "styles": {
+        backgroundColor: "#ffffff",
+        color: "#000000",
+        linkColor: "#0000ff",
+        font: "Arial",
     }
 };
+
+
+
+
+
 
 // #############################################
 // #############################################
@@ -302,8 +436,10 @@ export {
     projectTextAreaStylesDefault,
     projectColumnsContentDefault,
     projectImageContentDefault,
+    projectImageAndTextContentDefault,
     projectTextAreaContentDefault,
     textareaContentDefaultNew,
+    textareaStylesDefaultNew,
     textareaSectionContentDefault,
     projectGalleryContentDefault,
 

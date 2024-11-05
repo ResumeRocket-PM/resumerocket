@@ -1,10 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { textareaSectionContentDefault } from '../../example_responses/portfolioContent';
 import TextSizeOptionsMenu from './TextSizeOptionsMenu'; // Import the menu component
 import PortfolioItemWithPopupWrapper from './PortfolioItemWithPopupWrapper';
+import { PortfolioEditContext } from '../../context/PortfolioEditProvider';
 
-const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setTextAreaStyles, placeholder, editMode }) => {
+const TextAreaAutoSizeCustom = ({ 
+    sections, 
+    setSections, 
+    textAreaStyles, 
+    setTextAreaStyles, 
+    placeholder,
+    editMode,
+    changeVerticalAlign, 
+    portfolioStyles
+}) => {    
+    const { theme } = useContext(PortfolioEditContext);
+
     const [isSelected, setIsSelected] = useState(false);
     const [selectedSectionIndex, setSelectedSectionIndex] = useState(null);
     const textAreaRef = useRef(null);
@@ -13,9 +25,9 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
     const [currentTagType, setCurrentTagType] = useState([]);
     const [tempValues, setTempValues] = useState(sections ? sections.map(section => section.text) : []);
 
-    useEffect(() => {
-        setTempValues(sections.map(section => section.text));
-    }, [sections]);
+    // useEffect(() => {
+    //     setTempValues(sections?.map(section => section.text));
+    // }, [sections]);
 
     const handleTempChange = (index, event) => {
         const newTempValues = [...tempValues];
@@ -32,7 +44,7 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
     const handleKeyPress = (index, event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            handleTextChange(index);
+            // handleTempChange(index, event);
             const newSections = [...sections];
             newSections.splice(index + 1, 0, { ...textareaSectionContentDefault });
             setSections(newSections);
@@ -45,6 +57,7 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
                 }
             }, 0);
         }
+
     };
 
     const handleKeyDown = (index, event) => {
@@ -64,6 +77,20 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
                     textAreaRefs.current[index - 1].focus();
                 }
             }, 0);
+        }
+        // if down arrow key is pressed, focus on the next text area
+        else if(event.key === 'Tab' && !event.shiftKey) {
+            event.preventDefault();
+            if (textAreaRefs.current[index + 1]) {
+                textAreaRefs.current[index + 1].focus();
+            }
+        }
+        // if up arrow key is pressed, focus on the previous text area
+        else if(event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault();
+            if (textAreaRefs.current[index - 1]) {
+                textAreaRefs.current[index - 1].focus();
+            }
         }
     };
 
@@ -99,10 +126,10 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
     };
 
 
-    console.log('currentTagType', currentTagType);
-    console.log('sections', sections);
-    console.log('tempValues', tempValues);
-    console.log('textAreaStyles', textAreaStyles);
+    // console.log('currentTagType', currentTagType);
+    // console.log('sections', sections);
+    // console.log('tempValues', tempValues);
+    // console.log('textAreaStyles', textAreaStyles);
 
     return (
         <PortfolioItemWithPopupWrapper
@@ -119,6 +146,7 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
                         changeFontSize={handleTagTypeChange}
                         setPopoverOpen={setIsSelected}
                         changeTextAlign={changeTextAlign}
+                        changeVerticalAlign={changeVerticalAlign}
                     />
                 </div>
             }
@@ -144,6 +172,7 @@ const TextAreaAutoSizeCustom = ({ sections, setSections, textAreaStyles, setText
                         style={{
                             fontSize: section.styles.fontSize,
                             fontWeight: section.styles.fontWeight,
+                            color: portfolioStyles.color,
                             width: '100%',
                             border: 'none',
                             padding: '0',

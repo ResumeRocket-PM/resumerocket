@@ -114,6 +114,11 @@
     gap: 1rem;
 }
 
+.project-image-and-text .p-iat-text-area {
+    width: 45%;
+}
+
+
 @media (max-width: 1005px) {
     .project-image-and-text {
         display: flex;
@@ -122,5 +127,6 @@
         align-items: center;
     }
 }
+
 
 /* ############## */
