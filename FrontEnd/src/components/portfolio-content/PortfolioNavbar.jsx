@@ -19,22 +19,27 @@ const PortfolioNavbarDefault = ({portfolioContent}) => {
     // console.log("navContent:", navContent);
     // console.log("pages:", pages);
 
+    // console.log('portfolioContent:', portfolioContent);
+    const portfolioStyles = portfolioContent.styles;
+    // console.log('portfolioStyles:', portfolioStyles);
+
     return (
         <div id='portfolio-nav-container' style={navContent.styles.container}>
             {pages.map((page, index) => (
                 page !== 'projectsPreview' && (
                     <>
                         <Link 
-                            style={navContent.styles.links} 
+                            style={{
+                                ...navContent.styles.links,
+                                ...(portfolioStyles.linkColor && {color: portfolioStyles.linkColor}),
+                            }}
                             key={index} 
                             to={`/portfolio/preview/${page.toLowerCase()}`}
                         >
                             {page.charAt(0).toUpperCase() + page.slice(1)}
                         </Link>
-                        {index < pages.length - 1 && <span className="separator"></span>}                    
+                        {index < pages.length - 1 && <span className="separator" style={{backgroundColor: portfolioStyles.linkColor}}></span>}                    
                     </>
-
-
                 )
             ))}
         </div>

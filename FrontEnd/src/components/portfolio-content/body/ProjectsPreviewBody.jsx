@@ -55,7 +55,7 @@ const ProjectsPreviewBody = ({editMode, portfolioContent, setPortfolioContent, s
                 },
             },
         });
-        setProjectToAdd({ ...projectDefault }); // Reset the form
+        setProjectToAdd({ ...projectDefault }); 
         setAddProjectOpen(false);
     };
 

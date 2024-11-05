@@ -54,13 +54,6 @@ export default function PortfolioContent({
 
     const { 
         editMode,
-        hoveredItem,
-        setHoveredItem,
-        anchorEl, 
-        setAnchorEl,
-        popoverHovered,
-        handleMouseEnter,
-        handleMouseLeave 
     } = useContext(PortfolioEditContext);
 
     const location = useLocation();

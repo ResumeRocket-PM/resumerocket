@@ -134,7 +134,8 @@ function LeftMenu({
                     {selectedButton === "design" && (
                         <div id="portfolio-popout_section" >
                             <DesignContent
-                                handlePortfolioContentChange={handlePortfolioContentChange}
+                                portfolioContent={portfolioContent}
+                                setPortfolioContent={setPortfolioContent}
                             />
                         </div>
                     )}                                
@@ -159,8 +160,6 @@ function LeftMenu({
     )
 }
 
-
-
 export default function PortfolioPage() {
     const {
         userDetails,
@@ -168,8 +167,12 @@ export default function PortfolioPage() {
         setUserPortfolioContent
     } = useContext(UserInfoContext);
 
-    const {editMode, setEditMode, selectedPage, setSelectedPage} = useContext(PortfolioEditContext);
-
+    const {
+        editMode,
+        setEditMode, 
+        selectedPage, 
+        setSelectedPage,
+    } = useContext(PortfolioEditContext);
 
     const api = useApi();
     const navigate = useNavigate();
@@ -289,9 +292,6 @@ export default function PortfolioPage() {
         window.open('/portfolio/preview/about');
     };
 
-    // console.log(selectedLayout)
-    // console.log(newPortfolioContent)
-    // console.log('portfolioContent', portfolioContent)
     
     return (
         <div id='PortfolioPage-root'>
@@ -348,18 +348,18 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* </FormControl> */}
-                <div id="portfolio-actual">
-                    {/* <PortfolioEditProvider> */}
+                <div 
+                    id="portfolio-actual" 
+                    style={{backgroundColor: portfolioContent?.styles?.backgroundColor}}
+                >
                         <PortfolioContent 
                             portfolioContent={portfolioContent}
                             setPortfolioContent={setPortfolioContent}
                             selectedPage={selectedPage}
                             setSelectedPage={setSelectedPage}
                         />
-                    {/* </PortfolioEditProvider> */}
                 </div>
             </div>
-            {/* <PortfolioStylesBar/> */}
         </div>
     )
 }

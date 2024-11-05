@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../../../styles/ProjectBodyDefault.css';
 import ProjectAbout from '../project-sections/ProjectAbout';
 import ProjectVideo from '../project-sections/ProjectVideo';
@@ -19,32 +19,40 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
     // idk you'll probs have to manage this from both the navbar and the left menu... 
 
     const [project, setProject] = useState(portfolioContent.pages.projects.projectsData[projectNum]);
+    const isUpdating = useRef(false);
 
-    useEffect(() => {
-        setProject(portfolioContent.pages.projects.projectsData[projectNum]);
-    }, [portfolioContent, projectNum]);
+    /// idk why this was here but was causing an infinite loop
+    // useEffect(() => {
+    //     setProject(portfolioContent.pages.projects.projectsData[projectNum]);
+    //     console.log('project updated');
+    // }, [portfolioContent, projectNum]);
 
     // whenver the project is updated, update the project in the portfolioContent
     useEffect(() => {
-        setPortfolioContent({
-            ...portfolioContent,
-            pages: {
-                ...portfolioContent.pages,
-                projects: {
-                    ...portfolioContent.pages.projects,
-                    projectsData: [
-                        ...portfolioContent.pages.projects.projectsData.slice(0, projectNum),
-                        project,
-                        ...portfolioContent.pages.projects.projectsData.slice(projectNum + 1)
-                    ]
+        if (!isUpdating.current) {
+            isUpdating.current = true;
+            setPortfolioContent(prevContent => ({
+                ...prevContent,
+                pages: {
+                    ...prevContent.pages,
+                    projects: {
+                        ...prevContent.pages.projects,
+                        projectsData: [
+                            ...prevContent.pages.projects.projectsData.slice(0, projectNum),
+                            project,
+                            ...prevContent.pages.projects.projectsData.slice(projectNum + 1)
+                        ]
+                    }
                 }
-            }
-        });
-    }, [project]);
+            }));
+            isUpdating.current = false;
+        }
+        console.log('portfolio updated');
+    }, [project, projectNum, setPortfolioContent]);
 
-    useEffect(() => {
-        console.log(project);
-    }, [project]);
+    // useEffect(() => {
+    //     console.log(project);
+    // }, [project]);
 
     const renderSection = (section, index) => {
         // //convert section.styles to json
@@ -60,9 +68,25 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
                 case 'video':
                     return <ProjectVideo project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'text area':
-                    return <ProjectTextArea project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
+                    return <ProjectTextArea 
+                        project={project} 
+                        setProject={setProject} 
+                        content={section.content} 
+                        sectionIndex={index} 
+                        styles={section.styles} 
+                        type={section.type} 
+                        portfolioStyles={portfolioContent.styles}
+                    />;
                 case 'image and text':
-                    return <ProjectImageAndText project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
+                    return <ProjectImageAndText 
+                        project={project} 
+                        setProject={setProject} 
+                        content={section.content} 
+                        sectionIndex={index} 
+                        styles={section.styles} 
+                        type={section.type} 
+                        portfolioStyles={portfolioContent.styles}   
+                    />;
                 case 'image':
                     return <ProjectImage project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'gallery':
@@ -76,10 +100,19 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
                 case 'website preview':
                     return <ProjectWebsitePreview project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'columns':
-                    return <ProjectColumns project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
+                    return <ProjectColumns 
+                    project={project} 
+                    setProject={setProject} 
+                    content={section.content} 
+                    sectionIndex={index} 
+                    styles={section.styles} 
+                    type={section.type} 
+                    portfolioStyles={portfolioContent.styles}
+                />;
                 default:
                     return null;
             }
+
         };
     
         return (
@@ -94,9 +127,9 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
         <div id="portfolio-project-root">
             {project ? (
                 <>
-                    <ProjectSectionWrapper project={project} setProject={setProject}>
+                    {/* <ProjectSectionWrapper project={project} setProject={setProject}>
                         <ProjectAbout project={project} setProject={setProject} styles={project.aboutStyles} />
-                    </ProjectSectionWrapper>
+                    </ProjectSectionWrapper> */}
                     {project.sections.map((section, index) => renderSection(section, index))}
                 </>
 

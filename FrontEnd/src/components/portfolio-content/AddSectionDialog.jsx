@@ -22,7 +22,10 @@ import {
     projectColumnsContentDefault,
     projectTextAreaStylesDefault,
     projectImageContentDefault, 
-    projectTextAreaContentDefault,
+    projectImageAndTextContentDefault,
+    // projectTextAreaContentDefault,
+    textareaContentDefaultNew,
+    textareaStylesDefaultNew,
     projectGalleryContentDefault,
 } from '../../example_responses/portfolioContent';
 
@@ -39,11 +42,11 @@ const SectionIcons = [
     { icon: ColumnsIcon, name: "columns" },
 ];
 
-const defaultContent = {
-    "columns": projectColumnsContentDefault,
-    "image": projectImageContentDefault,
+// const defaultContent = {
+//     "columns": projectColumnsContentDefault,
+//     "image": projectImageContentDefault,
 
-}
+// }
 
 const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setProject, sectionIndex }) => {
     const [showAddSectionDetails, setShowAddSectionDetails] = useState(false);
@@ -63,20 +66,20 @@ const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setPr
             };
     
             if (section.name === 'text area') {
-                newSection.styles = projectTextAreaStylesDefault;
+                newSection.content = textareaContentDefaultNew;
+                newSection.styles = textareaStylesDefaultNew;
             }
 
             if (section.name === 'image and text') {
-                newSection.content = defaultContent.image, defaultContent.text;
-                newSection.styles = projectTextAreaStylesDefault;
+                newSection.content = projectImageAndTextContentDefault;
             }
     
             if (section.name === 'columns') {
-                newSection.content = defaultContent.columns;
+                newSection.content = projectColumnsContentDefault;
             }
 
             if (section.name === 'image') {
-                newSection.content = defaultContent.image;
+                newSection.content = projectImageContentDefault;
             }
 
             if (section.name === 'gallery') {
