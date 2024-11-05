@@ -18,14 +18,14 @@ import { useContext } from 'react';
 import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
 import { ResumeProvider } from './context/ResumeProvider.jsx';
 import ResumePage from './components/pages/ResumePages/ResumePage.jsx';
-
+import FloatingChatButton from './components/FloatChatBox';
 
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
 
 
-  return (
+  return (  
       <BrowserRouter>
           <Routes>
             {/* The index route is the Login page which will not render the Navbar */}
@@ -71,8 +71,10 @@ function App() {
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
+          <FloatingChatButton />
       </BrowserRouter>
   );
+
 }
 
 const LayoutWithNavbar = () => (
