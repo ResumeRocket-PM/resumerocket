@@ -164,24 +164,22 @@ const ProjectColumns = ({ project, setProject, content, sectionIndex, portfolioS
 
     return (
         <>
-            {editMode && (
-                <div className='portfolio-project-columns hz-center'>
-                    {content.map((column, index) => (
-                        <div key={index}>
-                            <ProjectColumn
-                                column={column}
-                                editMode={editMode}
-                                handleTextChange={handleTextChange}
-                                handleTextAreaStylesChange={handleTextAreaStylesChange}
-                                index={index}
-                                addColumn={addColumn}
-                                removeColumn={removeColumn}
-                                portfolioStyles={portfolioStyles}
-                            />
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className='portfolio-project-columns hz-center'>
+                {content.map((column, index) => (
+                    <div key={index}>
+                        <ProjectColumn
+                            column={column}
+                            editMode={editMode}
+                            handleTextChange={handleTextChange}
+                            handleTextAreaStylesChange={handleTextAreaStylesChange}
+                            index={index}
+                            addColumn={addColumn}
+                            removeColumn={removeColumn}
+                            portfolioStyles={portfolioStyles}
+                        />
+                    </div>
+                ))}
+            </div>
         </>
     );
 };

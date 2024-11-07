@@ -42,7 +42,7 @@ export default function PortfolioContent({
     setPortfolioContent = null, 
     selectedPage, 
     setSelectedPage,
-    previewMode = null
+    previewMode = null,
 }) {
     // console.log("portfolioContent:", portfolioContent);    
     // console.log("selectedPage:", selectedPage);
@@ -54,6 +54,7 @@ export default function PortfolioContent({
 
     const { 
         editMode,
+        setEditMode,
     } = useContext(PortfolioEditContext);
 
     const location = useLocation();
@@ -80,6 +81,8 @@ export default function PortfolioContent({
                         console.log("data from fetchPortfolioContent:", data);
                         console.log("data.result.content:", JSON.parse(data.result.content));
                         setPreviewPortfolioContent(JSON.parse(data.result.content));
+                        setEditMode(false);
+
                     } else {
                         console.error("Failed to fetch portfolio content:", response);
                     }
@@ -100,6 +103,7 @@ export default function PortfolioContent({
     // console.log("hoveredItem:", Boolean(hoveredItem));
     // console.log("popoverHovered: ", popoverHovered);
     console.log("portfolioContent:", portfolioContent);
+    console.log("contentToRender:", contentToRender);
 
     // setHoveredItem('')
 
@@ -110,14 +114,14 @@ export default function PortfolioContent({
                     <ClipLoader size={'15em'} color={"#123abc"} loading={!contentToRender} />
                 </div>
             ) : (
-            <>
+            <div id='portfolio-content' style={{backgroundColor: contentToRender?.styles?.backgroundColor}}>
                 {/* {portfolioContent.layout && (
                     <Layout 
                         layout={portfolioContent.layout} 
                         portfolioContent={portfolioContent} 
                     />
                 )} */}
-                <PortfolioNavbar portfolioContent={portfolioContent}/>
+                <PortfolioNavbar portfolioContent={contentToRender}/>
                 {selectedPage === "about" && (
                     <>
                         <AboutBody 
@@ -134,6 +138,7 @@ export default function PortfolioContent({
                                 setPortfolioContent={setPortfolioContent}
                                 setSelectedPage={setSelectedPage}
                                 projectsRef={projectsRef}
+                                previewMode={previewMode}
                             />
                         )}
                     </>
@@ -151,10 +156,11 @@ export default function PortfolioContent({
                         portfolioContent={contentToRender}
                         setPortfolioContent={setPortfolioContent}
                         projectNum={selectedPage.slice('project'.length)}
+                        previewMode={previewMode}
                     />
                 )}
                 {/* <PortfolioItemOptionsPopup/>                 */}
-            </>                
+            </div>                
             )}        
         </>
     )

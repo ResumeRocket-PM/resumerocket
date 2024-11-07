@@ -350,7 +350,7 @@ export default function PortfolioPage() {
                 {/* </FormControl> */}
                 <div 
                     id="portfolio-actual" 
-                    style={{backgroundColor: portfolioContent?.styles?.backgroundColor}}
+                    // style={{backgroundColor: portfolioContent?.styles?.backgroundColor}}
                 >
                         <PortfolioContent 
                             portfolioContent={portfolioContent}

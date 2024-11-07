@@ -14,6 +14,10 @@
     margin: auto; /* Center within the container */
 }
 
+#portfolio-content {
+    height: 100%;
+}
+
 .h1 {
     font-size: 2em;
     font-weight: bold;
@@ -195,8 +199,15 @@
     border: 1px solid blue;
  }
 
+ .portfolio-textarea-container.disabled {
+    pointer-events: none;
+    /* background-color: #f0f0f0; */
+    /* color: #a0a0a0; */
+    /* border: 1px solid #d0d0d0; */
+ }
+
 .portfolio-textarea {
-    border: 2px solid transparent;
+    /* border: 2px solid transparent; */
     background-color: transparent;
     border-radius: 5px;
     font-family: 'Roboto', 'sans-serif', 'Arial', 'Helvetica Neue';
