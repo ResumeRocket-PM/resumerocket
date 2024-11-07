@@ -35,6 +35,8 @@ const UserProfileHeader = ({userDetails}) => {
     }
 }, [userDetails]);
 
+  console.log(userDetails);
+
   return (
     <div style={{ position: 'relative', margin: 0, padding: 0 }}>
       {/* Background Image */}
@@ -97,6 +99,9 @@ const UserProfileHeader = ({userDetails}) => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <Link to={`/create-resume/${userDetails.primaryResumeId}`} style={{ textAlign: 'center' }}>
                 {userDetails.primaryResumeId != null ? 'View Resume' : null }
+            </Link>
+            <Link to={userDetails.portfolioLink} style={{textAlign: 'center'}}>
+                {userDetails.portfolioLink != null ? 'View Portfolio' : null }
             </Link>
           </div>
         </div>
