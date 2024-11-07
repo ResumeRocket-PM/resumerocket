@@ -18,7 +18,7 @@ const ProjectsPreviewBody = ({
     setPortfolioContent, 
     setSelectedPage, 
     projectRef,
-    previewMode=false,
+    viewMode=false,
 }) => {
 
     const navigate = useNavigate();
@@ -71,7 +71,7 @@ const ProjectsPreviewBody = ({
     };
 
     const handleGoToProject = (project, index) => {
-        if (previewMode) {
+        if (viewMode) {
             // navigate to /portfolio/preview/project/{index}
             navigate(`/portfolio/preview/project/${index}`);
         }

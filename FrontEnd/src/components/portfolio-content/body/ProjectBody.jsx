@@ -13,7 +13,7 @@ import ProjectWebsitePreview from '../project-sections/ProjectWebsitePreview';
 import ProjectColumns from '../project-sections/ProjectColumns';
 import ProjectSectionWrapper from '../ProjectSectionWrapper';
 
-const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNum, previewMode=false}) => {
+const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNum, viewMode=false}) => {
 
     // either pass in the project name or the project id
     // idk you'll probs have to manage this from both the navbar and the left menu... 
@@ -29,7 +29,7 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
 
     // whenver the project is updated, update the project in the portfolioContent
     useEffect(() => {
-        if (!previewMode && !isUpdating.current) {
+        if (!viewMode && !isUpdating.current) {
             isUpdating.current = true;
             setPortfolioContent(prevContent => ({
                 ...prevContent,
