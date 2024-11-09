@@ -95,17 +95,35 @@ const RearrangeImagesDialogGrid = ({ open, setOpen, items, setItems }) => {
     };
 
     const handleImageUpload = (files) => {
-        const file = files[0];
-        if (file) {
-            uploadImage(file)
-                .then((data) => {
-                    const newItems = [...tempItems];
-                    newItems.push({ imageUrl: data.url, imageId: data.imageId });
-                    setTempItems(newItems);
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
+        // const file = files[0];
+        if (files.length === 0) {
+            return;
+        } else {
+            const newItems = [...tempItems];
+            const newImageUrls = [...imageUrls];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                uploadImage(file)
+                    .then((data) => {
+                        newItems.push({ imageUrl: data.url, imageId: data.imageId });
+                        newImageUrls.push(data.url);
+                        setTempItems(newItems);
+                        setImageUrls(newImageUrls);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+            }
+            
+            // uploadImage(file)
+            //     .then((data) => {
+            //         const newItems = [...tempItems];
+            //         newItems.push({ imageUrl: data.url, imageId: data.imageId });
+            //         setTempItems(newItems);
+            //     })
+            //     .catch((err) => {
+            //         console.error(err);
+            //     });
         }        
     };
 
@@ -198,6 +216,7 @@ const RearrangeImagesDialogGrid = ({ open, setOpen, items, setItems }) => {
             <VisuallyHiddenInput
                 type="file"
                 accept="image/*"
+                multiple
                 ref={fileInputRef}
                 onChange={(event) => handleImageUpload(event.target.files)}
             />

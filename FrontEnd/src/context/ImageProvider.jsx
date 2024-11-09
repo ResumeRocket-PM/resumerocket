@@ -29,6 +29,7 @@ const ImageProvider = ({ children }) => {
     let token = imageSASToken;
     let imageUrl = `${url}${token ? `?${token}` : ''}`;
     let response = null;
+    console.log('imageUrl:', imageUrl);
 
     if (imageId == "") {
         return await fetch(imageUrl);

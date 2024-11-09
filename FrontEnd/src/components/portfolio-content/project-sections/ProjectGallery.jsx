@@ -64,7 +64,7 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
     const [imageUrls, setImageUrls] = useState([]);
 
     useEffect(() => {
-        if (content?.images[0]?.imageUrl) {
+        if (content?.images) {
             const fetchImageUrls = async () => {
                 const urls = [];
                 for (let i = 0; i < content.images.length; i++) {
@@ -149,8 +149,9 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
             </style>
             <div 
                 className="slider-container"
-                style={{ 
-                    width: '75%', 
+                style={{
+                    width: '90%', 
+                    minWidth: '90%', 
                     // backgroundColor: 'black'
                 }}
             >
@@ -183,7 +184,7 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
                                     alt={`carousel-item-${index}`} 
                                     // className='carousel-item' 
                                     // style={{ width: '150px', height: 'calc(100% - 20px)' }}
-                                    style={{ width: '150px' }}
+                                    // style={{ width: '150px'}}
 
                                 />
                             </div>

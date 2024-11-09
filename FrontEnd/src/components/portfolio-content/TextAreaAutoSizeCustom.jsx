@@ -61,7 +61,8 @@ const TextAreaAutoSizeCustom = ({
     };
 
     const handleKeyDown = (index, event) => {
-        if (event.key === 'Backspace' && tempValues[index] === '') {
+        console.log(tempValues[index]);
+        if (event.key === 'Backspace' && (tempValues[index] === '' || !tempValues[index]) ) {
             if (sections.length === 1) {
                 return;
             }
@@ -187,6 +188,7 @@ const TextAreaAutoSizeCustom = ({
                         aria-label="minimum height"
                         minRows={1}
                         placeholder={index===0 ? placeholder : ''}
+                        spellCheck={editMode}
                     />
                 ))}
             </div>

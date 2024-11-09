@@ -39,7 +39,7 @@ const RearrangeItemsDialog = ({ open, setOpen, items, setItems }) => {
     };
 
     const getListStyle = isDraggingOver => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        background: isDraggingOver ? 'lightblue' : 'white',
         display: 'flex',
         // padding: grid,
         overflow: 'auto',
@@ -63,8 +63,10 @@ const RearrangeItemsDialog = ({ open, setOpen, items, setItems }) => {
                                     {...provided.droppableProps}
                                     style={getListStyle(snapshot.isDraggingOver)}
                                     ref={provided.innerRef}
-                                    className='rearrange-sections-container'
-                                >
+                                    className={[
+                                        'rearrange-sections-container',
+                                        'column-layout',
+                                    ].join(' ')}                                >
                                     {tempItems.map((item, index) => (
                                         <Draggable key={index} draggableId={index.toString()} index={index}>
                                             {(provided, snapshot) => (
@@ -80,7 +82,7 @@ const RearrangeItemsDialog = ({ open, setOpen, items, setItems }) => {
                                                     onMouseDown={handleMouseDown}
                                                     onMouseUp={handleMouseUp}
                                                 >
-                                                    item.type
+                                                    {item.type}
                                                 </div>
                                             )}
                                         </Draggable>

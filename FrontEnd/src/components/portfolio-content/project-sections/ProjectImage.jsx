@@ -63,7 +63,7 @@ const ProjectImage = ({ project, setProject, content, sectionIndex, type }) => {
 
     useEffect(() => {
         // if there is an image URL and imageId is not empty
-        if (content.imageUrl && content.imageId !== "") {
+        if (content.imageUrl && content.imageId !== "" && projectImage === null) {
             showImage(content.imageUrl, content.imageId)
                 .then(blob => {
                     const objectUrl = URL.createObjectURL(blob);
@@ -75,7 +75,7 @@ const ProjectImage = ({ project, setProject, content, sectionIndex, type }) => {
         }else {
             setProjectImage(content.imageUrl);
         }
-    }, []);
+    }, [content.imageUrl, content.imageId]);
 
     console.log('projectImage', content.imageUrl);
     console.log('content', content.imageId);

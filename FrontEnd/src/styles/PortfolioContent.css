@@ -276,13 +276,17 @@
     max-width: 100%; /* Ensure it does not exceed the width of its parent */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     /* overflow: hidden; */
-    padding-left: 28px; /* to account for add button, button is 24, plus 4 padding */
+    padding-left: 28px; /*to account for add button, button is 24, plus 4 padding*/
 }
 
 @media (max-width: 1590px) {
     .portfolio-project-columns {
         grid-template-columns: 1fr; /* Switch to a single column layout */
     }
+}
+
+.portfolio-column-container {
+   
 }
 
 .column {
@@ -293,7 +297,7 @@
     height: 100%;
     min-width: 20rem;
     border: 1px solid black;
-    gap: 1rem;
+    /* gap: 1rem; */
 }
 
 .portfolio-project-columns .column {
@@ -424,6 +428,7 @@
     display: block;
     max-width: 23rem;
     /* max-height: 600px;  */
+    background: white;
 }
 
 .rearrange-sections-container.row-layout {

@@ -31,15 +31,18 @@ const PortfolioItemWithPopupWrapper = ({
     const popoverOpen = propPopoverOpen !== null ? propPopoverOpen : statePopoverOpen;
     const setPopoverOpen = propSetPopoverOpen !== null ? propSetPopoverOpen : setStatePopoverOpen;
 
+    const [isLeaving, setIsLeaving] = useState(false);
+
+
     const handleMouseEnterPI = (event, item) => {
         if (!editMode || useContentClick) return;
+        setIsLeaving(false);
         setHoveredItem(item);
     };
 
     const handleMouseLeavePI = () => {
         if (!editMode || useContentClick) return;
-        if (popoverHovered) return;
-        setHoveredItem('');
+        setIsLeaving(true);
     };
 
     const handlePopoverEnter = () => {
@@ -65,7 +68,12 @@ const PortfolioItemWithPopupWrapper = ({
         }
     };
 
-
+    useEffect(() => {
+        if (isLeaving && !popoverHovered) {
+            setHoveredItem('');
+            setIsLeaving(false);
+        }
+    }, [popoverHovered, isLeaving]);
 
     useEffect(() => {
         if (!hoveredItem && !popoverHovered) {
@@ -103,7 +111,7 @@ const PortfolioItemWithPopupWrapper = ({
         switch(popupLocation) {
             case 'top':
                 return {
-                    top: `-${popupDimensions.height + 6}px`,
+                    top: `-${popupDimensions.height}px`,
                     left: '50%',
                     marginLeft: `-${popupDimensions.width / 2}px`,
                 };

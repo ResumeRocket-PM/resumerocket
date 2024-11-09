@@ -65,6 +65,10 @@ export default function PortfolioContent({
 
     const [contentToRender, setContentToRender] = useState(portfolioContent);
 
+    if(userHasNoPortfolio) {
+        handleCreatePortfolio();
+    }
+
     useEffect(() => {
         if (viewMode) {
             setContentToRender(previewPortfolioContent);
@@ -143,15 +147,8 @@ export default function PortfolioContent({
 
     return (
         <>
-            {userHasNoPortfolio ? (
-                <Button 
-                    variant="contained" 
-                    size="small"
-                    onClick={handleCreatePortfolio}
-                >
-                    Create Portfolio
-                </Button>
-            ) : (
+
+            {(
                 !contentToRender ? (
                     <div style={{ height: '100%' }} className='hz-center'>
                         <ClipLoader size={'15em'} color={"#123abc"} loading={!contentToRender} />
@@ -164,7 +161,7 @@ export default function PortfolioContent({
                                 portfolioContent={portfolioContent} 
                             />
                         )} */}
-                        <PortfolioNavbar portfolioContent={contentToRender} />
+                        <PortfolioNavbar portfolioContent={contentToRender} setSelectedPage={setSelectedPage}/>
                         {selectedPage === "about" && (
                             <>
                                 <AboutBody 
@@ -186,6 +183,28 @@ export default function PortfolioContent({
                                 )}
                             </>
                         )}
+                        {selectedPage === "projects" && (
+                            <>
+                                <AboutBody 
+                                    userAbout={contentToRender.pages.about}
+                                    editMode={editMode}
+                                    portfolioContent={contentToRender}
+                                    setPortfolioContent={setPortfolioContent}
+                                />
+
+                                {contentToRender.pages.projects && (
+                                    <ProjectsPreviewBody 
+                                        editMode={editMode}
+                                        portfolioContent={contentToRender}
+                                        setPortfolioContent={setPortfolioContent}
+                                        setSelectedPage={setSelectedPage}
+                                        projectsRef={projectsRef}
+                                        viewMode={viewMode}
+                                        scrollIntoView={true}
+                                    />
+                                )}
+                            </>
+                        )}
                         {selectedPage === "experience" && (
                             <ExperienceBody 
                                 editMode={editMode}
@@ -193,7 +212,8 @@ export default function PortfolioContent({
                                 setPortfolioContent={setPortfolioContent}
                             />
                         )}
-                        {selectedPage.startsWith("project") && (
+                        {/* if starts with project followed by a number */}
+                        {/^project\d+$/.test(selectedPage) && (
                             <ProjectBody 
                                 editMode={editMode}
                                 portfolioContent={contentToRender}

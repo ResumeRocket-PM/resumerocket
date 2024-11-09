@@ -16,6 +16,7 @@ const DialogButton = ({text, content, buttonStyles=null, title=null, startIcon=n
     const [open, setOpen] = useState(isOpen !== null ? isOpen : false);
 
     const toggleDialogOpen = () => {
+        console.log('toggleDialogOpen hit');
         setOpen(!open);
         if(open && onClose){
             onClose();
@@ -62,6 +63,7 @@ const DialogButton = ({text, content, buttonStyles=null, title=null, startIcon=n
             {icon && (
                 <Button
                     variant="outlined"
+                    onClick={toggleDialogOpen}
                     sx={{...buttonStyles, minWidth: 'fit-content', padding: "5px"}}
                 >
                     {icon}

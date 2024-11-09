@@ -93,6 +93,7 @@ const AddContactMethodFields = ({ contactMethod, newContactMethodValue, setNewCo
         />
     );
 };
+
         
 
 const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent}) => {
@@ -233,7 +234,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
 
     useEffect(() => {
         // if there is an image URL and imageId is not empty
-        if (userAbout.profilePicture && userAbout.profilePictureId !== "") {
+        if (userAbout.profilePicture && userAbout.profilePictureId !== "" && profilePic === null) {
             showImage(userAbout.profilePicture, userAbout.profilePictureId)
                 .then(blob => {
                     const objectUrl = URL.createObjectURL(blob);
@@ -246,11 +247,11 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         // else {
         //     setProfilePic(userAbout.profilePicture);
         // }
-    }, []);
+    }, [userAbout.profilePicture, userAbout.profilePictureId]);
 
     useEffect(() => {
         // if there is an image URL and imageId is not empty
-        if (userAbout.backgroundPicture && userAbout.backgroundPictureId !== "") {
+        if (userAbout.backgroundPicture && userAbout.backgroundPictureId !== "" && backgroundPic === null) {
             showImage(userAbout.backgroundPicture, userAbout.backgroundPictureId)
                 .then(blob => {
                     const objectUrl = URL.createObjectURL(blob);
@@ -263,7 +264,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         // else {
         //     setBackgroundPic(userAbout.backgroundPicture);
         // }
-    }, []);
+    }, [userAbout.backgroundPicture, userAbout.backgroundPictureId]);
 
     const updatePersonalSummary = (newContent) => {
         const updatedAbout = { 
@@ -337,12 +338,26 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
         }));
     };
 
+    const deleteContactMethod = (contactMethod) => () => {
+        const updatedContactInfo = { ...about.contactInfo };
+        delete updatedContactInfo[contactMethod];
+        const updatedAbout = { ...about, contactInfo: updatedContactInfo };
+        setAbout(updatedAbout);
+        setPortfolioContent((prevContent) => ({
+            ...prevContent,
+            pages: {
+                ...prevContent.pages,
+                about: updatedAbout,
+            },
+        }));
+    };
 
-    // console.log('profilePicture', about.profilePicture);
+
     // console.log('profilePictureId', about.profilePictureId);
     // console.log('backgroundPicture', about.backgroundPicture);
     // console.log('backgroundPictureId', about.backgroundPictureId);  
-    console.log('about.personalSummary', about.personalSummary);
+    // console.log('about.personalSummary', about.personalSummary);
+    // console.log('profilePic', profilePic);
 
     return (
         <>
@@ -378,8 +393,9 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         id='portfolio-about-header'
                         className={`${!editMode ? 'hz-center' : ''}`}
                         style={{
-                            backgroundImage: `url(${backgroundPic})`,
-                            // backgroundColor: about.backgroundPicture ? 'transparent' : 'lightgreen',
+                            backgroundImage: backgroundPic 
+                            ? `url(${backgroundPic})` 
+                            : "url('https://st2.depositphotos.com/1084193/8215/v/450/depositphotos_82151626-stock-illustration-abstract-tech-background-futuristic-technology.jpg')",                            // backgroundColor: about.backgroundPicture ? 'transparent' : 'lightgreen',
                             backgroundSize: 'cover', // Ensures the image covers the div area
                             backgroundPosition: 'center', // Centers the image within the div
                         }}
@@ -438,7 +454,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                         </div>
                         <div id="portfolio-about-header-contact">
                         {about.contactInfo.email && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('email')}/>}
+                            >
                                 <a href={`mailto:${about.contactInfo.email}`}>
                                     <img 
                                         src={emailLogo}
@@ -449,7 +468,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             </PortfolioItemWithPopupWrapper>
                         )}
                         {about.contactInfo.instagram && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('instagram')}/>}
+                            >
                                 <a href={about.contactInfo.instagram}>
                                     <img 
                                         src={instagramLogo} 
@@ -460,7 +482,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             </PortfolioItemWithPopupWrapper>    
                         )}
                         {about.contactInfo.linkedin && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('linkedin')}/>}
+                            >
                                 <a href={about.contactInfo.linkedin}>
                                     <img 
                                         src={linkedinLogo} 
@@ -471,7 +496,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             </PortfolioItemWithPopupWrapper>
                         )}
                         {about.contactInfo.github && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('github')}/>}
+                            >
                                 <a href={about.contactInfo.github}>
                                     <img 
                                         src={githubLogo} 
@@ -482,7 +510,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             </PortfolioItemWithPopupWrapper>
                         )}
                         {about.contactInfo.twitter && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('twitter')}/>}
+                            >
                                 <a href={about.contactInfo.twitter}>
                                     <img 
                                         src={twitterLogo} 
@@ -493,7 +524,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             </PortfolioItemWithPopupWrapper>
                         )}
                         {about.contactInfo.facebook && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('facebook')}/>}
+                            >
                                 <a href={about.contactInfo.facebook}>
                                     <img 
                                         src={facebookLogo} 
@@ -504,7 +538,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                             </PortfolioItemWithPopupWrapper>
                         )}
                         {about.contactInfo.discord && (
-                            <PortfolioItemWithPopupWrapper popoverContent={<DeleteIcon />}>
+                            <PortfolioItemWithPopupWrapper 
+                                popupContentClasses='no-padding'
+                                popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('discord')}/>}
+                            >
                                 <a href={about.contactInfo.discord}>
                                     <img 
                                         src={discordLogo} 
@@ -548,7 +585,14 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                                 ) : (
                                                     <FormControl sx={{display: "flex", flexDirection: "row", gap: ".5rem"}}>
                                                         {Object.entries(ContactMethodIcons).map(([key, value], index) => (
-                                                            <img key={key} src={value} alt={key} onClick={() => handleContactMethodSelected(key)} />
+                                                            !userAbout.contactInfo[key] && (
+                                                                <img
+                                                                    key={key}
+                                                                    src={value}
+                                                                    alt={key}
+                                                                    onClick={() => handleContactMethodSelected(key)}
+                                                                />
+                                                            )
                                                         ))}
                                                     </FormControl>
                                                 )}

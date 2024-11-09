@@ -239,9 +239,51 @@ export default function PortfolioPage() {
         fetchPortfolioContent();
     }, []); // Empty dependency array to only run once on mount
 
+    const mergeAccountDetailsIntoPortfolioContent = (accountDetails) => {
+        const updatedPortfolioContent = { ...portfolioContentDefault };
+    
+        // Update name and title
+        updatedPortfolioContent.pages.about.nameAndTitle.content[0].text = `${accountDetails.firstName} ${accountDetails.lastName}`;
+        updatedPortfolioContent.pages.about.nameAndTitle.content[1].text = accountDetails.title;
+    
+        // Update profile picture
+        updatedPortfolioContent.pages.about.profilePicture = accountDetails.profilePhotoLink;
+
+        // Extract and update profile picture ID
+        const profilePictureId = accountDetails.profilePhotoLink.split('/').pop();
+        updatedPortfolioContent.pages.about.profilePictureId = profilePictureId;    
+        // Update contact info
+        updatedPortfolioContent.pages.about.contactInfo.email = accountDetails.email;
+    
+        // Add skills, experience, and education if needed
+        // updatedPortfolioContent.pages.about.skills = accountDetails.skills;
+        // updatedPortfolioContent.pages.about.experience = accountDetails.experience;
+        // updatedPortfolioContent.pages.about.education = accountDetails.education;
+    
+        return updatedPortfolioContent;
+    };
+
     const handleCreatePortfolio = async () => {
+        let accountDetails = null;
         try {
-            const response = await api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) });
+            const response = await api.get("/account/details"); 
+            if (!response.ok) {
+                throw new Error("Failed to get account details");
+            }
+            const data = await response.json();
+            accountDetails = data.result;
+            console.log("data from get account details:", data);
+        } catch (error) {
+            console.error("Error:", error); 
+        }
+
+        try {
+            let portfolioContent = portfolioContentDefault;
+            if (accountDetails) {
+                portfolioContent = mergeAccountDetailsIntoPortfolioContent(accountDetails);
+            }
+
+            const response = await api.post("/portfolio", { "content": JSON.stringify(portfolioContent) });
             if (!response.ok) {
                 throw new Error("Failed to set default portfolio content");
             }
@@ -255,19 +297,19 @@ export default function PortfolioPage() {
             console.error("Error:", error);
         }
 
-        try {
-            const response = await api.get("/portfolio/details");
-            if (response.ok) {
-                const data = await response.json();
-                console.log("data from fetchPortfolioContent:", data);
-                console.log("data.result.content:", JSON.parse(data.result.content));
-                setPortfolioContent(JSON.parse(data.result.content));
-            } else {
-                console.error("Failed to fetch portfolio content:", response);
-            }
-        } catch (error) {
-            console.error("Failed to fetch portfolio content:", error);
-        }
+        // try {
+        //     const response = await api.get("/portfolio/details");
+        //     if (response.ok) {
+        //         const data = await response.json();
+        //         console.log("data from fetchPortfolioContent:", data);
+        //         console.log("data.result.content:", JSON.parse(data.result.content));
+        //         setPortfolioContent(JSON.parse(data.result.content));
+        //     } else {
+        //         console.error("Failed to fetch portfolio content:", response);
+        //     }
+        // } catch (error) {
+        //     console.error("Failed to fetch portfolio content:", error);
+        // }
     };
 
 

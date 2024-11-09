@@ -82,61 +82,6 @@ const ProjectImageAndText = ({ project, setProject, content, sectionIndex, style
         }
     };
 
-    // const handleTempChange = (e) => {
-    //     setTempValue(e.target.value);
-    // };
-
-    // const handleTextChange = () => {
-    //     setProject(prevProject => {
-    //         const updatedSections = prevProject.sections.map((section, index) => {
-    //             if (section.type === 'text area' && index === sectionIndex) {
-    //                 return { ...section, content: tempValue };
-    //             }
-    //             return section;
-    //         });
-    //         return { ...prevProject, sections: updatedSections };
-    //     });
-    // };
-
-    // const changeFontSize = (size) => {
-    //     // Convert size to lowercase
-    //     size = size.toLowerCase();
-    //     setFontSelected(size);
-    
-    //     // let newStyles = {};
-    //     // if (size === 'h1') {
-    //     //     newStyles = { font: 'h1' };
-    //     // } else if (size === 'h2') {
-    //     //     newStyles = { font: 'h2' };
-    //     // } else if (size === 'h3') {
-    //     //     newStyles = { font: 'h3' };
-    //     // } else if (size === 'h4') {
-    //     //     newStyles = { font: 'h4' };
-    //     // } else if (size === 'p') {
-    //     //     newStyles = { font: 'p' };
-    //     // }
-    
-    //     setProject(prevProject => {
-    //         const updatedSections = prevProject.sections.map((section, index) => {
-    //             if (section.type === 'image and text' && index === sectionIndex) {
-    //                 // Add new styles to only the specific class
-    //                 return { 
-    //                     ...section, 
-    //                     styles: {
-    //                         ...section.styles, 
-    //                         'textarea': {
-    //                             ...section.styles.textarea,
-    //                             font: size
-    //                         }
-    //                     }
-    //                 };
-    //             }
-    //             return section;
-    //         });
-    //         return { ...prevProject, sections: updatedSections };
-    //     });
-    // };
-
     const changeVerticalAlign = (align) => {
         setProject(prevProject => {
             const updatedSections = prevProject.sections.map((section, index) => {
@@ -164,7 +109,7 @@ const ProjectImageAndText = ({ project, setProject, content, sectionIndex, style
 
     useEffect(() => {
         // if there is an image URL and imageId is not empty
-        if (content.imageContent.imageUrl && content.imageContent.imageId !== "") {
+        if (content.imageContent.imageUrl && content.imageContent.imageId !== "" && projectImage === null) {
             showImage(content.imageContent.imageUrl, content.imageContent.imageId)
                 .then(blob => {
                     const objectUrl = URL.createObjectURL(blob);
@@ -176,7 +121,7 @@ const ProjectImageAndText = ({ project, setProject, content, sectionIndex, style
         }else {
             setProjectImage(content.imageContent.imageUrl);
         }
-    }, []);
+    }, [content.imageContent.imageUrl, content.imageContent.imageId]);
 
 
     ///// NEW STUFF ////
@@ -223,8 +168,10 @@ const ProjectImageAndText = ({ project, setProject, content, sectionIndex, style
         });
     };
 
-    console.log('content', content);
-    console.log('styles', styles);
+    // console.log('content', content);
+    // console.log('styles', styles);
+
+    console.log('projectImage', projectImage);
 
     return (
         <div className='project-image-and-text'>
