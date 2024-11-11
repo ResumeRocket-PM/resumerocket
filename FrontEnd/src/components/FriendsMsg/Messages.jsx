@@ -5,7 +5,7 @@ import { useApi } from "../../hooks";
 import Draggable from 'react-draggable';
 import userSolidOrange from "../../assets/user-solid-orange.svg";
 
-const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMessageSent = null }) => {
+const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMessageSent }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const api = useApi();
@@ -75,7 +75,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                     right: '443px',
                     width: '400px',
                     maxHeight: '500px',
-                    backgroundColor: 'white',
+                    backgroundColor: 'lightskyblue',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                     borderRadius: '8px',
                     padding: '10px',
@@ -85,7 +85,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                     cursor: 'move',
                 }}
             >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid black', }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <img
                             src={profilePhotoLink || userSolidOrange}
@@ -95,9 +95,11 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                                 height: '40px',
                                 borderRadius: '50%',
                                 marginRight: '8px',
+                                background: 'white',
+                                border: '2px'
                             }}
                         />
-                        <Typography variant="h6">{firstName} {lastName}</Typography>
+                        <Typography variant="h6" >{firstName} {lastName}</Typography>
                     </div>
                     <IconButton onClick={onClose}>
                         <CloseIcon />
@@ -131,9 +133,9 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                                         ? 'green'
                                         : msg.identity === 'system'
                                             ? 'red'  // Red background for system messages (e.g., blocked message)
-                                            : 'blue',
+                                            : 'ThreeDDarkShadow',
                                     color: 'white',
-                                    textAlign: msg.identity === 'me' ? 'right' : 'left',
+                                    textAlign: 'left',
                                 }}
                             >
                                 {msg.msgContent}
@@ -152,12 +154,20 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyDown={handleKeyPress} // Listen for "Enter" key press
                         style={{ marginRight: '10px' }}
+                        sx={{
+                            backgroundColor: 'white' // Set background color to white
+                        }}
                     />
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSendMessage}
                         disabled={!newMessage.trim()}
+                        style={{
+                            backgroundColor: newMessage.trim() ? 'darkgreen' : 'lightgrey', // Green when enabled, grey when disabled
+                            color: 'white',
+                            cursor: newMessage.trim() ? 'pointer' : 'not-allowed', // Pointer when enabled, default when disabled
+                        }}
                     >
                         Send
                     </Button>

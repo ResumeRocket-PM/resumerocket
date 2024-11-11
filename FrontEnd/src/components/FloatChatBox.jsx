@@ -3,6 +3,7 @@ import { IconButton, Box, Typography, Button } from '@mui/material';
 import ChatIcon from '../assets/RR_Chat_Icon.png';
 import FriendsList from './FriendsMsg/FriendsList';
 import TalkedPeopleList from './FriendsMsg/TalkedPeopleList.jsx';
+import searchIcon from '../assets/searchIcon.png';
 
 const FloatingChatButton = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,13 +11,14 @@ const FloatingChatButton = () => {
 
     const handleClick = () => setIsOpen(!isOpen);
     const handleClose = () => setIsOpen(false);
-
     const handleListChange = (type) => {
         if (listType !== type) { // Only change if listType is different
             setListType(type);
         }
     };
-
+    const handleSearchClicked = () => {
+        alert("search button is clicked")
+    }
     return (
         <div>
             <IconButton
@@ -51,7 +53,17 @@ const FloatingChatButton = () => {
                     }}
                 >
                     <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6" align="center">Chat Options</Typography>
+                        <Typography variant="h6" align="center">Chat Box</Typography>
+                        <IconButton
+                            onClick={handleSearchClicked }
+                            style={{
+                                borderRadius: '2px',
+                                position: 'fixed',
+                                right:'90px'
+                            }}
+                        >
+                            <img src={searchIcon} alt="search" style={{ width: '18px', height: '18px' }} />
+                        </IconButton>
                         <Button onClick={handleClose} style={{ fontSize: '12px' }}>Close</Button>
                     </Box>
 
