@@ -182,6 +182,8 @@ export default function PortfolioPage() {
         setSelectedLayout(layout);
     };
 
+    const [userHasNoPortfolio, setUserHasNoPortfolio] = useState(false);
+
     // const [selectedPage, setSelectedPage] = useState("about");
     // useEffect(() => {
     //     // console.log("selectedPage changed:", selectedPage);
@@ -208,48 +210,106 @@ export default function PortfolioPage() {
         })        
     }
 
+    const fetchPortfolioContent = async () => {
+        try {
+            const response = await api.get("/portfolio/details");
+            if (response.ok) {
+                const data = await response.json();
+                if (data.result.content) {
+                    console.log("data from fetchPortfolioContent:", data);
+                    console.log("data.result.content:", JSON.parse(data.result.content));
+                    setPortfolioContent(JSON.parse(data.result.content));
+                } else {
+                    // If no portfolio content, set default content
+                    // handleCreatePortfolio();
+                }
+            } else {
+                console.error("Failed to fetch portfolio content:", response);
+            }
+        } catch (error) {
+            console.error("Failed to fetch portfolio content:", error);
+                setUserHasNoPortfolio(true);
+                setSelectedPage("about");
+        }
+    };
+
     // I think there's a better way to do this, with the .then callback and whatnot
     // (Austin)-> see pony express chats page for example, or devexpo listing users 
     useEffect(() => {
-        const fetchPortfolioContent = async () => {
-            try {
-                const response = await api.get("/portfolio/details");
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.result.content) {
-                        console.log("data from fetchPortfolioContent:", data);
-                        console.log("data.result.content:", JSON.parse(data.result.content));
-                        setPortfolioContent(JSON.parse(data.result.content));
-                    } else {
-                        // If no portfolio content, set default content
-                        // handleCreatePortfolio();
-                    }
-                } else {
-                    console.error("Failed to fetch portfolio content:", response);
-                }
-            } catch (error) {
-                console.error("Failed to fetch portfolio content:", error);
-            }
-        };
-
         fetchPortfolioContent();
     }, []); // Empty dependency array to only run once on mount
 
-    const handleCreatePortfolio = () => {
-        api.post("/portfolio", { "content": JSON.stringify(portfolioContentDefault) })
-            .then(response => {
-                if (response.ok) {
-                    response.json().then((data) => {
-                        console.log("data from set default portfolio content:", data);
-                        setPortfolioContent(JSON.parse(data.result.content));
-                    });
-                } else {
-                    console.error("Failed to set default portfolio content:", response);
-                }
-            })
-            .catch(error => {
-                console.error("Failed to set default portfolio content:", error);
-            });
+    const mergeAccountDetailsIntoPortfolioContent = (accountDetails) => {
+        const updatedPortfolioContent = { ...portfolioContentDefault };
+    
+        // Update name and title
+        updatedPortfolioContent.pages.about.nameAndTitle.content[0].text = `${accountDetails.firstName} ${accountDetails.lastName}`;
+        updatedPortfolioContent.pages.about.nameAndTitle.content[1].text = accountDetails.title;
+    
+        // Update profile picture
+        updatedPortfolioContent.pages.about.profilePicture = accountDetails.profilePhotoLink;
+
+        // Extract and update profile picture ID
+        const profilePictureId = accountDetails.profilePhotoLink.split('/').pop();
+        updatedPortfolioContent.pages.about.profilePictureId = profilePictureId;    
+        // Update contact info
+        updatedPortfolioContent.pages.about.contactInfo.email = accountDetails.email;
+    
+        // Add skills, experience, and education if needed
+        // updatedPortfolioContent.pages.about.skills = accountDetails.skills;
+        // updatedPortfolioContent.pages.about.experience = accountDetails.experience;
+        // updatedPortfolioContent.pages.about.education = accountDetails.education;
+    
+        return updatedPortfolioContent;
+    };
+
+    const handleCreatePortfolio = async () => {
+        let accountDetails = null;
+        try {
+            const response = await api.get("/account/details"); 
+            if (!response.ok) {
+                throw new Error("Failed to get account details");
+            }
+            const data = await response.json();
+            accountDetails = data.result;
+            console.log("data from get account details:", data);
+        } catch (error) {
+            console.error("Error:", error); 
+        }
+
+        try {
+            let portfolioContent = portfolioContentDefault;
+            if (accountDetails) {
+                portfolioContent = mergeAccountDetailsIntoPortfolioContent(accountDetails);
+            }
+
+            const response = await api.post("/portfolio", { "content": JSON.stringify(portfolioContent) });
+            if (!response.ok) {
+                throw new Error("Failed to set default portfolio content");
+            }
+            const data = await response.json();
+            console.log("data from set default portfolio content:", data);
+            // setPortfolioContent(JSON.parse(data.result.content));
+            setUserHasNoPortfolio(false);
+
+            await fetchPortfolioContent();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+
+        // try {
+        //     const response = await api.get("/portfolio/details");
+        //     if (response.ok) {
+        //         const data = await response.json();
+        //         console.log("data from fetchPortfolioContent:", data);
+        //         console.log("data.result.content:", JSON.parse(data.result.content));
+        //         setPortfolioContent(JSON.parse(data.result.content));
+        //     } else {
+        //         console.error("Failed to fetch portfolio content:", response);
+        //     }
+        // } catch (error) {
+        //     console.error("Failed to fetch portfolio content:", error);
+        // }
     };
 
 
@@ -309,7 +369,7 @@ export default function PortfolioPage() {
             <div id="portfolio-backdrop">
                 <div id='portfolio-top-right-options'>
                     <div id="portfolio-top-right-options-inner" className="hz-center">
-                        { !portfolioContent && (
+                        {/* { !portfolioContent && (
                             <Button 
                                 variant="contained" 
                                 size="small"
@@ -317,7 +377,7 @@ export default function PortfolioPage() {
                             >
                                 Create Portfolio
                             </Button>
-                        )}
+                        )} */}
                         <Button
                             variant="contained"
                             size="small"
@@ -355,8 +415,10 @@ export default function PortfolioPage() {
                         <PortfolioContent 
                             portfolioContent={portfolioContent}
                             setPortfolioContent={setPortfolioContent}
+                            userHasNoPortfolio={userHasNoPortfolio}
                             selectedPage={selectedPage}
                             setSelectedPage={setSelectedPage}
+                            handleCreatePortfolio={handleCreatePortfolio}
                         />
                 </div>
             </div>

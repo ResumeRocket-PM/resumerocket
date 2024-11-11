@@ -17,21 +17,28 @@ const ProjectsPreviewBody = ({
     portfolioContent, 
     setPortfolioContent, 
     setSelectedPage, 
-    projectRef,
-    previewMode=false,
+    projectsRef,
+    viewMode=false,
+    scrollIntoView,
 }) => {
 
     const navigate = useNavigate();
 
 
     const [projects, setProjects] = useState(portfolioContent.pages.projects.projectsData);
-    useEffect(() => {
-        setProjects(portfolioContent.pages.projects.projectsData);
-    }, [portfolioContent]);
-
     const [projectToAdd, setProjectToAdd] = useState({ ...projectDefault });
     const [addProjectOpen, setAddProjectOpen] = useState(false);    
     const [validationErrors, setValidationErrors] = useState({});
+
+    useEffect(() => {
+        if (scrollIntoView && projectsRef && projectsRef.current) {
+            projectsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, []);
+
+    useEffect(() => {
+        setProjects(portfolioContent.pages.projects.projectsData);
+    }, [portfolioContent]);
 
 
     const handleInputChange = (key) => (event) => {
@@ -49,13 +56,36 @@ const ProjectsPreviewBody = ({
         const errors = {};
         if (!projectToAdd.name) errors.name = 'Name is required';
         if (!projectToAdd.description) errors.description = 'Description is required';
-
+    
         if (Object.keys(errors).length > 0) {
             setValidationErrors(errors);
             return;
         }
-
-        const updatedProjects = [...portfolioContent.pages.projects.projectsData, projectToAdd];
+    
+        // Update the sections with the project name and description
+        const updatedSections = projectToAdd.sections.map((section, index) => {
+            if (index === 0) {
+                return {
+                    ...section,
+                    content: section.content.map((contentItem, contentIndex) => {
+                        if (contentIndex === 0) {
+                            return { ...contentItem, text: projectToAdd.name };
+                        } else if (contentIndex === 1) {
+                            return { ...contentItem, text: projectToAdd.description };
+                        }
+                        return contentItem;
+                    }),
+                };
+            }
+            return section;
+        });
+    
+        const updatedProjectToAdd = {
+            ...projectToAdd,
+            sections: updatedSections,
+        };
+    
+        const updatedProjects = [...portfolioContent.pages.projects.projectsData, updatedProjectToAdd];
         setPortfolioContent({
             ...portfolioContent,
             pages: {
@@ -71,7 +101,7 @@ const ProjectsPreviewBody = ({
     };
 
     const handleGoToProject = (project, index) => {
-        if (previewMode) {
+        if (viewMode) {
             // navigate to /portfolio/preview/project/{index}
             navigate(`/portfolio/preview/project/${index}`);
         }
@@ -79,7 +109,7 @@ const ProjectsPreviewBody = ({
     };
 
     return (
-        <div id='portfolio-projects-preview-root' ref={projectRef} style={{backgroundColor: portfolioContent.styles.backgroundColor}}>
+        <div id='portfolio-projects-preview-root' ref={projectsRef} style={{backgroundColor: portfolioContent.styles.backgroundColor}}>
             <h1 id='portfolio-pp-header' style={portfolioContent.pages.projectsPreview.styles} >Projects</h1>
             <div id='portfolio-pp-projects-container'>
                 {projects && projects.map((project, index) => (

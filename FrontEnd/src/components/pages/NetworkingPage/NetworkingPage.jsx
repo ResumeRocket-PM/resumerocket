@@ -3,6 +3,7 @@ import UserCard from './UserCard';
 import ResumeContent from './ResumeContent'; 
 import { useApi } from "../../../hooks.js";
 import { useLocation } from 'react-router-dom'; 
+import FloatingChatButton from '../../../components/FloatChatBox.jsx';
 
 const NetworkingPage = () => {
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
@@ -113,6 +114,7 @@ const NetworkingPage = () => {
           selectedUserDetails={selectedUserDetails}
         />
       </div>
+      <FloatingChatButton />
     </div>
   );
 };

@@ -164,9 +164,12 @@ const ProjectColumns = ({ project, setProject, content, sectionIndex, portfolioS
 
     return (
         <>
-            <div className='portfolio-project-columns hz-center'>
+            <div 
+                className='portfolio-project-columns hz-center-top' 
+                // style={{gap: !editMode ? '28px' : '0px'}}
+            >
                 {content.map((column, index) => (
-                    <div key={index}>
+                    <div key={index} className='portfolio-column-container' style={{paddingRight: !editMode ? '28px' : '0px'}}>
                         <ProjectColumn
                             column={column}
                             editMode={editMode}

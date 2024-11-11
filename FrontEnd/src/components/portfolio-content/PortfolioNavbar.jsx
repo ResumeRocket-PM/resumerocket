@@ -1,45 +1,42 @@
-import React, { useState } from 'react';
-// import {portfolioContentExample} from '../../example_responses/portfolioContent';
-import {Link} from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/PortfolioNavbarDefault.css';
+import { PortfolioEditContext } from '../../context/PortfolioEditProvider';
 
-const PortfolioNavbarDefault = ({portfolioContent}) => {
-    // console.log("portfolioContent:", portfolioContent); 
+const PortfolioNavbarDefault = ({ portfolioContent, setSelectedPage }) => {
+    const { editMode } = useContext(PortfolioEditContext);
+    const navigate = useNavigate();
 
     const pages = Object.keys(portfolioContent.pages).filter(page => page !== 'projectsPreview');
 
     const [navContent, setNavContent] = useState(portfolioContent.navbar);
-    // const [pages, setPages] = useState(portfolioContent.pages);
 
-    // useState(() => {
-    //     setNavContent(portfolioContent.navbar);
-    //     setPages(portfolioContent.pages);
-    // }, [portfolioContent]);
-
-    // console.log("navContent:", navContent);
-    // console.log("pages:", pages);
-
-    // console.log('portfolioContent:', portfolioContent);
     const portfolioStyles = portfolioContent.styles;
-    // console.log('portfolioStyles:', portfolioStyles);
+
+    const handleClick = (page) => {
+        if (editMode) {
+            setSelectedPage(page);
+        } else {
+            navigate(`/portfolio/preview/${page.toLowerCase()}`);
+        }
+    };
 
     return (
         <div id='portfolio-nav-container' style={navContent.styles.container}>
             {pages.map((page, index) => (
                 page !== 'projectsPreview' && (
-                    <>
+                    <React.Fragment key={index}>
                         <Link 
                             style={{
                                 ...navContent.styles.links,
-                                ...(portfolioStyles.linkColor && {color: portfolioStyles.linkColor}),
+                                ...(portfolioStyles.linkColor && { color: portfolioStyles.linkColor }),
                             }}
-                            key={index} 
-                            to={`/portfolio/preview/${page.toLowerCase()}`}
+                            onClick={() => handleClick(page)}
                         >
                             {page.charAt(0).toUpperCase() + page.slice(1)}
                         </Link>
-                        {index < pages.length - 1 && <span className="separator" style={{backgroundColor: portfolioStyles.linkColor}}></span>}                    
-                    </>
+                        {index < pages.length - 1 && <span className="separator" style={{ backgroundColor: portfolioStyles.linkColor }}></span>}
+                    </React.Fragment>
                 )
             ))}
         </div>

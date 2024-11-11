@@ -145,6 +145,8 @@ const AccountPage = () => {
 
     console.log('userDetails', userDetails)
 
+    console.log('profilePhoto', profilePhoto)
+
     return (
         <>
             { isLoading &&

@@ -35,11 +35,9 @@ function App() {
                 element={
                     <PortfolioEditProvider>
                       <PortfolioContent 
-                          // portfolioContent={portfolioContentExample}
-                          // setPortfolioContent={() => {}} // Pass a dummy function or handle it appropriately
                           selectedPage="about" // Set the default selected page
                           editMode={false} // Set editMode to false for preview
-                          previewMode={true} // Set previewMode to true for preview
+                          viewMode={true} // Set viewMode to true for preview
                       />
                     </PortfolioEditProvider>
 
@@ -51,6 +49,19 @@ function App() {
                     <PortfolioEditProvider>
                         <PortfolioProjectWrapper/>
                     </PortfolioEditProvider>
+                }
+            />
+              <Route path="/:portfolioId/portfolio" element={<RedirectToAbout />} />
+              <Route
+                path="/:portfolioId/portfolio/about"
+                element={
+                  <PortfolioEditProvider>
+                    <PortfolioContent
+                      selectedPage="about" // Set the default selected page
+                      editMode={false} // Set editMode to false for preview
+                      viewMode={true} // Set viewMode to true for preview
+                    />
+                  </PortfolioEditProvider>
                 }
             />
            
@@ -66,7 +77,6 @@ function App() {
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
-          <FloatingChatButton />
       </BrowserRouter>
   );
 
@@ -85,9 +95,14 @@ const PortfolioProjectWrapper = () => {
       <PortfolioContent
           selectedPage={`project${projectNum}`}
           editMode={false} 
-          previewMode={true} 
+          viewMode={true} 
       />
   );
+};
+
+const RedirectToAbout = () => {
+  const { portfolioId } = useParams();
+  return <Navigate to={`/${portfolioId}/portfolio/about`} />;
 };
 
 export default App;

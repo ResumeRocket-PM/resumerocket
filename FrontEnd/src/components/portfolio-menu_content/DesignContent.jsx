@@ -6,11 +6,12 @@ import chroma from 'chroma-js';
 
 
 
-const ColorItem = ({ colorType, colorValue, onColorChange, changePortfolioColors }) => {
+const ColorItem = ({ colorType, colorValue, onColorChange, updatePortfolioColors }) => {
     const [showPicker, setShowPicker] = useState(false);
     const [pickerColor, setPickerColor] = useColor(colorValue);
     const pickerRef = useRef(null);
     const [tempColor, setTempColor] = useState(colorValue);
+
 
     const handleInputChange = (event) => {
         setTempColor(event.target.value);
@@ -24,8 +25,7 @@ const ColorItem = ({ colorType, colorValue, onColorChange, changePortfolioColors
         // }else{
         //     onColorChange(colorType, '#INVALID!');
         // }
-        onColorChange(colorType, tempColor);
-        changePortfolioColors();
+        onColorChange(colorType, tempColor, true);
     };
 
     const handleKeyDown = (event) => {
@@ -55,7 +55,7 @@ const ColorItem = ({ colorType, colorValue, onColorChange, changePortfolioColors
             document.addEventListener('mousedown', handleClickOutside);
         } else {
             document.removeEventListener('mousedown', handleClickOutside);
-            changePortfolioColors();
+            updatePortfolioColors();
             setTempColor(colorValue);
         }
         return () => {
@@ -131,7 +131,7 @@ const DesignContent = ({portfolioContent, setPortfolioContent}) => {
     //     }
     // };
 
-    const changePortfolioColors = () => {
+    const updatePortfolioColors = () => {
         setPortfolioContent(prevContent => ({
             ...prevContent,
             styles: {
@@ -143,6 +143,10 @@ const DesignContent = ({portfolioContent, setPortfolioContent}) => {
         }));
     }
 
+    useEffect(() => {
+        updatePortfolioColors();
+    }, [colors]);
+
     console.log('colors', colors);
 
     return (
@@ -153,7 +157,7 @@ const DesignContent = ({portfolioContent, setPortfolioContent}) => {
                     colorType={colorType}
                     colorValue={colorValue}
                     onColorChange={handleColorChange}
-                    changePortfolioColors={changePortfolioColors}
+                    updatePortfolioColors={updatePortfolioColors}
                 />
             ))}
         </div>

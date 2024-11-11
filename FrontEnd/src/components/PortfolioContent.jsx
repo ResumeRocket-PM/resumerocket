@@ -8,11 +8,12 @@ import ProjectBody from "./portfolio-content/body/ProjectBody";
 import { ClipLoader } from 'react-spinners'; 
 import { useState, useEffect, useContext, useRef } from "react";
 import { useApi } from "../hooks";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 // import PortfolioItemOptionsPopup from "./portfolio-content/PortfolioItemOptionsPopup";
 import { PortfolioEditContext } from "../context/PortfolioEditProvider";
 import PortfolioNavbar from "./portfolio-content/PortfolioNavbar";
 import "../styles/PortfolioContent.css"
+import { Button } from "@mui/material";
 
 function Layout({layout, portfolioContent}) {
     return (
@@ -40,17 +41,12 @@ function Layout({layout, portfolioContent}) {
 export default function PortfolioContent({
     portfolioContent = null, 
     setPortfolioContent = null, 
+    userHasNoPortfolio = false,
     selectedPage, 
     setSelectedPage,
-    previewMode = null,
+    viewMode = null,
+    handleCreatePortfolio=null,
 }) {
-    // console.log("portfolioContent:", portfolioContent);    
-    // console.log("selectedPage:", selectedPage);
-
-    // const [portfolioContent, setPortfolioContent] = useState(null);
-    // useState(() => {
-    //     setPortfolioContent(initialPortfolioContent);
-    // }, [initialPortfolioContent]);
 
     const { 
         editMode,
@@ -63,7 +59,23 @@ export default function PortfolioContent({
     const [previewPortfolioContent, setPreviewPortfolioContent] = useState(null);
     const api = useApi();
 
-    const contentToRender = previewMode ? previewPortfolioContent : portfolioContent;
+    const {portfolioId} = useParams();
+
+    // const contentToRender = viewMode ? previewPortfolioContent : portfolioContent;
+
+    const [contentToRender, setContentToRender] = useState(portfolioContent);
+
+    if(userHasNoPortfolio) {
+        handleCreatePortfolio();
+    }
+
+    useEffect(() => {
+        if (viewMode) {
+            setContentToRender(previewPortfolioContent);
+        } else {
+            setContentToRender(portfolioContent);
+        }
+    }, [viewMode, previewPortfolioContent, portfolioContent]);
 
     useEffect(() => {
         if (location.state && location.state.scrollToProjects && projectsRef.current) {
@@ -71,11 +83,35 @@ export default function PortfolioContent({
         }
     }, [location]);
 
+    // useEffect(() => {
+    //     if (viewMode && !previewPortfolioContent) {
+    //         const fetchPortfolioContent = async () => {
+    //             try {
+    //                 const response = await api.get("/portfolio/details");
+    //                 if (response.ok) {
+    //                     const data = await response.json();
+    //                     console.log("data from fetchPortfolioContent:", data);
+    //                     console.log("data.result.content:", JSON.parse(data.result.content));
+    //                     setPreviewPortfolioContent(JSON.parse(data.result.content));
+    //                     setEditMode(false);
+
+    //                 } else {
+    //                     console.error("Failed to fetch portfolio content:", response);
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Failed to fetch portfolio content:", error);
+    //             }
+    //         };
+
+    //         fetchPortfolioContent();
+    //     }
+    // }, [viewMode, previewPortfolioContent, api]);
+
     useEffect(() => {
-        if (previewMode && !previewPortfolioContent) {
+        if (viewMode && !previewPortfolioContent) {
             const fetchPortfolioContent = async () => {
                 try {
-                    const response = await api.get("/portfolio/details");
+                    const response = await api.get(`/portfolio/${portfolioId}/details`);
                     if (response.ok) {
                         const data = await response.json();
                         console.log("data from fetchPortfolioContent:", data);
@@ -93,7 +129,7 @@ export default function PortfolioContent({
 
             fetchPortfolioContent();
         }
-    }, [previewMode, previewPortfolioContent, api]);
+    }, [viewMode, previewPortfolioContent, api]);
 
     useEffect(() => {
         console.log("selectedPage changed:", selectedPage);
@@ -104,64 +140,92 @@ export default function PortfolioContent({
     // console.log("popoverHovered: ", popoverHovered);
     console.log("portfolioContent:", portfolioContent);
     console.log("contentToRender:", contentToRender);
+    console.log('userHasNoPortfolio:', userHasNoPortfolio);
+    console.log('selectedPage:', selectedPage);
 
     // setHoveredItem('')
 
     return (
         <>
-            {!contentToRender ? (
-                <div style={{height: '100%'}} className='hz-center'>
-                    <ClipLoader size={'15em'} color={"#123abc"} loading={!contentToRender} />
-                </div>
-            ) : (
-            <div id='portfolio-content' style={{backgroundColor: contentToRender?.styles?.backgroundColor}}>
-                {/* {portfolioContent.layout && (
-                    <Layout 
-                        layout={portfolioContent.layout} 
-                        portfolioContent={portfolioContent} 
-                    />
-                )} */}
-                <PortfolioNavbar portfolioContent={contentToRender}/>
-                {selectedPage === "about" && (
-                    <>
-                        <AboutBody 
-                            userAbout={contentToRender.pages.about}
-                            editMode={editMode}
-                            portfolioContent={contentToRender}
-                            setPortfolioContent={setPortfolioContent}
-                        />
 
-                        {contentToRender.pages.projects && (
-                            <ProjectsPreviewBody 
+            {(
+                !contentToRender ? (
+                    <div style={{ height: '100%' }} className='hz-center'>
+                        <ClipLoader size={'15em'} color={"#123abc"} loading={!contentToRender} />
+                    </div>
+                ) : (
+                    <div id='portfolio-content' style={{ backgroundColor: contentToRender?.styles?.backgroundColor }}>
+                        {/* {portfolioContent.layout && (
+                            <Layout 
+                                layout={portfolioContent.layout} 
+                                portfolioContent={portfolioContent} 
+                            />
+                        )} */}
+                        <PortfolioNavbar portfolioContent={contentToRender} setSelectedPage={setSelectedPage}/>
+                        {selectedPage === "about" && (
+                            <>
+                                <AboutBody 
+                                    userAbout={contentToRender.pages.about}
+                                    editMode={editMode}
+                                    portfolioContent={contentToRender}
+                                    setPortfolioContent={setPortfolioContent}
+                                />
+
+                                {contentToRender.pages.projects && (
+                                    <ProjectsPreviewBody 
+                                        editMode={editMode}
+                                        portfolioContent={contentToRender}
+                                        setPortfolioContent={setPortfolioContent}
+                                        setSelectedPage={setSelectedPage}
+                                        projectsRef={projectsRef}
+                                        viewMode={viewMode}
+                                    />
+                                )}
+                            </>
+                        )}
+                        {selectedPage === "projects" && (
+                            <>
+                                <AboutBody 
+                                    userAbout={contentToRender.pages.about}
+                                    editMode={editMode}
+                                    portfolioContent={contentToRender}
+                                    setPortfolioContent={setPortfolioContent}
+                                />
+
+                                {contentToRender.pages.projects && (
+                                    <ProjectsPreviewBody 
+                                        editMode={editMode}
+                                        portfolioContent={contentToRender}
+                                        setPortfolioContent={setPortfolioContent}
+                                        setSelectedPage={setSelectedPage}
+                                        projectsRef={projectsRef}
+                                        viewMode={viewMode}
+                                        scrollIntoView={true}
+                                    />
+                                )}
+                            </>
+                        )}
+                        {selectedPage === "experience" && (
+                            <ExperienceBody 
                                 editMode={editMode}
                                 portfolioContent={contentToRender}
                                 setPortfolioContent={setPortfolioContent}
-                                setSelectedPage={setSelectedPage}
-                                projectsRef={projectsRef}
-                                previewMode={previewMode}
                             />
                         )}
-                    </>
-                )}
-                {selectedPage === "experience" && (
-                    <ExperienceBody 
-                        editMode={editMode}
-                        portfolioContent={contentToRender}
-                        setPortfolioContent={setPortfolioContent}
-                    />
-                )}
-                {selectedPage.startsWith("project") && (
-                    <ProjectBody 
-                        editMode={editMode}
-                        portfolioContent={contentToRender}
-                        setPortfolioContent={setPortfolioContent}
-                        projectNum={selectedPage.slice('project'.length)}
-                        previewMode={previewMode}
-                    />
-                )}
-                {/* <PortfolioItemOptionsPopup/>                 */}
-            </div>                
-            )}        
+                        {/* if starts with project followed by a number */}
+                        {/^project\d+$/.test(selectedPage) && (
+                            <ProjectBody 
+                                editMode={editMode}
+                                portfolioContent={contentToRender}
+                                setPortfolioContent={setPortfolioContent}
+                                projectNum={selectedPage.slice('project'.length)}
+                                viewMode={viewMode}
+                            />
+                        )}
+                        {/* <PortfolioItemOptionsPopup/> */}
+                    </div>
+                )
+            )}
         </>
-    )
+    );
 }
