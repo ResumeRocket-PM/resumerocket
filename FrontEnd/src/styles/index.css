@@ -84,6 +84,13 @@ p {
   align-items: start;
 }
 
+.v-center-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: end;
+}
+
 .not-visible {
   /* display: none; */
   visibility: hidden;

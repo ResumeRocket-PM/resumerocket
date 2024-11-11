@@ -27,6 +27,8 @@ import {
     textareaContentDefaultNew,
     textareaStylesDefaultNew,
     projectGalleryContentDefault,
+    projectJupyterContentDefault,
+    projectGoogleSlidesContentDefault,
 } from '../../example_responses/portfolioContent';
 
 const SectionIcons = [ 
@@ -84,6 +86,14 @@ const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setPr
 
             if (section.name === 'gallery') {
                 newSection.content = projectGalleryContentDefault;
+            }
+
+            if (section.name === 'jupyter') {
+                newSection.content = projectJupyterContentDefault;
+            }
+
+            if (section.name === 'google slides') {
+                newSection.content = projectGoogleSlidesContentDefault;
             }
     
             newSections.splice(sectionIndex + 1, 0, newSection);
