@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton, Box, Typography, Button } from '@mui/material';
+import { IconButton, Box, Typography, TextField,Button } from '@mui/material';
 import ChatIcon from '../assets/RR_Chat_Icon.png';
 import FriendsList from './FriendsMsg/FriendsList';
 import TalkedPeopleList from './FriendsMsg/TalkedPeopleList.jsx';
@@ -8,6 +8,7 @@ import searchIcon from '../assets/searchIcon.png';
 const FloatingChatButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [listType, setListType] = useState('friends');
+    const [isVisible, setIsVisible] = useState(false);
 
     const handleClick = () => setIsOpen(!isOpen);
     const handleClose = () => setIsOpen(false);
@@ -17,7 +18,8 @@ const FloatingChatButton = () => {
         }
     };
     const handleSearchClicked = () => {
-        alert("search button is clicked")
+        //alert("search button is clicked")
+        setIsVisible(!isVisible);
     }
     return (
         <div>
@@ -66,7 +68,24 @@ const FloatingChatButton = () => {
                         </IconButton>
                         <Button onClick={handleClose} style={{ fontSize: '12px' }}>Close</Button>
                     </Box>
-
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        placeholder="Type a user name..."
+                        //value={newMessage}
+                        //onChange={(e) => setNewMessage(e.target.value)}
+                        //onKeyDown={handleKeyPress} // Listen for "Enter" key press
+                        style={{width: '400px', display: isVisible ? 'block' : 'none'}}
+                        sx={{
+                            backgroundColor: 'white' // Set background color to white
+                        }}
+                        inputProps={{
+                            style: {
+                                height: '100%', // Ensures the text area uses the full height
+                                padding: '10px 12px', // Adjust padding to fit the height as needed
+                            }
+                        }}
+                    />
                     <Box display="flex" justifyContent="space-around" marginBottom="8px">
                         <Button
                             variant={listType === 'messages' ? 'contained' : 'outlined'}
