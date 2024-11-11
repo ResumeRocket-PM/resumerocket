@@ -1,114 +1,179 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
-import { useApi } from "../../hooks"; // Assuming this is your custom API hook
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, TextField, Typography, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { useApi } from "../../hooks";
+import Draggable from 'react-draggable';
+import userSolidOrange from "../../assets/user-solid-orange.svg";
 
-const Messages = ({ friendId, onBack }) => {
+const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMessageSent }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [loading, setLoading] = useState(true);
-
     const api = useApi();
+    const messagesEndRef = useRef(null);
 
-    // Fetch message history when the component mounts
+    // Function to fetch message history
+    const fetchMessages = async (id) => {
+        if (!id) return;
+        try {
+            const response = await api.get(`/Chat/MsgHistory/${id}`);
+            const data = await response.json();
+            setMessages(data.result || []);
+        } catch (error) {
+            console.error('Error fetching message history:', error);
+        }
+    };
+
     useEffect(() => {
-        setLoading(true);
-        api.get(`/api/Chat/MsgHistory?friendId=${friendId}`)
-            .then(response => {
-                if (response.ok) {
-                    response.json().then(data => {
-                        setMessages(data.history || []); // Assuming the response has a 'history' array
-                        setLoading(false);
-                    });
-                } else {
-                    console.error('Failed to fetch message history');
-                    setLoading(false);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching message history:', error);
-                setLoading(false);
-            });
-    }, [friendId, api]);
+        fetchMessages(theyId);
+    }, [theyId]);
 
-    // Handle sending a new message
-    const handleSendMessage = () => {
-        if (!newMessage.trim()) return; // Do nothing if the message is empty
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
-        api.post('/api/Chat/SendMessage', {
-            friendId,
-            message: newMessage.trim()
-        })
-            .then(response => {
-                if (response.ok) {
-                    // Add the new message to the message list
-                    setMessages(prevMessages => [...prevMessages, { sender: 'You', content: newMessage.trim(), timestamp: new Date().toLocaleString() }]);
-                    setNewMessage(''); // Clear the input
-                } else {
-                    console.error('Failed to send message');
-                }
-            })
-            .catch(error => {
-                console.error('Error sending message:', error);
+    const handleSendMessage = async () => {
+        if (!newMessage.trim()) return;
+
+        try {
+            const response = await api.post('/Chat/sendMsg', {
+                receiveId: theyId,
+                msgContent: newMessage.trim(),
             });
+            const data = await response.json();
+
+            if (data.result) {
+                setMessages(prevMessages => [
+                    ...prevMessages,
+                    { identity: 'system', msgContent: data.result }
+                ]);
+            } else {
+                setNewMessage('');
+                await fetchMessages(theyId);
+                if (onMessageSent) {
+                    onMessageSent();
+                }
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSendMessage();
+        }
     };
 
     return (
-        <Box
-            style={{
-                width: '100%',
-                padding: '10px',
-                backgroundColor: '#ffffff',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-                borderRadius: '8px',
-                maxHeight: '400px',
-                overflowY: 'auto'
-            }}
-        >
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">Chat with Friend</Typography>
-                <Button onClick={onBack} style={{ fontSize: '12px' }}>Close</Button>
-            </Box>
+        <Draggable>
+            <div
+                style={{
+                    position: 'fixed',
+                    bottom: '80px',
+                    right: '443px',
+                    width: '400px',
+                    maxHeight: '500px',
+                    backgroundColor: 'lightskyblue',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    zIndex: 2000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    cursor: 'move',
+                }}
+            >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid black', }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <img
+                            src={profilePhotoLink || userSolidOrange}
+                            alt={`${firstName} ${lastName}`}
+                            style={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                marginRight: '8px',
+                                background: 'white',
+                                border: '2px'
+                            }}
+                        />
+                        <Typography variant="h6" >{firstName} {lastName}</Typography>
+                    </div>
+                    <IconButton onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </div>
 
-            {loading ? (
-                <CircularProgress />
-            ) : (
-                <Box style={{ maxHeight: '300px', overflowY: 'auto', marginTop: '10px' }}>
-                    {messages.length > 0 ? (
-                        messages.map((msg, index) => (
-                            <Box key={index} style={{ marginBottom: '10px' }}>
-                                <Typography variant="body2" color={msg.sender === 'You' ? 'primary' : 'textSecondary'}>
-                                    <strong>{msg.sender}:</strong> {msg.content}
-                                </Typography>
-                                <Typography variant="caption" color="textSecondary">
-                                    {msg.timestamp}
-                                </Typography>
-                            </Box>
-                        ))
-                    ) : (
-                        <Typography variant="body2" color="textSecondary">No messages yet.</Typography>
-                    )}
-                </Box>
-            )}
-
-            <Box display="flex" alignItems="center" style={{ marginTop: '10px' }}>
-                <TextField
-                    variant="outlined"
-                    fullWidth
-                    placeholder="Type a message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    style={{ marginRight: '10px' }}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSendMessage}
-                    disabled={!newMessage.trim()} // Disable if input is empty
+                <div
+                    style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        marginTop: '10px',
+                        marginBottom: '10px',
+                        paddingRight: '10px',
+                    }}
                 >
-                    Send
-                </Button>
-            </Box>
-        </Box>
+                    {messages.slice().map((msg, index) => (
+                        <div
+                            key={index}
+                            style={{
+                                display: 'flex',
+                                justifyContent: msg.identity === 'me' ? 'flex-end' : 'flex-start',
+                                marginBottom: '5px',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    maxWidth: '70%',
+                                    padding: '8px',
+                                    borderRadius: '10px',
+                                    backgroundColor: msg.identity === 'me'
+                                        ? 'green'
+                                        : msg.identity === 'system'
+                                            ? 'red'  // Red background for system messages (e.g., blocked message)
+                                            : 'ThreeDDarkShadow',
+                                    color: 'white',
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {msg.msgContent}
+                            </div>
+                        </div>
+                    ))}
+                    <div ref={messagesEndRef} />
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        placeholder="Type a message..."
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyDown={handleKeyPress} // Listen for "Enter" key press
+                        style={{ marginRight: '10px' }}
+                        sx={{
+                            backgroundColor: 'white' // Set background color to white
+                        }}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSendMessage}
+                        disabled={!newMessage.trim()}
+                        style={{
+                            backgroundColor: newMessage.trim() ? 'darkgreen' : 'lightgrey', // Green when enabled, grey when disabled
+                            color: 'white',
+                            cursor: newMessage.trim() ? 'pointer' : 'not-allowed', // Pointer when enabled, default when disabled
+                        }}
+                    >
+                        Send
+                    </Button>
+                </div>
+            </div>
+        </Draggable>
     );
 };
 

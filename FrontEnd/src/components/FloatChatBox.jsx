@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import { IconButton, Box, Typography, Button } from '@mui/material';
-import ChatIcon from '../assets/RR_Chat_Icon.png'; // Use custom image or icon
+import ChatIcon from '../assets/RR_Chat_Icon.png';
 import FriendsList from './FriendsMsg/FriendsList';
+import TalkedPeopleList from './FriendsMsg/TalkedPeopleList.jsx';
+import searchIcon from '../assets/searchIcon.png';
 
 const FloatingChatButton = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [listType, setListType] = useState('friends'); // Controls which list to show
+    const [listType, setListType] = useState('friends');
 
-    const handleClick = () => {
-        setIsOpen(!isOpen); // Toggle the chatbox visibility
-    };
-
-    const handleClose = () => {
-        setIsOpen(false); // Close the chatbox
-    };
-
+    const handleClick = () => setIsOpen(!isOpen);
+    const handleClose = () => setIsOpen(false);
     const handleListChange = (type) => {
-        setListType(type); // Change the list type (friends, pending, or blocked)
+        if (listType !== type) { // Only change if listType is different
+            setListType(type);
+        }
     };
-
+    const handleSearchClicked = () => {
+        alert("search button is clicked")
+    }
     return (
         <div>
-            {/* Floating Icon Button */}
             <IconButton
                 onClick={handleClick}
                 style={{
@@ -38,12 +37,11 @@ const FloatingChatButton = () => {
                 <img src={ChatIcon} alt="Chat" style={{ width: '80px', height: '80px' }} />
             </IconButton>
 
-            {/* Persistent Chatbox */}
             {isOpen && (
                 <Box
                     style={{
                         position: 'fixed',
-                        bottom: '80px', // Position above the floating button
+                        bottom: '80px',
                         right: '20px',
                         width: '400px',
                         maxHeight: '600px',
@@ -55,34 +53,52 @@ const FloatingChatButton = () => {
                     }}
                 >
                     <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6" align="center">Friends List</Typography>
+                        <Typography variant="h6" align="center">Chat Box</Typography>
+                        <IconButton
+                            onClick={handleSearchClicked }
+                            style={{
+                                borderRadius: '2px',
+                                position: 'fixed',
+                                right:'90px'
+                            }}
+                        >
+                            <img src={searchIcon} alt="search" style={{ width: '18px', height: '18px' }} />
+                        </IconButton>
                         <Button onClick={handleClose} style={{ fontSize: '12px' }}>Close</Button>
                     </Box>
 
-                    {/* Buttons to Switch Between Lists */}
                     <Box display="flex" justifyContent="space-around" marginBottom="8px">
-                        <Button 
-                            variant={listType === 'friends' ? 'contained' : 'outlined'} 
+                        <Button
+                            variant={listType === 'messages' ? 'contained' : 'outlined'}
+                            onClick={() => handleListChange('messages')}
+                        >
+                            Messages
+                        </Button>
+                        <Button
+                            variant={listType === 'friends' ? 'contained' : 'outlined'}
                             onClick={() => handleListChange('friends')}
                         >
                             Friends
                         </Button>
-                        <Button 
-                            variant={listType === 'unaccept' ? 'contained' : 'outlined'} 
+                        <Button
+                            variant={listType === 'unaccept' ? 'contained' : 'outlined'}
                             onClick={() => handleListChange('unaccept')}
                         >
                             Pending
                         </Button>
-                        <Button 
-                            variant={listType === 'block' ? 'contained' : 'outlined'} 
+                        <Button
+                            variant={listType === 'block' ? 'contained' : 'outlined'}
                             onClick={() => handleListChange('block')}
                         >
                             Blocked
                         </Button>
                     </Box>
 
-                    {/* FriendsList Component */}
-                    <FriendsList status={listType} />
+                    {listType === 'messages' ? (
+                        <TalkedPeopleList />
+                    ) : (
+                        <FriendsList status={listType} />
+                    )}
                 </Box>
             )}
         </div>
