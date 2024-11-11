@@ -297,6 +297,16 @@ const projectGalleryContentDefault = {
     }
 }
 
+const projectJupyterContentDefault = {
+    "notebook": "",
+    "theme": "atomDark",
+}
+
+const projectGoogleSlidesContentDefault = {
+    "slidesUrl": "",
+}
+
+
 const portfolioContentDefault = {
     "navbar": {
         "styles": {
@@ -442,6 +452,8 @@ export {
     textareaStylesDefaultNew,
     textareaSectionContentDefault,
     projectGalleryContentDefault,
+    projectJupyterContentDefault,
+    projectGoogleSlidesContentDefault,
 
     experienceDefault,
     experienceItemDefault,
