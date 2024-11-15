@@ -4,6 +4,7 @@ import { useApi } from "../../hooks";
 import { ImageContext } from '../../context/ImageProvider';
 import Messages from './Messages';
 import userSolidOrange from "../../assets/user-solid-orange.svg";
+import ProfilePhoto from './ProfilePhoto'; // Import ProfilePhoto component
 
 const FriendsList = ({ status = 'friends' }) => {
     const [friends, setFriends] = useState([]);
@@ -11,6 +12,7 @@ const FriendsList = ({ status = 'friends' }) => {
     const [selectedFriend, setSelectedFriend] = useState(null); // Store the selected friend object
     const api = useApi();
     const { showImage } = useContext(ImageContext);
+    const [profileDialog, setProfileDialog] = useState({ open: false, accountId: null, status: null });
 
     useEffect(() => {
         const fetchFriends = async () => {
@@ -33,6 +35,13 @@ const FriendsList = ({ status = 'friends' }) => {
         fetchFriends();
     }, [status]);
 
+    const closeProfileDialog = () => {
+        setProfileDialog({ open: false, accountId: null, status: null });
+    };
+    const handlePhotoClicked = (friend) => {
+        console.log(friend.accountId)
+        setProfileDialog({ open: true, accountId: friend.accountId, status: friend.status });
+    };
     const handleSendMessage = (friend) => {
         // Set the selected friend object to open the Messages component with their details
         setSelectedFriend(friend);
@@ -60,7 +69,7 @@ const FriendsList = ({ status = 'friends' }) => {
                             <div
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleSendMessage(friend);
+                                    handlePhotoClicked(friend);
                                 }}
                                 style={{
                                     width: '40px',
@@ -102,6 +111,13 @@ const FriendsList = ({ status = 'friends' }) => {
                                 onClose={() => setSelectedFriend(null)}
                             />
 
+                        )}
+                    {profileDialog.open && (
+                        <ProfilePhoto
+                            accountId={profileDialog.accountId}
+                            friendStatus={profileDialog.status}
+                            onClose={closeProfileDialog} // Pass a function to close the dialog
+                        />
                     )}
                 </div>
             )}

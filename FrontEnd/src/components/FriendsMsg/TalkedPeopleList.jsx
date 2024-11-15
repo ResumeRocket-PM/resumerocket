@@ -2,13 +2,16 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { CircularProgress } from '@mui/material';
 import { useApi } from "../../hooks";
 import { ImageContext } from '../../context/ImageProvider';
-import userSolidOrange from "../../assets/user-solid-orange.svg";
+import ProfilePhoto from './ProfilePhoto'; // Import ProfilePhoto component
 import Messages from './Messages';
+import userSolidOrange from "../../assets/user-solid-orange.svg";
+
 
 const TalkedPeopleList = () => {
     const [talkedPeople, setTalkedPeople] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedPerson, setSelectedPerson] = useState(null); // Store the selected person object
+    const [selectedPerson, setSelectedPerson] = useState(null);
+    const [profileDialog, setProfileDialog] = useState({ open: false, accountId: null, status: null });
     const api = useApi();
     const { showImage } = useContext(ImageContext);
     const isInitialLoad = useRef(true);
@@ -38,15 +41,20 @@ const TalkedPeopleList = () => {
     }, []);
 
     const handlePersonClick = (person) => {
-        // Close the existing Messages panel if open, then open a new one
         if (selectedPerson) {
-            setSelectedPerson(null); // Temporarily set to null to close the existing panel
-            setTimeout(() => {
-                setSelectedPerson(person); // Open the new panel with person data
-            }, 0); // Small delay to ensure re-render
+            setSelectedPerson(null);
+            setTimeout(() => setSelectedPerson(person), 0);
         } else {
-            setSelectedPerson(person); // Open the new panel if none is open
+            setSelectedPerson(person);
         }
+    };
+
+    const handlePhotoClicked = (person) => {
+        setProfileDialog({ open: true, accountId: person.accountId, status: person.status });
+    };
+
+    const closeProfileDialog = () => {
+        setProfileDialog({ open: false, accountId: null, status: null });
     };
 
     return (
@@ -69,7 +77,10 @@ const TalkedPeopleList = () => {
                             onClick={() => handlePersonClick(person)}
                         >
                             <div
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePhotoClicked(person);
+                                }}
                                 style={{
                                     width: '40px',
                                     height: '40px',
@@ -78,7 +89,8 @@ const TalkedPeopleList = () => {
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     marginRight: '8px',
-                                    backgroundColor: '#ddd'
+                                    backgroundColor: '#ddd',
+                                    cursor: 'pointer',
                                 }}
                             ></div>
 
@@ -90,7 +102,6 @@ const TalkedPeopleList = () => {
                         </div>
                     ))}
 
-                    {/* Render Messages panel as an overlay */}
                     {selectedPerson && (
                         <Messages
                             theyId={selectedPerson.accountId}
@@ -99,6 +110,14 @@ const TalkedPeopleList = () => {
                             lastName={selectedPerson.lastName}
                             onClose={() => setSelectedPerson(null)}
                             onMessageSent={fetchTalkedPeople}
+                        />
+                    )}
+
+                    {profileDialog.open && (
+                        <ProfilePhoto
+                            accountId={profileDialog.accountId}
+                            friendStatus={profileDialog.status}
+                            onClose={closeProfileDialog} // Pass a function to close the dialog
                         />
                     )}
                 </div>
