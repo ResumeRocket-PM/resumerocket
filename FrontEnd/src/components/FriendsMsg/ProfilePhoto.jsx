@@ -63,7 +63,7 @@ const ProfilePhoto = ({ accountId, friendStatus, onClose }) => {
                 <div
                     style={{
                         position: 'fixed',
-                        bottom: '80px',
+                        bottom: '200px',
                         right: '443px',
                         width: '450px',
                         maxHeight: '600px',

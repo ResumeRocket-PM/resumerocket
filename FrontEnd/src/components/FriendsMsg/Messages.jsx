@@ -90,6 +90,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                     display: 'flex',
                     flexDirection: 'column',
                     cursor: 'move',
+                    border: '2px solid black',
                 }}
             >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid black', }}>
