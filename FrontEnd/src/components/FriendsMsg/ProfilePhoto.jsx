@@ -31,6 +31,7 @@ const ProfilePhoto = ({ accountId, friendStatus, onClose }) => {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         setCurrentFriendStatus(friendStatus);
     }, [friendStatus]);
@@ -43,13 +44,13 @@ const ProfilePhoto = ({ accountId, friendStatus, onClose }) => {
         setMessageOpen(true);
     };
 
-    const handleAddOrBlock = async () => {
+    const handleAddOrDelete = async () => {
         try {
             let response;
 
             if (currentFriendStatus === 'friends') {
-                // Call block API and update friend status
-                response = await api.post(`/Chat/block/${accountId}`);
+                // Call delete API and update friend status
+                response = await api.post(`/Chat/delete/${accountId}`);
             } else {
                 // Call add friend API and update friend status
                 response = await api.post(`/Chat/requestFriend/${accountId}`);
@@ -66,7 +67,19 @@ const ProfilePhoto = ({ accountId, friendStatus, onClose }) => {
         }
     };
 
-
+    const handleBlock = async () => {
+        try {
+            const response = await api.post(`/Chat/newStatus/${accountId}/blocking`);
+            if (response.ok) {
+                console.log("User successfully blocked.");
+                setCurrentFriendStatus("blocking");
+            } else {
+                console.error("Failed to block user.");
+            }
+        } catch (error) {
+            console.error("Error blocking user:", error);
+        }
+    };
 
     return (
         <>
@@ -235,13 +248,29 @@ const ProfilePhoto = ({ accountId, friendStatus, onClose }) => {
                         >
                             Send Message
                         </Button>
-                        <Button
-                            variant="contained"
-                            color={currentFriendStatus === 'friends' ? 'secondary' : 'primary'}
-                            onClick={handleAddOrBlock}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end', // Align buttons to the right
+                                gap: '10px', // Add space between the buttons
+                            }}
                         >
-                            {currentFriendStatus === 'friends' ? 'Block' : 'Add'}
-                        </Button>
+                            <Button
+                                variant="contained"
+                                color={currentFriendStatus === 'friends' ? 'secondary' : 'primary'}
+                                onClick={handleAddOrDelete}
+                            >
+                                {currentFriendStatus === 'friends' ? 'Delete' : 'Add'}
+                            </Button>
+                            <Button
+                                variant="contained"
+                                style={{ backgroundColor: 'red', color: 'white' }}
+                                onClick={handleBlock}
+                            >
+                                Block
+                            </Button>
+                        </div>
+
                     </div>
                 </div>
             </Draggable>

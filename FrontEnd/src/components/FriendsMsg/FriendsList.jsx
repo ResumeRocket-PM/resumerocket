@@ -47,7 +47,7 @@ const FriendsList = ({ status }) => {
     const handleActionButtonClick = async (friend, action) => {
         try {
             const respond = action;
-            const response = await api.post(`/Chat/respondNewFriend/${friend.accountId}/${respond}`);
+            const response = await api.post(`/Chat/newStatus/${friend.accountId}/${respond}`);
             if (response.ok) {
                 // Refresh the friend list after action
                 const updatedFriends = friends.filter(f => f.accountId !== friend.accountId);
