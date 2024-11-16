@@ -45,17 +45,28 @@ const ProfilePhoto = ({ accountId, friendStatus, onClose }) => {
 
     const handleAddOrBlock = async () => {
         try {
+            let response;
+
             if (currentFriendStatus === 'friends') {
-                await api.post(`/Chat/block/${accountId}`);
-                setCurrentFriendStatus(null); // Update to null after blocking
+                // Call block API and update friend status
+                response = await api.post(`/Chat/block/${accountId}`);
             } else {
-                await api.post(`/Chat/add/${accountId}`);
-                setCurrentFriendStatus('friends'); // Update to 'friends' after adding
+                // Call add friend API and update friend status
+                response = await api.post(`/Chat/requestFriend/${accountId}`);
+            }
+
+            if (response.ok) {
+                const data = await response.json(); // Assuming the API response contains the updated object
+                setCurrentFriendStatus(data.status); // Update the friend status based on the returned object
+            } else {
+                console.error('Failed to update friend status');
             }
         } catch (error) {
             console.error(`Error updating friend status: ${error}`);
         }
     };
+
+
 
     return (
         <>
