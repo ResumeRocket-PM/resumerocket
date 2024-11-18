@@ -18,7 +18,6 @@ const UploadNewResumeButton = ({resume, originalResumeId, resumeLoading, resumeD
 
   const handleSubmit = () => {
     const formData = new FormData();
-    // formData.append('File', selectedFile); // Append the file to FormData
     formData.append("ResumeHtmlString", resume); // Append the ResumeHtmlString to FormData
 
     setVersionIsUploading(true); // Show loading indicator
@@ -37,11 +36,8 @@ const UploadNewResumeButton = ({resume, originalResumeId, resumeLoading, resumeD
         setVersionIsUploading(false); // Stop loading indicator
         setFile(null); // Reset file input
         setFileName('Upload'); // Reset button text
-        // loadPage(); // Reload the page to show the new resume
       });
 };
-
-console.log('resume', resume);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -57,7 +53,6 @@ console.log('resume', resume);
             style={{ position: 'absolute', left: '50%', marginLeft: '-12px', color: 'white' }} // Center the spinner
           />
         )}
-        {/* {fileName} Display the file name or default button text */}
         Save Version
       </Button>
 

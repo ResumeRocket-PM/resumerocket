@@ -71,7 +71,7 @@ const ResumePage = () => {
                     <>
                         {sectionSelected === 'repository' && <SavedResumesSection showResume={showResume} />}
                         {sectionSelected === 'applications' && <ApplicationsSection />}
-                        {sectionSelected === 'edit' && <EditResumeSection resumeId={selectedResumeId}/>}
+                        {sectionSelected === 'edit' && <EditResumeSection resumeId={selectedResumeId} setSelectedResumeId={setSelectedResumeId}/>}
                     </>
                 {/* )} */}
             </div>

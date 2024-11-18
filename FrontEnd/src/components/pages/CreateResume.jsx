@@ -6,7 +6,6 @@ import LeftBarResume from '../LeftBarResume.jsx';
 import { Card, CardContent, Dialog, Button} from '@mui/material/';
 import Chat from '../Chat.jsx';
 import { useApi } from "../../hooks";
-import Bubble from "../Effects/Bubble.jsx"
 import { ClipLoader } from "react-spinners";
 import { debounce, set } from 'lodash';
 import AddVersionToResumeHistoryButton from './ResumePages/AddVersionToResumeHistoryButton.jsx';
@@ -108,9 +107,6 @@ export default function CreateResume({resumeId=null}) {
         setVersionHistoryOpen(!versionHistoryOpen);
     }
 
-    // console.log("pdf:", pdf);
-    // console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
-
     const downloadPdf = () => {
         api.get(`/resume/${id}/pdf`)
         .then(response => {
@@ -160,10 +156,6 @@ export default function CreateResume({resumeId=null}) {
             return null; 
         }
     };
-
-    // const handleResumeHtmlContentChange = (event) => {
-    //     setResume(event.target.innerHTML);
-    // };
 
     const debouncedSetResume = useCallback(
         debounce((newHtml) => {
@@ -260,7 +252,6 @@ export default function CreateResume({resumeId=null}) {
                     </>
                 )}
             </div>
-
 
             <ShareDialog open={shareDialogOpen} onClose={handleShareDialogClose}/>
             <div id="col3">
