@@ -38,16 +38,20 @@ export default function CreateResume({resumeId=null}) {
 
     let { id } = useParams();
     id = resumeId || id; // use resumeId if provided, otherwise use id from URL
+    
     const api = useApi();
-
-    const [resume, setResume] = useState(null);
     const iframeRef = useRef(null);
-    const [targetRect, setTargetRect] = useState(null);
 
-    const [resumeLoading, setResumeLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [resume, setResume] = useState(null);
+    const [chatOpen, setChatOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [targetRect, setTargetRect] = useState(null);
+    const [resumeLoading, setResumeLoading] = useState(true);
+    const [versionHistory, setVersionHistory] = useState([]);
+    const [shareDialogOpen, setShareDialogOpen] = useState(false);
     const [resumeDoneEditing, setResumeDoneEditing] = useState(true);
+    const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
 
     const handleResize = () => {
         if (iframeRef.current) {
@@ -76,20 +80,18 @@ export default function CreateResume({resumeId=null}) {
                 setResumeLoading(false);
             });
         }
-
-        window.addEventListener('resize', handleResize);
-        handleResize()
-    
-        return () => window.removeEventListener('resize', handleResize);
     }
 
     useEffect(() => {
-        loadPage()
-    }, []); 
-
-    const [shareDialogOpen, setShareDialogOpen] = useState(false);
-    const [chatOpen, setChatOpen] = useState(false);
-    const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
+        loadPage();
+        loadVersionHistory();
+        window.addEventListener('resize', handleResize);
+        handleResize();
+    
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const handleShareDialogOpen = () => {
         setShareDialogOpen(true);
@@ -101,10 +103,6 @@ export default function CreateResume({resumeId=null}) {
 
     const handleChatOpen = () => {
         setChatOpen(!chatOpen);
-    }
-
-    const handleVersionHistoryOpen = () => {
-        setVersionHistoryOpen(!versionHistoryOpen);
     }
 
     const downloadPdf = () => {
@@ -170,9 +168,30 @@ export default function CreateResume({resumeId=null}) {
         setResumeDoneEditing(true); 
     };
 
+    const loadVersionHistory = () => {
+        api.get(`/resume/${id}/history`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('history', data);
+                setVersionHistory(data.result); // Save the response data to the state variable
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error("Failed to fetch data:", error);
+                setError(error.message);
+                setIsLoading(false);
+            });
+    };
+
+    const updateResumeView = (resumeId) => {
+        id = resumeId;
+        loadPage();
+    };
+
     return (
-        <div id='CreateResume_content' 
-        className=
+        <div 
+            id='CreateResume_content' 
+            className=
             {versionHistoryOpen && chatOpen ? "versionHistoryOpen_chatOpen" : 
             versionHistoryOpen ? "versionHistoryOpen" : 
             chatOpen ? "chatOpen" : ""}
@@ -185,20 +204,39 @@ export default function CreateResume({resumeId=null}) {
                 /> */}
                 {chatOpen && <Chat/>}
                 <Button 
-                style={{ marginLeft: '20px' }}
-                variant="contained" 
-                onClick={downloadPdf} 
-                disabled={!resume}>Download Pdf
+                    style={{ marginLeft: '20px' }}
+                    variant="contained" 
+                    onClick={downloadPdf} 
+                    disabled={!resume}
+                >
+                    Download Pdf
                 </Button>
                 <div style={{marginLeft: '20px'}}>
                     <AddVersionToResumeHistoryButton
-                    resume={resume}
-                    resumeLoading={resumeLoading}
-                    resumeDoneEditing={resumeDoneEditing}
-                    originalResumeId={id}
+                        resume={resume}
+                        resumeLoading={resumeLoading}
+                        resumeDoneEditing={resumeDoneEditing}
+                        originalResumeId={id}
+                        onClick={() => {
+                            loadPage();
+                            loadVersionHistory();
+                        }}
                     />
                 </div>
-
+                <div style={{marginLeft: '20px'}}>
+                    <div>
+                        <h3>Version History</h3>
+                        <ul>
+                            {versionHistory && versionHistory.map((version, index) => (
+                                <li key={index}>
+                                    <a href="#" onClick={() => updateResumeView(version.resumeId)}>
+                                        {version.resumeId}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div id='resume_section'>
