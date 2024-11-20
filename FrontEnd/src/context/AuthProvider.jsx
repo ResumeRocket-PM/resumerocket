@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
 
   const isLoggedIn = !!authToken;
   console.log("isLoggedIn: ", isLoggedIn);
-  console.log("authToken: ", authToken);
+  // console.log("authToken: ", authToken);
 
 
   return (

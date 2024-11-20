@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // which means it will send another param - OriginalResume = true - with each request
 
 // the resume param is already html for the resume
-const UploadNewResumeButton = ({resume, originalResumeId, resumeLoading, resumeDoneEditing}) => {
+const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoading, resumeDoneEditing, afterVersionSave, saveSuggestionStatuses}) => {
 
   const [fileName, setFileName] = useState('Upload');
   const [file, setFile] = useState(null); // Store the uploaded file
@@ -24,9 +24,12 @@ const UploadNewResumeButton = ({resume, originalResumeId, resumeLoading, resumeD
     setVersionIsUploading(true); // Show loading indicator
     console.log('formData', formData);
 
+    saveSuggestionStatuses(); // Save the suggestion statuses before uploading the new version
+    
     api.postFileForm(`/resume/${originalResumeId}/addToVersionHistory`, formData) // Call the API to upload
       .then(response => {
         console.log('Response from API:', response);
+        afterVersionSave(response.result.resumeId);
         toast.success('Resume added to version history successfully!');
       })
       .catch(error => {
@@ -41,10 +44,12 @@ const UploadNewResumeButton = ({resume, originalResumeId, resumeLoading, resumeD
       });
 };
 
-console.log('resume', resume);
+// console.log('resume', resume);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div 
+      // style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+    >
       <Button 
         variant="contained" 
         onClick={handleSubmit} 
@@ -66,4 +71,4 @@ console.log('resume', resume);
   );
 };
 
-export default UploadNewResumeButton;
+export default AddVersionToResumeHistoryButton;

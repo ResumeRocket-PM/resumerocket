@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -29,7 +29,7 @@ const ResumeListPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('applyDate');
-  const [data, setData] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [options, setOptions] = useState({ company: [], position: [], status: [] });
 
   const api = useApi();
@@ -39,7 +39,7 @@ const ResumeListPage = () => {
       if (response.ok) {
         response.json().then(data => {
           const jobPostings = data.result;
-          setData(jobPostings);
+          setApplications(jobPostings);
 
           // Generate distinct and sorted options
           const companies = [...new Set(jobPostings.map(item => item.companyName))].sort();
@@ -97,7 +97,7 @@ const ResumeListPage = () => {
       .then((response) => {
         console.log('Status updated successfully:', response.data);
   
-        setData((prevData) =>
+        setApplications((prevData) =>
           prevData.map((item) => (item.resumeID === id ? { ...item, status: newStatus } : item))
         );
 
@@ -108,7 +108,7 @@ const ResumeListPage = () => {
       });
   };
 
-  const filteredData = data.filter(item => {
+  const filteredData = applications.filter(item => {
     const companyMatch = filter.company.length ? filter.company.includes(item.companyName) : true;
     const positionMatch = filter.position.length ? filter.position.includes(item.position) : true;
     const statusMatch = filter.status.length ? filter.status.includes(item.status) : true;
@@ -142,6 +142,7 @@ const ResumeListPage = () => {
 
   // Hardcoded status options
   const statusOptions = ['Pending', 'Interview Scheduled', 'Rejected', 'Accepted'];
+  console.log('applications', applications);
 
   return (
     <div style={{ width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 auto' }}>
@@ -271,7 +272,7 @@ const ResumeListPage = () => {
 
               
               <TableCell>
-                <Link to={`/create-resume/${row.resumeID}`}  align='center'>
+                <Link to={`/create-resume/${row.resumeContentId}/${row.applicationId}`}  align='center'>
                   { 'View' }
                 </Link>
               </TableCell>

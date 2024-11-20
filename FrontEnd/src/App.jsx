@@ -64,10 +64,10 @@ function App() {
                 <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
-              {/* <Route path="/resume-list" element={<ResumeListPage />} /> */}
-              <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
+                    <Route path="/create-resume/:_resumeId?" element={<CreateResume />} />
+                    <Route path="/create-resume/:_resumeId/:_applicationId" element={<CreateResume />} />
+                    <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
                     <Route path="/networking" element={<NetworkingPage />} />
-                    <Route path="/create-resume/:id?" element={<CreateResume />} />
                     <Route path="/account" element={<AccountPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Route>
