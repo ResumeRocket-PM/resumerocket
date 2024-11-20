@@ -6,7 +6,6 @@ import LeftBarResume from '../LeftBarResume.jsx';
 import { Card, CardContent, Dialog, Button} from '@mui/material/';
 import Chat from '../Chat.jsx';
 import { useApi } from "../../hooks";
-import Bubble from "../Effects/Bubble.jsx"
 import { ClipLoader } from "react-spinners";
 import { debounce, set } from 'lodash';
 import AddVersionToResumeHistoryButton from './ResumePages/AddVersionToResumeHistoryButton.jsx';
@@ -162,15 +161,17 @@ export default function CreateResume({resumeId=null}) {
     const Rid = resumeId || _resumeId; // use resumeId if provided, otherwise use id from URL
     const Aid = _applicationId; // use applicationId if provided, otherwise null
     const api = useApi();
-
-    const [resume, setResume] = useState(null);
     const iframeRef = useRef(null);
-    const [targetRect, setTargetRect] = useState(null);
 
+    const [error, setError] = useState(null);
+    const [resume, setResume] = useState(null);
+    const [chatOpen, setChatOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [targetRect, setTargetRect] = useState(null);
     const [resumeLoading, setResumeLoading] = useState(true);
     const [suggestionsLoading, setSuggestionsLoading] = useState(true);
-    const [error, setError] = useState(null);
-
+    const [versionHistory, setVersionHistory] = useState([]);
+    const [shareDialogOpen, setShareDialogOpen] = useState(false);
     const [resumeDoneEditing, setResumeDoneEditing] = useState(true);
     const [suggestions, setSuggestions] = useState([]);
 
@@ -190,6 +191,7 @@ export default function CreateResume({resumeId=null}) {
     const [OGtextClassPairsList, setOGtextClassPairsList] = useState([]);
 
     // ###############################################
+    const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
 
     const handleResize = () => {
         if (iframeRef.current) {
@@ -946,6 +948,26 @@ export default function CreateResume({resumeId=null}) {
     console.log('suggestionsApplied', suggestionsApplied);
     // console.log('resume', resume);
 
+    const loadVersionHistory = () => {
+        api.get(`/resume/${id}/history`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('history', data);
+                setVersionHistory(data.result); // Save the response data to the state variable
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error("Failed to fetch data:", error);
+                setError(error.message);
+                setIsLoading(false);
+            });
+    };
+
+    const updateResumeView = (resumeId) => {
+        id = resumeId;
+        loadPage();
+    };
+
     return (
 
         <div id="CreateResume-root">
@@ -1012,11 +1034,28 @@ export default function CreateResume({resumeId=null}) {
                     {/* </div> */}
                     {chatOpen && <Chat/>}
                 </div>
-                <div id='resume_section'>
-                    {resumeLoading ? (
-                        <ClipLoader />
-                    ) : (
-                        <>
+                <div style={{marginLeft: '20px'}}>
+                    <div>
+                        <h3>Version History</h3>
+                        <ul>
+                            {versionHistory && versionHistory.map((version, index) => (
+                                <li key={index}>
+                                    <a href="#" onClick={() => updateResumeView(version.resumeId)}>
+                                        {version.resumeId}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id='resume_section'>
+                {resumeLoading ? (
+                    <ClipLoader />
+                ) : (
+                    <>
+
                 {!versionHistoryOpen &&
                     <div id='resume-and-suggestions'>
                         <div id='left-suggestions'>

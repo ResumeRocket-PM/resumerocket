@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
-import { IconButton, Box, Typography, TextField,Button } from '@mui/material';
+import { IconButton, Box, Typography, TextField, Button } from '@mui/material';
 import ChatIcon from '../assets/RR_Chat_Icon.png';
 import FriendsList from './FriendsMsg/FriendsList';
 import TalkedPeopleList from './FriendsMsg/TalkedPeopleList.jsx';
 import searchIcon from '../assets/searchIcon.png';
+import SearchUser from './FriendsMsg/SearchUser.jsx'; // Import SearchUser component
 
 const FloatingChatButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [listType, setListType] = useState('friends');
     const [isVisible, setIsVisible] = useState(false);
+    const [searchInput, setSearchInput] = useState(''); // State for search input
+    const [searchQuery, setSearchQuery] = useState(''); // State to trigger search
 
     const handleClick = () => setIsOpen(!isOpen);
     const handleClose = () => setIsOpen(false);
     const handleListChange = (type) => {
-        if (listType !== type) { // Only change if listType is different
+        if (listType !== type) {
             setListType(type);
+            setSearchQuery(''); // Reset search when changing list type
         }
     };
     const handleSearchClicked = () => {
-        //alert("search button is clicked")
         setIsVisible(!isVisible);
-    }
+        setSearchInput(''); // Clear search input when toggling visibility
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter' && searchInput.trim()) {
+            setSearchQuery(searchInput); // Set searchQuery to trigger the search
+        }
+    };
+
     return (
         <div>
             <IconButton
@@ -52,40 +63,45 @@ const FloatingChatButton = () => {
                         borderRadius: '8px',
                         padding: '10px',
                         zIndex: 1000,
+                        overflowY: 'auto' // Enable scrolling within the panel
                     }}
                 >
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h6" align="center">Chat Box</Typography>
                         <IconButton
-                            onClick={handleSearchClicked }
+                            onClick={handleSearchClicked}
                             style={{
                                 borderRadius: '2px',
                                 position: 'fixed',
-                                right:'90px'
+                                right: '90px'
                             }}
                         >
                             <img src={searchIcon} alt="search" style={{ width: '18px', height: '18px' }} />
                         </IconButton>
                         <Button onClick={handleClose} style={{ fontSize: '12px' }}>Close</Button>
                     </Box>
-                    <TextField
-                        variant="outlined"
-                        fullWidth
-                        placeholder="Type a user name..."
-                        //value={newMessage}
-                        //onChange={(e) => setNewMessage(e.target.value)}
-                        //onKeyDown={handleKeyPress} // Listen for "Enter" key press
-                        style={{width: '400px', display: isVisible ? 'block' : 'none'}}
-                        sx={{
-                            backgroundColor: 'white' // Set background color to white
-                        }}
-                        inputProps={{
-                            style: {
-                                height: '100%', // Ensures the text area uses the full height
-                                padding: '10px 12px', // Adjust padding to fit the height as needed
-                            }
-                        }}
-                    />
+
+                    {isVisible && (
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            placeholder="Type a user name..."
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)} // Update search input
+                            onKeyDown={handleKeyPress} // Trigger search on Enter key press
+                            style={{ width: '100%', marginBottom: '10px' }}
+                            sx={{
+                                backgroundColor: 'white' // Set background color to white
+                            }}
+                            inputProps={{
+                                style: {
+                                    height: '100%',
+                                    padding: '10px 12px',
+                                }
+                            }}
+                        />
+                    )}
+
                     <Box display="flex" justifyContent="space-around" marginBottom="8px">
                         <Button
                             variant={listType === 'messages' ? 'contained' : 'outlined'}
@@ -113,11 +129,17 @@ const FloatingChatButton = () => {
                         </Button>
                     </Box>
 
-                    {listType === 'messages' ? (
-                        <TalkedPeopleList />
-                    ) : (
-                        <FriendsList status={listType} />
-                    )}
+                    <Box style={{ overflowY: 'auto', maxHeight: '450px' }}> {/* Add scrolling for list items */}
+                        {searchQuery ? (
+                            <SearchUser input={searchQuery} />
+                        ) : (
+                            listType === 'messages' ? (
+                                <TalkedPeopleList />
+                            ) : (
+                                <FriendsList status={listType} />
+                            )
+                        )}
+                    </Box>
                 </Box>
             )}
         </div>

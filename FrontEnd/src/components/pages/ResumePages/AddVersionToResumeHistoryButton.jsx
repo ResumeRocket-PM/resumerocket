@@ -18,7 +18,6 @@ const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoadin
 
   const handleSubmit = () => {
     const formData = new FormData();
-    // formData.append('File', selectedFile); // Append the file to FormData
     formData.append("ResumeHtmlString", resume); // Append the ResumeHtmlString to FormData
 
     setVersionIsUploading(true); // Show loading indicator
@@ -40,7 +39,6 @@ const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoadin
         setVersionIsUploading(false); // Stop loading indicator
         setFile(null); // Reset file input
         setFileName('Upload'); // Reset button text
-        // loadPage(); // Reload the page to show the new resume
       });
 };
 
@@ -62,7 +60,6 @@ const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoadin
             style={{ position: 'absolute', left: '50%', marginLeft: '-12px', color: 'white' }} // Center the spinner
           />
         )}
-        {/* {fileName} Display the file name or default button text */}
         Save Version
       </Button>
 

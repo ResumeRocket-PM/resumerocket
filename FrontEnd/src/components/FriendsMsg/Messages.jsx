@@ -8,6 +8,7 @@ import userSolidOrange from "../../assets/user-solid-orange.svg";
 const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMessageSent }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const [zIndex, setZIndex] = useState(2000); // Set initial zIndex
     const api = useApi();
     const messagesEndRef = useRef(null);
 
@@ -66,9 +67,15 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
         }
     };
 
+    // Function to bring the component to the top layer when clicked
+    const handleClick = () => {
+        setZIndex(zIndex + 1); // Increase zIndex to bring to the front
+    };
+
     return (
         <Draggable>
             <div
+                onClick={handleClick} // Update zIndex on click
                 style={{
                     position: 'fixed',
                     bottom: '80px',
@@ -79,10 +86,11 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                     boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                     borderRadius: '8px',
                     padding: '10px',
-                    zIndex: 2000,
+                    zIndex: zIndex, // Apply dynamic zIndex
                     display: 'flex',
                     flexDirection: 'column',
                     cursor: 'move',
+                    border: '2px solid black',
                 }}
             >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid black', }}>
