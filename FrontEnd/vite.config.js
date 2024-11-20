@@ -11,9 +11,9 @@ export default defineConfig({
   plugins: [
     react(),
     treatAsCommonjs(),
-    inject({
-      Buffer: ['buffer', 'Buffer'], // This injects the Buffer polyfill
-    }),
+    // inject({
+    //   Buffer: ['buffer', 'Buffer'], // This injects the Buffer polyfill
+    // }),
 //     vitePluginRequire.default(),
   ],
   server: {

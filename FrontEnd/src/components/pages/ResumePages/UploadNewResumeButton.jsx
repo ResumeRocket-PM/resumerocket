@@ -16,6 +16,7 @@ const UploadNewResumeButton = ({loadPage}) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.pdf'; // Accept only PDF files
+    // input.accept = '.doc,.docx'; // Accept PDF, DOC, DOCX files
     input.onchange = (e) => {
       const selectedFile = e.target.files[0];
       if (selectedFile) {

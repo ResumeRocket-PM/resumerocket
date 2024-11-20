@@ -1,4 +1,17 @@
-#CreateResume_content {
+#CreateResume-root {
+    background-color: gainsboro;
+}
+
+/* #CreateResume-top-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+    border-bottom: 2px solid black;
+} */
+
+#CreateResume-main-content {
     height: 100%;
     width: 100%;
     display: grid;
@@ -6,7 +19,6 @@
     align-items: center;
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: gainsboro;
 }
 
 #CreateResume_content.versionHistoryOpen {
@@ -38,7 +50,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    width: 15rem;
+    width: 7rem;
     height: fit-content;
     padding: 1rem;
     background-color: burlywood;
@@ -46,8 +58,16 @@
 } 
 
 .version_block:hover {
-    background-color: darkorange;
+    /* background-color: darkorange; */
     cursor: pointer;
+}
+
+.version_block.not-selected:hover {
+    background-color: darkorange;
+}
+
+.version_block.selected {
+    background-color: lightgreen;
 }
 
 
@@ -60,21 +80,68 @@
     width: 100%;
     height: 100%;
     background-color: gainsboro;
+    margin-left: 20px;
 }
 
-#resume_section {
+/* ##### resume and suggestion stlyes ##### */
+
+
+#resume-and-suggestions {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
     gap: 1rem;
     width: 100%;
     height: 100%;
 }
 
+#resume_section {
+    width: 100%;
+    height: 100%;
+}
+
+#left-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 20%;
+    height: 100%;
+}
+
+#right-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 20%;
+    height: 100%;
+}
+
+.suggestion-box {
+    /* width: 90%; */
+    min-width: 15rem;
+    transition: max-height 1.5s ease-in-out;
+}
+
+.suggestion-box-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: .5rem;
+    gap: .5rem;
+}
+
+/* ########################### */
+
+#resume-html-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
+
 .ResumeFull {
     height: 70rem;
-    width: 54.09rem;
+    min-width: 54.09rem;
 }
 
 .ResumeSmaller {
