@@ -12,20 +12,20 @@ import EditResumeSection from './sections/EditResumeSection';
 import { ResumeContext } from '../../../context/ResumeProvider';
 import { useApi } from "../../../hooks";
 import { set } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 
-const ResumePage = () => {
+
+const ResumePage = ({page=null}) => {
     const api = useApi();
     // const [value, setValue] = useState('repository');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { sectionSelected, setSectionSelected } = useContext(ResumeContext);
+    const {sectionSelected, setSectionSelected } = useContext(ResumeContext);
     const [selectedResumeId, setSelectedResumeId] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Simulate loading
-        // setTimeout(() => setLoading(false), 1000);
-
         // Load section from local storage
         const savedSection = localStorage.getItem('sectionSelected');
         if (savedSection) {
@@ -34,6 +34,22 @@ const ResumePage = () => {
         }
     }, [setSectionSelected]);
 
+    useEffect(() => {
+        // Set section to 'edit' if page prop is 'edit'
+        if (page === 'edit') {
+            setSectionSelected('edit');
+            localStorage.setItem('sectionSelected', 'edit');
+        }
+    }, [page, setSectionSelected]);
+
+    useEffect(() => {
+        // if the section is not edit, set the url to /resume
+        if (sectionSelected === 'repository' || sectionSelected === 'applications') {
+            navigate('/resume');
+        }
+    }, [sectionSelected]);
+
+    // switching tabs
     const handleChange = (event, newValue) => {
     //   setValue(newValue);
       setSectionSelected(newValue);
@@ -45,8 +61,6 @@ const ResumePage = () => {
         setSectionSelected('edit');
         console.log('showResume resumeId', resumeId);
     };
-
-    // console.log('sectionSelected', sectionSelected);
 
     useEffect(() => {
         console.log('sectionSelected', sectionSelected);

@@ -65,7 +65,7 @@ function App() {
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
                     <Route path="/create-resume/:_resumeId?" element={<CreateResume />} />
-                    <Route path="/create-resume/:_resumeId/:_applicationId" element={<CreateResume />} />
+                    <Route path="/create-resume/:_resumeId/:_applicationId" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />
                     <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
                     <Route path="/networking" element={<NetworkingPage />} />
                     <Route path="/account" element={<AccountPage />} />
