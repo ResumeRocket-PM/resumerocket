@@ -3,7 +3,7 @@ import { TextField } from "@mui/material"
 
 export default function Chat() {
     const [inputText, setInputText] = useState('');
-    // const [response, setResponse] = useState('');
+    const [response, setResponse] = useState('');
     const [messages, setMessages] = useState([{ai: "As a AI Language Model, I can provide you feed back on your resume."}]);
 
     const handleKeyPress = (event) => {
@@ -18,7 +18,7 @@ export default function Chat() {
 
     return (
         <div id="chat_outermost">
-            <h1>AI assistant</h1>
+            <h1>Resume Assistant</h1>
             <div id="chat_messages_container">
                 {messages.map((message, index) => (
                     <React.Fragment key={index}>

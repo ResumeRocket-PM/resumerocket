@@ -108,9 +108,6 @@ export default function CreateResume({resumeId=null}) {
         setVersionHistoryOpen(!versionHistoryOpen);
     }
 
-    // console.log("pdf:", pdf);
-    // console.log('pdf.resumeid.filebytes:', pdf && pdf["resumeContent"]["FileBytes"]);
-
     const downloadPdf = () => {
         api.get(`/resume/${id}/pdf`)
         .then(response => {
@@ -161,10 +158,6 @@ export default function CreateResume({resumeId=null}) {
         }
     };
 
-    // const handleResumeHtmlContentChange = (event) => {
-    //     setResume(event.target.innerHTML);
-    // };
-
     const debouncedSetResume = useCallback(
         debounce((newHtml) => {
             setResume(newHtml);
@@ -186,11 +179,11 @@ export default function CreateResume({resumeId=null}) {
             chatOpen ? "chatOpen" : ""}
         >
             <div id='left_menu_section'>
-                {/* <LeftBarResume 
+                <LeftBarResume 
                     handleShareDialogOpen={handleShareDialogOpen} 
                     handleChatOpen={handleChatOpen} 
                     handleVersionHistoryOpen={handleVersionHistoryOpen}
-                /> */}
+                />
                 {chatOpen && <Chat/>}
                 <Button 
                 style={{ marginLeft: '20px' }}
