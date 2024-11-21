@@ -29,7 +29,7 @@ const ChangeSlidesButton = ({setSlidesUrl, setProject, sectionIndex}) => {
                 variant="contained"
                 onClick={() => setDialogOpen(true)}
             >
-                choose notebook file
+                upload slides url
             </Button>
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogContent>

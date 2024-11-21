@@ -37,11 +37,11 @@ const SectionIcons = [
     { icon: VideoIcon, name: "video" },
     { icon: ImageIcon, name: "image" },
     { icon: GalleryIcon, name: "gallery" },
-    { icon: FigmaIcon, name: "figma" },
+    // { icon: FigmaIcon, name: "figma" },
+    { icon: ColumnsIcon, name: "columns" },
     { icon: JupyterIcon, name: "jupyter" },
     { icon: GoogleSlidesIcon, name: "google slides" },
     // { icon: WebsitePreview, name: "website preview" },
-    { icon: ColumnsIcon, name: "columns" },
 ];
 
 // const defaultContent = {
