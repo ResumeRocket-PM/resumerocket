@@ -285,6 +285,7 @@ export default function CreateResume({resumeId=null}) {
     }   
 
     const handleChatOpen = () => {
+        /* make call to send initial resume and job posting over */
         setChatOpen(!chatOpen);
     }
 
@@ -1059,11 +1060,9 @@ export default function CreateResume({resumeId=null}) {
                 }
             >
                 <div id='left_menu_section'>
-                    {/* <LeftBarResume
-                        handleShareDialogOpen={handleShareDialogOpen}
+                    <LeftBarResume
                         handleChatOpen={handleChatOpen}
-                        handleVersionHistoryOpen={handleVersionHistoryOpen}
-                    /> */}
+                    />
     
                     <Button
                         // style={{ marginLeft: '20px' }}
@@ -1111,8 +1110,13 @@ export default function CreateResume({resumeId=null}) {
                             </div>
                         </div>
                     }
-
-                    {chatOpen && <Chat />}
+                    {
+                        chatOpen && 
+                        <Chat
+                            resumeId={resumeIdToRender}
+                            applicationId={Aid}
+                        />
+                    }
                 </div>
                 <div id='resume_section'>
                 {resumeLoading ? (
