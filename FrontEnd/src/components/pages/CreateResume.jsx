@@ -180,6 +180,8 @@ export default function CreateResume({resumeId=null}) {
 
     const [suggestionsOGInnerHTML, setSuggestionsOGInnerHTML] = useState([]);
 
+    const [resumeWithoutPageContainer, setResumeWithoutPageContainer] = useState(null);
+
     // ################## new stuff ##################
 
     const editorRef = useRef(null);
@@ -213,7 +215,10 @@ export default function CreateResume({resumeId=null}) {
             .then(response => response.json())
             .then(data => {
                 // console.log('data', data);
-                setResume(removePageContainer(data.result));
+                // setResume(removePageContainer(data.result));
+                setResume(data.result);
+                const resumeWithoutPageContainer = removePageContainer(data.result);
+                setResumeWithoutPageContainer(resumeWithoutPageContainer);
 
                 setTimeout(() => {
                     handleResize();
@@ -294,7 +299,9 @@ export default function CreateResume({resumeId=null}) {
 
     const afterVersionSave = (newResumeId) => {
         // update the resumeId in the url
-        window.history.pushState({}, null, `/create-resume/${newResumeId}/${Aid}`);
+        if(Aid) {
+            window.history.pushState({}, null, `/create-resume/${newResumeId}/${Aid}`);
+        }
     }
 
     const handleShareDialogClose = () => {
@@ -1011,13 +1018,14 @@ export default function CreateResume({resumeId=null}) {
         setCurrentVersionResumeId(resumeId);
     };
 
-    // console.log('suggestions', suggestions);
+    console.log('suggestions', suggestions);
     // console.log('suggestions.resumeSuggestions', suggestions);
     // console.log('OGtextClassPairsList', OGtextClassPairsList);
     // console.log('suggestionsApplied', suggestionsApplied);
 
     console.log('currentVersionResumeId', currentVersionResumeId);
     console.log('resumeIdToRender', resumeIdToRender);
+    console.log('OriginalResumeId', OriginalResumeId);
 
     return (
         <div id="CreateResume-root">
@@ -1081,6 +1089,7 @@ export default function CreateResume({resumeId=null}) {
                             originalResumeId={OriginalResumeId}
                             afterVersionSave={afterVersionSave}
                             saveSuggestionStatuses={saveSuggestionStatuses}
+                            reloadVersionHistory={loadVersionHistory}
                         />
                     {/* </div> */}
 
@@ -1125,7 +1134,7 @@ export default function CreateResume({resumeId=null}) {
                                     suggestions.map((suggestion, index) => {
                                         if (
                                             index < 3 &&
-                                            suggestion?.modifiedText.length < suggestion?.originalText.length &&
+                                            // suggestion?.modifiedText.length < suggestion?.originalText.length &&
                                             OGtextClassPairsList[index]?.length > 0 &&
                                             !suggestion?.accepted
                                         ) {
@@ -1153,7 +1162,7 @@ export default function CreateResume({resumeId=null}) {
                                 <div 
                                     id='resume-html'
                                     contentEditable={true}
-                                    dangerouslySetInnerHTML={{ __html: resume }}
+                                    dangerouslySetInnerHTML={{ __html: resumeIdToRender === OriginalResumeId ? resumeWithoutPageContainer : resume }}
                                     onInput={handleResumeHtmlContentChange}
                                 />
                             </Card>
@@ -1162,7 +1171,7 @@ export default function CreateResume({resumeId=null}) {
                                     suggestions.map((suggestion, index) => {
                                         if (
                                             index > 2 &&
-                                            suggestion.modifiedText?.length < suggestion.originalText?.length &&
+                                            // suggestion.modifiedText?.length < suggestion.originalText?.length &&
                                             OGtextClassPairsList[index]?.length > 0 &&
                                             !suggestion?.accepted
                                         ) {
@@ -1172,6 +1181,7 @@ export default function CreateResume({resumeId=null}) {
                                                     suggestion={suggestion}
                                                     classPairs={OGtextClassPairsList[index]}
                                                     calculateTopPosition={calculateTopPosition}
+                                                    undoSuggestion={undoSuggestion}
                                                     applySuggestion={applySuggestion}
                                                     manuallyHighlightOriginalText={manuallyHighlightOriginalText}
                                                     index={index}

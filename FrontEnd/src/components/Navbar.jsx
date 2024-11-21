@@ -98,9 +98,9 @@ export default function Navbar() {
             }}
           />
 
-          <IconButton aria-label="messaging">
+          {/* <IconButton aria-label="messaging">
             <ForumIcon fontSize="large" />
-          </IconButton>
+          </IconButton> */}
 
           <IconButton
             aria-controls="account-menu"

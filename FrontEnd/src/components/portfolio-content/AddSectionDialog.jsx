@@ -68,32 +68,38 @@ const AddSectionDialog = ({ addSectionDialogOpen, setAddSectionDialogOpen, setPr
             };
     
             if (section.name === 'text area') {
-                newSection.content = textareaContentDefaultNew;
-                newSection.styles = textareaStylesDefaultNew;
+                newSection.content = JSON.parse(JSON.stringify(textareaContentDefaultNew)); // Deep copy array
+                newSection.styles = { ...textareaStylesDefaultNew }; // Shallow copy object
             }
-
+            
             if (section.name === 'image and text') {
-                newSection.content = projectImageAndTextContentDefault;
+                newSection.content = {
+                    imageContent: { ...projectImageContentDefault }, // Shallow copy object
+                    textContent: {
+                        content: JSON.parse(JSON.stringify(textareaContentDefaultNew)), // Deep copy array
+                        styles: { ...textareaStylesDefaultNew } // Shallow copy object
+                    }
+                };
             }
-    
+            
             if (section.name === 'columns') {
-                newSection.content = projectColumnsContentDefault;
+                newSection.content = JSON.parse(JSON.stringify(projectColumnsContentDefault)); // Deep copy array
             }
-
+            
             if (section.name === 'image') {
-                newSection.content = projectImageContentDefault;
+                newSection.content = { ...projectImageContentDefault }; // Shallow copy object
             }
-
+            
             if (section.name === 'gallery') {
-                newSection.content = projectGalleryContentDefault;
+                newSection.content = JSON.parse(JSON.stringify(projectGalleryContentDefault)); // Deep copy array
             }
-
+            
             if (section.name === 'jupyter') {
-                newSection.content = projectJupyterContentDefault;
+                newSection.content = { ...projectJupyterContentDefault }; // Shallow copy object
             }
-
+            
             if (section.name === 'google slides') {
-                newSection.content = projectGoogleSlidesContentDefault;
+                newSection.content = { ...projectGoogleSlidesContentDefault }; // Shallow copy object
             }
     
             newSections.splice(sectionIndex + 1, 0, newSection);

@@ -23,16 +23,19 @@ import PortfolioStylesBar from "../portfolio-styles-bar/PortfolioStylesBar";
 import { PortfolioEditContext } from "../../context/PortfolioEditProvider";
 import PaletteIcon from '@mui/icons-material/Palette';
 import DesignContent from "../portfolio-menu_content/DesignContent";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import TextField from '@mui/material/TextField';
 
 
 
 function LeftMenu({
-    handleLayoutSelected, 
     handlePortfolioContentChange, 
     handleSavePortfolioContent,
     setSelectedPage,
     portfolioContent,
-    setPortfolioContent
+    setPortfolioContent,
+    setShowLinkDialog
 }) {
 
     const [showPopout, setShowPopout] = useState(false);
@@ -61,6 +64,10 @@ function LeftMenu({
             // } else {    
             //     setShowPopout(true);
             // }
+        }
+
+        if(buttonID === "link") {
+            setShowLinkDialog(true);
         }
 
 
@@ -101,10 +108,10 @@ function LeftMenu({
                     <img src={arrangeIcon} alt="Rearange" />
                     <p>Rearange</p>
                 </Button> */}
-                <Button onClick={() => menuButtonClicked("layouts")} id="layouts_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                {/* <Button onClick={() => menuButtonClicked("layouts")} id="layouts_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={templatesIcon} alt="Layouts" />
                     <p>Layouts</p>
-                </Button>
+                </Button> */}
                 {/* <Button onClick={() => menuButtonClicked("ai")} id="ai_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
                     <img src={openAI_Icon} alt="OpenAI" />
                     <p>AI assistant</p>
@@ -145,14 +152,6 @@ function LeftMenu({
                                 handlePortfolioContentChange={handlePortfolioContentChange}
                             />
                         </div>
-                    )}   
-                    {selectedButton === "layouts" && (
-                        <div id="portfolio-popout_section" >
-                            <LayoutsContent 
-                                handleLayoutSelected={handleLayoutSelected} 
-                                handlePortfolioContentChange={handlePortfolioContentChange}
-                            />
-                        </div>
                     )}                                                 
                 </>
             }
@@ -162,7 +161,8 @@ function LeftMenu({
 
 export default function PortfolioPage() {
     const {
-        userDetails,
+        // userDetails,
+        // setUserDetails,
         userPortfolioContent,
         setUserPortfolioContent
     } = useContext(UserInfoContext);
@@ -177,20 +177,27 @@ export default function PortfolioPage() {
     const api = useApi();
     const navigate = useNavigate();
 
-    const [selectedLayout, setSelectedLayout] = useState(null);
-    const handleLayoutSelected = (layout) => {
-        setSelectedLayout(layout);
-    };
+    const [userDetails, setUserDetails] = useState('none');
+
+    useEffect(() => {
+        if (userDetails === 'none') {
+            api.get("/account/details").then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        setUserDetails(data.result);
+                    });
+                } else {
+                    console.error("Failed to get account details:", response);
+                }
+            });
+        }
+    }, [userDetails]);
+
 
     const [userHasNoPortfolio, setUserHasNoPortfolio] = useState(false);
-
-    // const [selectedPage, setSelectedPage] = useState("about");
-    // useEffect(() => {
-    //     // console.log("selectedPage changed:", selectedPage);
-    // }, [selectedPage]);
-    // const [editMode, setEditMode] = useState(true);
-
     const [portfolioContent, setPortfolioContent] = useState();
+    const [showLinkDialog, setShowLinkDialog] = useState(false);
+
     const handleSavePortfolioContent = () => {
         const content = portfolioContent
         // console.log("final content from handlePortfolioContentChange, stringified:", JSON.stringify(content))
@@ -208,7 +215,7 @@ export default function PortfolioPage() {
                 console.error("Failed to update portfolio content:", response);
             }
         })        
-    }
+    };
 
     const fetchPortfolioContent = async () => {
         try {
@@ -244,21 +251,16 @@ export default function PortfolioPage() {
     
         // Update name and title
         updatedPortfolioContent.pages.about.nameAndTitle.content[0].text = `${accountDetails.firstName} ${accountDetails.lastName}`;
-        updatedPortfolioContent.pages.about.nameAndTitle.content[1].text = accountDetails.title;
+        updatedPortfolioContent.pages.about.nameAndTitle.content[1].text = accountDetails?.title || '';
     
         // Update profile picture
-        updatedPortfolioContent.pages.about.profilePicture = accountDetails.profilePhotoLink;
+        updatedPortfolioContent.pages.about.profilePicture = accountDetails?.profilePhotoLink || '';
 
         // Extract and update profile picture ID
-        const profilePictureId = accountDetails.profilePhotoLink.split('/').pop();
-        updatedPortfolioContent.pages.about.profilePictureId = profilePictureId;    
+        const profilePictureId = accountDetails.profilePhotoLink?.split('/').pop();
+        updatedPortfolioContent.pages.about.profilePictureId = profilePictureId || '';    
         // Update contact info
         updatedPortfolioContent.pages.about.contactInfo.email = accountDetails.email;
-    
-        // Add skills, experience, and education if needed
-        // updatedPortfolioContent.pages.about.skills = accountDetails.skills;
-        // updatedPortfolioContent.pages.about.experience = accountDetails.experience;
-        // updatedPortfolioContent.pages.about.education = accountDetails.education;
     
         return updatedPortfolioContent;
     };
@@ -296,25 +298,11 @@ export default function PortfolioPage() {
         } catch (error) {
             console.error("Error:", error);
         }
-
-        // try {
-        //     const response = await api.get("/portfolio/details");
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         console.log("data from fetchPortfolioContent:", data);
-        //         console.log("data.result.content:", JSON.parse(data.result.content));
-        //         setPortfolioContent(JSON.parse(data.result.content));
-        //     } else {
-        //         console.error("Failed to fetch portfolio content:", response);
-        //     }
-        // } catch (error) {
-        //     console.error("Failed to fetch portfolio content:", error);
-        // }
     };
 
 
     const handlePortfolioContentChange = (content) => {
-        content = ph.formatNewContent(portfolioContent, content);
+        // content = ph.formatNewContent(portfolioContent, content);
         // console.log("new content from handlePortfolioContentChange:", content)
         // console.log("old content from handlePortfolioContentChange:", portfolioContent)
         // content = {
@@ -352,17 +340,20 @@ export default function PortfolioPage() {
         window.open('/portfolio/preview/about');
     };
 
+    console.log('portfolioContent', portfolioContent);
+    console.log('userDetails', userDetails);    
+
     
     return (
         <div id='PortfolioPage-root'>
             <div id='portfolio_left_menu_section'>
                 <LeftMenu 
-                    handleLayoutSelected={handleLayoutSelected} 
                     handlePortfolioContentChange={handlePortfolioContentChange}
                     handleSavePortfolioContent={handleSavePortfolioContent}
                     setSelectedPage={setSelectedPage}
                     portfolioContent={portfolioContent}
                     setPortfolioContent={setPortfolioContent}
+                    setShowLinkDialog={setShowLinkDialog}
                 />
             </div>
 
@@ -422,6 +413,17 @@ export default function PortfolioPage() {
                         />
                 </div>
             </div>
+
+                <Dialog open={showLinkDialog} onClose={() => setShowLinkDialog(false)}>
+                    <DialogContent>
+                        <TextField
+                            label="Link to your portfolio"
+                            value={userDetails.portfolioLink}
+                            style={{width: '25rem'}}
+                        />
+                    </DialogContent>
+                </Dialog>
+
         </div>
     )
 }

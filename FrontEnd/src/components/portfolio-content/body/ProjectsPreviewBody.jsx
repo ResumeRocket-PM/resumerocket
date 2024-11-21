@@ -8,7 +8,7 @@ import { projectDefault, projectsPreviewDefault } from '../../../example_respons
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -16,7 +16,7 @@ const ProjectsPreviewBody = ({
     editMode, 
     portfolioContent, 
     setPortfolioContent, 
-    setSelectedPage, 
+    setSelectedPage=null, 
     projectsRef,
     viewMode=false,
     scrollIntoView,
@@ -29,6 +29,17 @@ const ProjectsPreviewBody = ({
     const [projectToAdd, setProjectToAdd] = useState({ ...projectDefault });
     const [addProjectOpen, setAddProjectOpen] = useState(false);    
     const [validationErrors, setValidationErrors] = useState({});
+    const { portfolioId } = useParams();
+    // const [projectNumFromUrl, setProjectNumFromUrl] = useState(null);
+
+    // useEffect(() => {
+    //     // get the current url 
+    //     const url = window.location.href;
+    //     // get the project number from the url
+    //     const projectNum = url.split('/').pop();
+    //     // set the project number from the url
+    //     setProjectNumFromUrl(projectNum);
+    // }, []);
 
     useEffect(() => {
         if (scrollIntoView && projectsRef && projectsRef.current) {
@@ -102,15 +113,17 @@ const ProjectsPreviewBody = ({
 
     const handleGoToProject = (project, index) => {
         if (viewMode) {
-            // navigate to /portfolio/preview/project/{index}
-            navigate(`/portfolio/preview/project/${index}`);
+            // navigate(`/portfolio/preview/project/${index}`);
+            // navigate(`/${portfolioId}/portfolio/project/${projectNumFromUrl}`);
+            const projectNumYea = project.match(/\d+/)[0]; // Extract the number from the project name
+            navigate(`/${portfolioId}/portfolio/project/${projectNumYea}`);
         }
         setSelectedPage(project);
     };
 
     return (
         <div id='portfolio-projects-preview-root' ref={projectsRef} style={{backgroundColor: portfolioContent.styles.backgroundColor}}>
-            <h1 id='portfolio-pp-header' style={portfolioContent.pages.projectsPreview.styles} >Projects</h1>
+            <h1 id='portfolio-pp-header' style={{color: portfolioContent.styles.color}} >Projects</h1>
             <div id='portfolio-pp-projects-container'>
                 {projects && projects.map((project, index) => (
                     <div 
@@ -118,9 +131,11 @@ const ProjectsPreviewBody = ({
                         key={index}
                         onClick={() => handleGoToProject(`project${index}`, index)}
                     >
-                        <div>
-                            <h1 style={{color: portfolioContent.styles.color}}>{project.name}</h1>
-                            <p style={{color: portfolioContent.styles.color}}>{project.description}</p>
+                        <div className='v-center' style={{gap: '1rem'}}>
+                            <div className='hz-center h1' style={{color: portfolioContent.styles.color, textAlign: 'center'}}>
+                                {project.name}
+                            </div>                            
+                            <p className='hz-center' style={{color: portfolioContent.styles.color}}>{project.description}</p>
                             {/* <a href={project.projectLink}>Link</a> */}
                         </div>
                     </div>
@@ -159,6 +174,7 @@ const ProjectsPreviewBody = ({
 
                             </div>
 
+                            {editMode &&
                                 <Button 
                                     variant='contained' 
                                     color='primary' 
@@ -166,7 +182,9 @@ const ProjectsPreviewBody = ({
                                     sx={{marginTop: '1rem'}}
                                 >
                                     Add
-                                </Button>                            
+                                </Button>       
+                            }
+                          
                             </>
                         }
                     />

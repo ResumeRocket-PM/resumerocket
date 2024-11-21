@@ -55,7 +55,6 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
     // }, [project]);
 
     const renderSection = (section, index) => {
-
         const sectionContent = () => {
             switch (section.type) {
                 case 'video':
@@ -83,7 +82,7 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
                 case 'image':
                     return <ProjectImage project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'gallery':
-                    return <ProjectGallery project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
+                    return <ProjectGallery project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} portfolioStyles={portfolioContent.styles}/>;
                 case 'figma':
                     return <ProjectFigma project={project} setProject={setProject} content={section.content} sectionIndex={index} styles={section.styles} type={section.type} />;
                 case 'jupyter':
@@ -115,7 +114,7 @@ const ProjectBody = ({editMode, portfolioContent, setPortfolioContent, projectNu
         );
     };
     console.log('portfolioContent:', portfolioContent);
-    console.log('projectNum:', projectNum);
+    // console.log('projectNum:', projectNum);
     console.log('project:', project);
 
 

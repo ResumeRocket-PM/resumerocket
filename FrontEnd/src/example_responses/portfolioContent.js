@@ -106,6 +106,16 @@ const projectDefault = {
     ],
 };
 
+const projectsPreviewDefault = {
+    "projects": [],
+    "styles": {
+        "header": {
+            // "color": "white",
+            // "backgroundColor": "black"
+        },
+    }
+};
+
 
 
 // const projectColumnsContentDefault = [
@@ -306,7 +316,6 @@ const projectGoogleSlidesContentDefault = {
     "slidesUrl": "",
 }
 
-
 const portfolioContentDefault = {
     "navbar": {
         "styles": {
@@ -361,6 +370,8 @@ const portfolioContentDefault = {
                 }
             }
         },
+        "projectsPreview": projectsPreviewDefault,
+        "projects": projectsDefault,
     },
     "styles": {
         backgroundColor: "#ffffff",
@@ -381,15 +392,6 @@ const portfolioContentDefault = {
 // #############################################
 // #############################################
 
-
-const projectsPreviewDefault = {
-    "styles": {
-        "header": {
-            // "color": "white",
-            // "backgroundColor": "black"
-        },
-    }
-};
 
 // const projectPreviewDefault = {
 //     "name": "",

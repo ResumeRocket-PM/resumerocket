@@ -3,11 +3,13 @@ import userSolidOrange from "../../../assets/user-solid-orange.svg"; // Default 
 import accountBanner from '../../../assets/account-banner.png';
 import { Link } from 'react-router-dom';
 import { ImageContext } from '../../../context/ImageProvider';
+import ResumeDisplayDialog from '../ResumePages/ResumeDisplayDialog';
 
 const UserProfileHeader = ({userDetails}) => {
 
   const { showImage } = useContext(ImageContext);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [resumeDisplayDialogOpen, setResumeDisplayDialogOpen] = useState(false);
 
 
   useEffect(() => {
@@ -97,16 +99,36 @@ const UserProfileHeader = ({userDetails}) => {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <Link to={`/create-resume/${userDetails.primaryResumeId}`} style={{ textAlign: 'center' }}>
+            {/* <Link to={`/create-resume/${userDetails.primaryResumeId}`} style={{ textAlign: 'center' }}>
                 {userDetails.primaryResumeId != null ? 'View Resume' : null }
-            </Link>
-            <Link to={userDetails.portfolioLink} style={{textAlign: 'center'}}>
-                {userDetails.portfolioLink != null ? 'View Portfolio' : null }
-            </Link>
+            </Link> */}
+            {userDetails.primaryResumeId && 
+              <div className="clickable" style={{textAlign: 'center', color: 'blue', textDecoration: 'underline', fontSize: '17px'}} onClick={() => setResumeDisplayDialogOpen(true)}>
+                View Resume
+              </div>
+            }
+
+            {userDetails.portfolioLink &&
+              <Link to={userDetails.portfolioLink} style={{textAlign: 'center'}} target="_blank" rel="noopener noreferrer">
+                  {userDetails.portfolioLink != null ? 'View Portfolio' : null }
+              </Link>
+            }
+
           </div>
         </div>
       </div>
+
+      {userDetails.primaryResumeId &&
+        <ResumeDisplayDialog 
+          resumeId={userDetails?.primaryResumeId} 
+          resumeDisplayDialogOpen={resumeDisplayDialogOpen} 
+          setResumeDisplayDialogOpen={setResumeDisplayDialogOpen}
+        />
+      }
+
     </div>
+
+
   );
 };
 

@@ -39,6 +39,7 @@ const NetworkingPage = () => {
 
   // Get selected user's details
   const selectedUserDetails = selectedUserIndex !== null ? usersDetails[selectedUserIndex] : {};
+  console.log(usersDetails);
 
   return (
     <div id="networking-page-wrapper">

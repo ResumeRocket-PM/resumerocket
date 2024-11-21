@@ -168,7 +168,7 @@ const ProjectImageAndText = ({ project, setProject, content, sectionIndex, style
         });
     };
 
-    // console.log('content', content);
+    console.log('content', content);
     // console.log('styles', styles);
 
     console.log('projectImage', projectImage);

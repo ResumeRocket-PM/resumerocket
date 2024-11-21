@@ -15,28 +15,6 @@ import PortfolioNavbar from "./portfolio-content/PortfolioNavbar";
 import "../styles/PortfolioContent.css"
 import { Button } from "@mui/material";
 
-// function Layout({layout, portfolioContent}) {
-//     return (
-//         <>
-//             {layout && layout === "basic" && (
-//                 <BasicLayout 
-//                     portfolioContent={portfolioContent}
-//                 />
-//             )}           
-//             {layout && layout === "2" && (
-//                 <Layout2 
-//                     portfolioContent={portfolioContent}                 
-//                 />
-//             )}  
-//             {layout && layout === "3" && (
-//                 <Layout3 
-//                     portfolioContent={portfolioContent}                
-//                 />
-//             )}                                               
-//         </>
-//     )
-// }
-
 
 export default function PortfolioContent({
     portfolioContent = null, 
@@ -144,6 +122,7 @@ export default function PortfolioContent({
     console.log('selectedPage:', selectedPage);
 
     // setHoveredItem('')
+    console.log('selectedPage:', selectedPage);
 
     return (
         <>
@@ -161,7 +140,7 @@ export default function PortfolioContent({
                                 portfolioContent={portfolioContent} 
                             />
                         )} */}
-                        <PortfolioNavbar portfolioContent={contentToRender} setSelectedPage={setSelectedPage}/>
+                        <PortfolioNavbar portfolioContent={contentToRender} setSelectedPage={setSelectedPage} viewMode={viewMode}/>
                         {selectedPage === "about" && (
                             <>
                                 <AboutBody 

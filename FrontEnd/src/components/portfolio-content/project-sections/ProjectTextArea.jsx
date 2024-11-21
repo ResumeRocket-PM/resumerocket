@@ -144,6 +144,8 @@ const ProjectTextArea = ({ project, setProject, content, sectionIndex, styles, p
     // console.log('content', content);    
     // console.log('styles', styles);
 
+    console.log('content', content);    
+
     return (
         // <ProjectSectionWrapper project={project} setProject={setProject} sectionIndex={sectionIndex}>
         <div className='project-text-area-root' style={{width: '50%'}}>

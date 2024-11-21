@@ -142,3 +142,7 @@ p {
 .background-green {
   background-color: lightgreen;
 }
+
+.clickable {
+  cursor: pointer;
+}

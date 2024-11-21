@@ -193,7 +193,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
 
     return (
         <div id='portfolio-lm-pages'>
-            <Button 
+            {/* <Button 
                 startIcon={<AddIcon />} 
                 sx={{...buttonStyles}} 
                 onClick={handleAddPageButtonClick}
@@ -231,7 +231,7 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                         <p>Custom</p>
                     </div>                                        
                 </div>
-            </Popover>
+            </Popover> */}
 
             {/* <Card sx={{...cardStyles}}>
                 <div className='portfolio-lm-user-page'>
@@ -347,6 +347,16 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                     )}
                 </div>
             ))}
+
+            {/* {!portfolioPages.projects && 
+                <Button 
+                    startIcon={<AddIcon />} 
+                    sx={{...buttonStyles}} 
+                    onClick={() => handleAddPageToPortfolio('projects')}
+                >
+                    Add Project Page
+                </Button>
+            } */}
 
 
         </div>

@@ -14,3 +14,7 @@
     box-sizing: border-box; /* Include padding in the element's total width */
 
 }
+
+.portfolio-nav-link:hover {
+    cursor: pointer;
+}

@@ -21,6 +21,8 @@ import FloatingChatButton from './components/FloatChatBox';
 
 function App() {
     const { isLoggedIn } = useContext(AuthContext);
+    const { projectNum } = useParams();
+
 
     return (
         <BrowserRouter>
@@ -31,9 +33,9 @@ function App() {
                     element={
                         <PortfolioEditProvider>
                             <PortfolioContent
-                          selectedPage="about" // Set the default selected page
-                          editMode={false} // Set editMode to false for preview
-                          viewMode={true} // Set viewMode to true for preview
+                                selectedPage="about" // Set the default selected page
+                                editMode={false} // Set editMode to false for preview
+                                viewMode={true} // Set viewMode to true for preview
                             />
                         </PortfolioEditProvider>
                     }
@@ -42,7 +44,7 @@ function App() {
                     path="/portfolio/preview/project/:projectNum"
                     element={
                         <PortfolioEditProvider>
-                        <PortfolioProjectWrapper/>
+                            <PortfolioProjectWrapper/>
                         </PortfolioEditProvider>
                     }
                 />
@@ -60,11 +62,26 @@ function App() {
                     }
                 />
 
+                {/* <Route path="/:portfolioId/portfolio/project/:projectNum" element={<RedirectProject />} /> */}
+                <Route
+                    path="/:portfolioId/portfolio/project/:projectNum"
+                    element={
+                        <PortfolioEditProvider>
+                            {/* <PortfolioContent
+                                selectedPage={`project${projectNum}`} // Set the default selected page
+                                editMode={false} // Set editMode to false for preview
+                                viewMode={true} // Set viewMode to true for preview
+                            /> */}
+                            <PortfolioProjectWrapper/>
+                        </PortfolioEditProvider>
+                    }
+                />
+
                 {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
                 <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
-                    <Route path="/create-resume/:_resumeId?" element={<CreateResume />} />
+                    <Route path="/create-resume/:_resumeId?" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />
                     <Route path="/create-resume/:_resumeId/:_applicationId" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />
                     <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
                     <Route path="/networking" element={<NetworkingPage />} />
@@ -98,6 +115,11 @@ const PortfolioProjectWrapper = () => {
 const RedirectToAbout = () => {
     const { portfolioId } = useParams();
     return <Navigate to={`/${portfolioId}/portfolio/about`} />;
+};
+
+const RedirectProject = () => {
+    const { portfolioId, projectNum } = useParams();
+    return <Navigate to={`/${portfolioId}/portfolio/project/${projectNum}`} />;
 };
 
 export default App;

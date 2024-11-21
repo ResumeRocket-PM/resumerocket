@@ -9,14 +9,14 @@ import 'react-toastify/dist/ReactToastify.css';
 // which means it will send another param - OriginalResume = true - with each request
 
 // the resume param is already html for the resume
-const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoading, resumeDoneEditing, afterVersionSave, saveSuggestionStatuses}) => {
+const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoading, resumeDoneEditing, afterVersionSave, reloadVersionHistory, saveSuggestionStatuses}) => {
 
   const [fileName, setFileName] = useState('Upload');
   const [file, setFile] = useState(null); // Store the uploaded file
   const [versionIsUploading, setVersionIsUploading] = useState(false);
   const api = useApi(); 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("ResumeHtmlString", resume); // Append the ResumeHtmlString to FormData
 
@@ -24,22 +24,32 @@ const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoadin
     console.log('formData', formData);
 
     saveSuggestionStatuses(); // Save the suggestion statuses before uploading the new version
-    
-    api.postFileForm(`/resume/${originalResumeId}/addToVersionHistory`, formData) // Call the API to upload
-      .then(response => {
+
+    try {
+        const response = await api.postFileForm(`/resume/${originalResumeId}/addToVersionHistory`, formData); // Call the API to upload
         console.log('Response from API:', response);
-        afterVersionSave(response.result.resumeId);
-        toast.success('Resume added to version history successfully!');
-      })
-      .catch(error => {
+
+        const data = await response.json();
+        console.log('data', data);
+
+        if (data && data.result && data.result.resumeId) {
+            const newResumeId = data.result.resumeId;
+            console.log('resumeId', newResumeId);
+            afterVersionSave(newResumeId);
+            reloadVersionHistory();
+            toast.success('Resume added to version history successfully!');
+        } else {
+            console.error('Unexpected response structure:', data);
+            toast.error('Failed to add resume to version history. Unexpected response structure.');
+        }
+    } catch (error) {
         console.error('Error uploading file:', error);
         toast.error('Failed to add resume to version history.');
-      })
-      .finally(() => {
+    } finally {
         setVersionIsUploading(false); // Stop loading indicator
         setFile(null); // Reset file input
         setFileName('Upload'); // Reset button text
-      });
+    }
 };
 
 // console.log('resume', resume);

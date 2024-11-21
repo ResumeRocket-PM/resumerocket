@@ -15,6 +15,8 @@ import RearrangeImagesDialog from "../RearrangeImagesDialog";
 import RearrangeImagesDialogGrid from "../RearrangeImagesDialogGrid";
 import { ImageContext } from '../../../context/ImageProvider';
 
+
+
 // const images = [
 //     "https://images.ctfassets.net/rt5zmd3ipxai/5hWDLmY62kBYnc2Cm4WF2T/e2ffb09597504b9832fafdf579c80c91/NVA_-_MASTER_-_BLOG_-_EXOTIC_-_LEOPARD_GECKO.jpg?fit=fill&fm=webp&h=678&w=1252&q=72",
 //     "https://cdn.medvet.com/app/uploads/2016/12/Common-diseases-leopard-gecko.jpg?strip=all&lossy=1&ssl=1",
@@ -50,18 +52,47 @@ const PrevArrow = (props) => {
     return (
         <div
             className={className}
-            style={{ ...style, display: "block" }}
+            style={{ ...style, display: "block", }}
             onClick={onClick}
         />
     );
 };
 
-const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
+const ProjectGallery = ({ project, setProject, content, sectionIndex, portfolioStyles }) => {
 
     const { showImage } = useContext(ImageContext);
     const sliderRef = useRef(null);
     const [rearrangeDialogOpen, setRearrangeDialogOpen] = useState(false);
     const [imageUrls, setImageUrls] = useState([]);
+    // const { portfolioStyles, setPortfolioStyles } = useContext(PortfolioEditContext);
+    // const api = useApi();
+
+    // const getAndSetPortfolioStyles = async () => {
+    //     try {
+    //         const response = await api.get("/portfolio/details");
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             if (data.result.content) {
+    //                 console.log("data from fetchPortfolioContent:", data);
+    //                 console.log("data.result.content:", JSON.parse(data.result.content));
+    //                 setPortfolioStyles(JSON.parse(data.result.content).styles);
+    //             } else {
+    //                 // If no portfolio content, set default content
+    //                 // handleCreatePortfolio();
+    //             }
+    //         } else {
+    //             console.error("Failed to fetch portfolio content:", response);
+    //         }
+    //     } catch (error) {
+    //         console.error("Failed to fetch portfolio content:", error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     if (portfolioStyles === 'gae') {
+    //         getAndSetPortfolioStyles(); 
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (content?.images) {
@@ -136,6 +167,8 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
     console.log('content', content);
     console.log('imageUrls', imageUrls);
 
+    console.log('portfolioStyles', portfolioStyles);
+
 
     return (
         <>
@@ -143,7 +176,7 @@ const ProjectGallery = ({ project, setProject, content, sectionIndex }) => {
                 {`
                     .slick-prev:before,
                     .slick-next:before {
-                        color: grey;
+                        color: ${portfolioStyles?.color};
                     }
                 `}
             </style>

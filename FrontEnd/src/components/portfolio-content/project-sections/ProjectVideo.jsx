@@ -51,7 +51,7 @@ const ProjectVideo = ({ project, setProject, content, sectionIndex }) => {
             <PortfolioItemWithPopupWrapper
                 popoverOpen={popupOpen}
                 setPopoverOpen={setPopupOpen}
-                popupLocation="top-right"
+                popupLocation="top-right-over"
                 popoverContent={
                     <div className='hz-center' onClick={handleEditIconClick}>
                         <EditOutlinedIcon />
