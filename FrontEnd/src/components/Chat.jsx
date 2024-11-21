@@ -1,24 +1,50 @@
-import React, { useState,  } from 'react';
-import { TextField } from "@mui/material"
+import React, { useState, useContext } from 'react';
+import TextField from '@mui/material/TextField';
+import { useApi } from "../hooks";
+import { ResumeContext } from '../context/ResumeProvider';
 
-export default function Chat() {
+const Chat = ({ resumeId, applicationId }) => {
+    const { messages, setMessages } = useContext(ResumeContext);
     const [inputText, setInputText] = useState('');
-    // const [response, setResponse] = useState('');
-    const [messages, setMessages] = useState([{ai: "As a AI Language Model, I can provide you feed back on your resume."}]);
+    const api = useApi();
 
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            const newMessage = inputText.trim();
-            if (newMessage !== '') {
-                setMessages([...messages, {user: newMessage}, {ai: "Great Question! Here is how....."}]);
+    const sendMessage = async (message) => {
+        try {
+            const payload = {
+                "resumeId": resumeId,
+                "applicationId": applicationId || null,
+                "message": message
+            };
+            const response = await api.post('/Externel/openai/aiMultipleMessage', payload);
+            const responseData = await response.json();
+            const aiMessage = responseData.result;
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { ai: aiMessage }
+            ]);
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const message = inputText.trim();
+            if (message) {
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    { user: message }
+                ]);
                 setInputText('');
+                sendMessage(message);
             }
         }
     };
 
     return (
         <div id="chat_outermost">
-            <h1>AI assistant</h1>
+            <h1>Resume Assistant</h1>
             <div id="chat_messages_container">
                 {messages.map((message, index) => (
                     <React.Fragment key={index}>
@@ -42,8 +68,8 @@ export default function Chat() {
                     variant="outlined"
                     fullWidth
                     multiline
-                    minRows={1}  // Set the initial number of rows
-                    maxRows={5}  // Set the maximum number of rows
+                    minRows={1}
+                    maxRows={5}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyPress={handleKeyPress}
@@ -55,14 +81,12 @@ export default function Chat() {
                                 width: "6px",
                                 height: "6px",
                             },
-                            "&::-webkit-scrollbar-thumb": {
-                                backgroundColor: "rgba(192, 192, 192, 0.5)", // Light grey with 50% opacity
-                                borderRadius: "3px",
-                            },
                         },
                     }}
                 />
             </div>
         </div>
-    )
-}
+    );
+};
+
+export default Chat;
