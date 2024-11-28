@@ -7,7 +7,7 @@ import UserTutorial from "./sections/UserTutorial";
 
 
 export default function HomePage() {
-    const [sectionSelected, setSectionSelected ] = useState('home');
+    const [sectionSelected, setSectionSelected ] = useState('about');
 
     const handleChange = (event, newValue) => {
         setSectionSelected(newValue);
