@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email'; // Import the Email icon
-import PhoneIcon from '@mui/icons-material/Phone'; // Import the Phone icon
+import EmailIcon from '@mui/icons-material/Email'; 
+import PhoneIcon from '@mui/icons-material/Phone';
 
 import "../../../../styles/HomePage.css";
 
@@ -111,11 +111,10 @@ const TheTeam = () => {
                                                         overflow: 'hidden', 
                                                         textOverflow: 'ellipsis', 
                                                         whiteSpace: 'nowrap', 
-                                                        fontSize: '10pt', // Default font size
-                                                        minWidth: 0, // Ensures text can shrink
-                                                        maxWidth: '100%', // Prevents text from going out of bounds
-                                                        display: 'inline-block', // Allows the element to shrink
-                                                        fontSize: 'clamp(8pt, 10pt, 100%)' // Ensures a minimum font size of 8pt
+                                                        minWidth: 0,
+                                                        maxWidth: '100%',
+                                                        display: 'inline-block',
+                                                        fontSize: 'clamp(8pt, 10pt, 100%)'
                                                     }}
                                                 >
                                                     {member.email}
