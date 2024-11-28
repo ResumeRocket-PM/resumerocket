@@ -1,6 +1,7 @@
 import '../../styles/LoginPage.css'; // make sure to create a corresponding CSS file
 import resumeRocket from '../../assets/resumeRocket.png'
 import LoginForm from '../login-form/LoginForm';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
 
@@ -25,7 +26,12 @@ const LoginPage = () => {
                     Resume Rocket
                     </h2>
                     <LoginForm />
+                    <Link to={`/about`}  align='center'>
+                        { 'About' }
+                    </Link>
                 </div>
+
+
             </div>
         </div>
     </div>
