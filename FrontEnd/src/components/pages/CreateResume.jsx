@@ -1021,12 +1021,14 @@ export default function CreateResume({resumeId=null}) {
 
     console.log('suggestions', suggestions);
     // console.log('suggestions.resumeSuggestions', suggestions);
-    // console.log('OGtextClassPairsList', OGtextClassPairsList);
+    console.log('OGtextClassPairsList', OGtextClassPairsList);
     // console.log('suggestionsApplied', suggestionsApplied);
 
     console.log('currentVersionResumeId', currentVersionResumeId);
     console.log('resumeIdToRender', resumeIdToRender);
     console.log('OriginalResumeId', OriginalResumeId);
+
+    console.log('resume', resume);
 
     return (
         <div id="CreateResume-root">
@@ -1166,7 +1168,8 @@ export default function CreateResume({resumeId=null}) {
                                 <div 
                                     id='resume-html'
                                     contentEditable={true}
-                                    dangerouslySetInnerHTML={{ __html: resumeIdToRender === OriginalResumeId ? resumeWithoutPageContainer : resume }}
+                                    // dangerouslySetInnerHTML={{ __html: resumeIdToRender === OriginalResumeId ? resumeWithoutPageContainer : resume }}
+                                    dangerouslySetInnerHTML={{ __html: removePageContainer(resume) }}
                                     onInput={handleResumeHtmlContentChange}
                                 />
                             </Card>

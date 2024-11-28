@@ -4,9 +4,29 @@ h1 {
     align-items: center;
 }
 
-#yea {
+#home-page-root {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+}
+
+#home-page-main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 70%;
+    min-width: 70%;                                                                                                                     
+}
+
+.home-page-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 20px; */
+    width: 100%;
 }

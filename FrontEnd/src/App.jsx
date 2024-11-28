@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Outlet, Navigate, useParams } from 'react-router-dom';
-import HomePage from './components/pages/HomePage.jsx';
+import HomePage from './components/pages/HomePage/HomePage.jsx';
 import NotFoundPage from './components/pages/NotFoundPage.jsx';
 import LoginPage from './components/pages/LoginPage.jsx';
 import ResumeListPage from "./components/pages/ResumeListPage/ResumeListPage.jsx";
