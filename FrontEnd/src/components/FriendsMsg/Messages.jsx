@@ -11,9 +11,8 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
     const [zIndex, setZIndex] = useState(2000); // Set initial zIndex
     const api = useApi();
     const messagesEndRef = useRef(null);
-    const pollingIntervalRef = useRef(null);
 
-    // Function to fetch all message history
+    // Function to fetch message history
     const fetchMessages = async (id) => {
         if (!id) return;
         try {
@@ -25,38 +24,11 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
         }
     };
 
-    // Function to fetch only new messages
-    const fetchNewMessages = async (id) => {
-        if (!id) return;
-        try {
-            const response = await api.get(`/Chat/MsgHistory/${id}`);
-            const data = await response.json();
-
-            if (data.result && data.result.length > messages.length) {
-                setMessages(data.result); // Update messages only if new messages exist
-            }
-        } catch (error) {
-            console.error('Error fetching new messages:', error);
-        }
-    };
-
     useEffect(() => {
-        // Fetch initial messages
         fetchMessages(theyId);
-
-        // Start polling for new messages every 5 seconds
-        pollingIntervalRef.current = setInterval(() => {
-            fetchNewMessages(theyId);
-        }, 5000);
-
-        return () => {
-            // Clear the polling interval on component unmount
-            clearInterval(pollingIntervalRef.current);
-        };
     }, [theyId]);
 
     useEffect(() => {
-        // Scroll to the bottom of the messages container when messages are updated
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -73,13 +45,17 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
             const data = await response.json();
 
             if (data.result) {
-                setMessages((prevMessages) => [
+                setMessages(prevMessages => [
                     ...prevMessages,
-                    { identity: 'me', msgContent: newMessage.trim() },
+                    { identity: 'system', msgContent: data.result }
                 ]);
-                if (onMessageSent) onMessageSent();
+            } else {
+                setNewMessage('');
+                await fetchMessages(theyId);
+                if (onMessageSent) {
+                    onMessageSent();
+                }
             }
-            setNewMessage('');
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -117,14 +93,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                     border: '2px solid black',
                 }}
             >
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        borderBottom: '2px solid black',
-                    }}
-                >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid black', }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <img
                             src={profilePhotoLink || userSolidOrange}
@@ -135,11 +104,10 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                                 borderRadius: '50%',
                                 marginRight: '8px',
                                 background: 'white',
+                                border: '2px'
                             }}
                         />
-                        <Typography variant="h6">
-                            {firstName} {lastName}
-                        </Typography>
+                        <Typography variant="h6" >{firstName} {lastName}</Typography>
                     </div>
                     <IconButton onClick={onClose}>
                         <CloseIcon />
@@ -155,7 +123,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                         paddingRight: '10px',
                     }}
                 >
-                    {messages.map((msg, index) => (
+                    {messages.slice().map((msg, index) => (
                         <div
                             key={index}
                             style={{
@@ -169,12 +137,11 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                                     maxWidth: '70%',
                                     padding: '8px',
                                     borderRadius: '10px',
-                                    backgroundColor:
-                                        msg.identity === 'me'
-                                            ? 'green'
-                                            : msg.identity === 'system'
-                                            ? 'red'
-                                            : 'black',
+                                    backgroundColor: msg.identity === 'me'
+                                        ? 'green'
+                                        : msg.identity === 'system'
+                                            ? 'red'  // Red background for system messages (e.g., blocked message)
+                                            : 'ThreeDDarkShadow',
                                     color: 'white',
                                     textAlign: 'left',
                                 }}
@@ -196,7 +163,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                         onKeyDown={handleKeyPress} // Listen for "Enter" key press
                         style={{ marginRight: '10px' }}
                         sx={{
-                            backgroundColor: 'white', // Set background color to white
+                            backgroundColor: 'white' // Set background color to white
                         }}
                     />
                     <Button
@@ -205,9 +172,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                         onClick={handleSendMessage}
                         disabled={!newMessage.trim()}
                         style={{
-                            backgroundColor: newMessage.trim()
-                                ? 'darkgreen'
-                                : 'lightgrey', // Green when enabled, grey when disabled
+                            backgroundColor: newMessage.trim() ? 'darkgreen' : 'lightgrey', // Green when enabled, grey when disabled
                             color: 'white',
                             cursor: newMessage.trim() ? 'pointer' : 'not-allowed', // Pointer when enabled, default when disabled
                         }}
