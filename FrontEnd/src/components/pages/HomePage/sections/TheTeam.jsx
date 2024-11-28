@@ -31,25 +31,25 @@ const teamMembers = [
         phone: '801-803-8406',
         github: '17agodfrey'
     },
-    {
-        name: 'Yinghua Yin',
-        image: YinghuaImage,
-        bio: null,
-        linkedin: null,
-        resumerocket: null,
-        email: null,
-        phone: null,
-        github: null
+    { 
+        name: 'Yinghua Yin', 
+        image: YinghuaImage, 
+        bio: 'Yinghua is a Computer Science student at the University of Utah with a strong focus on backend development and a solid foundation in computer science principles.   He is proficient in multiple programming languages, including Java, Python, C#, and JavaScript, and has expertise in developing algorithms, handling databases, and designing secure systems.   On this project, Yinghua primarily contributed to backend tasks, including developing a robust web scraping feature to extract and process data efficiently.   Additionally, he played a significant role in designing and implementing the website’s chat functionality, ensuring seamless communication and data integrity.Yinghuas diverse project experience highlights his ability to tackle complex technical challenges.  His knowledge extends to cybersecurity, where he has simulated various attacks and designed strategies to protect systems.   This blend of technical expertise and hands-on experience makes him well-equipped to handle both backend and frontend challenges effectively, while his strong understanding of computer security adds an extra layer of reliability to his work.', 
+        linkedin: 'www.linkedin.com/in/yinghua-yin-b54697240', 
+        resumerocket: null, 
+        email: 'yinyinghua737@gmail.com', 
+        phone: '3852164867', 
+        github: 'Desublimation',
     },
     {
         name: 'Nathan Weston',
-        image: NathanImage,
-        bio: null,
-        linkedin: null, 
+        image: 'NathanImage',
+        bio: 'Nathan is a Computer Science and Information Systems double major at the University of Utah with a focus on backend development, algorithms, and service applications. In this project he primarily worked in the backend to provide API endpoints for the frontend to use, resume conversion and transfer through the app, and OpenAI integration to get job details and change suggestions. Additionally, he worked on one of the service application containers to extract job postings from certain websites. Apart from the project his personal unpublished projects include image hash comparison to find duplicate images in a set of directories using Python, a terminal password generator that can be used to convert easy to remember text into secure passwords locally in both Python and Bash, several local website to serve Multimedia  (Reflex) and inventory tracking (ASP.NET), and a local file locker for encrypting and storing files..Currently he is working as a Junior Data Engineer where he can leverage his knowledge of algorithms and data flow, and would either like to progress down the data engineering path or move into either Machine Learning or backend development to solve business problems from the backend.',
+        linkedin: 'https://www.linkedin.com/in/nathan-n-weston/', 
         resumerocket: null,
-        email: null,
-        phone: null,
-        github: null
+        email: 'meganootsupreme@gmail.com',
+        phone: '8014521941',
+        github: 'meganootsupreme'
     },
 ];
 
