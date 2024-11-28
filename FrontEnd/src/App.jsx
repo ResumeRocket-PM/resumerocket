@@ -81,6 +81,7 @@ function App() {
                 {/* Layout route for pages that include the Navbar, wrapped with PrivateRoute */}
                 <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
                     <Route path="/home" element={<HomePage />} />
+                    <Route path="/about" element={<HomePage />} />
                     <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
                     <Route path="/create-resume/:_resumeId?" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />
                     <Route path="/create-resume/:_resumeId/:_applicationId" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />

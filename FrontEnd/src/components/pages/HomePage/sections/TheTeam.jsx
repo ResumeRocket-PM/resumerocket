@@ -43,7 +43,7 @@ const teamMembers = [
     },
     {
         name: 'Nathan Weston',
-        image: 'NathanImage',
+        image: NathanImage,
         bio: 'Nathan is a Computer Science and Information Systems double major at the University of Utah with a focus on backend development, algorithms, and service applications. In this project he primarily worked in the backend to provide API endpoints for the frontend to use, resume conversion and transfer through the app, and OpenAI integration to get job details and change suggestions. Additionally, he worked on one of the service application containers to extract job postings from certain websites. Apart from the project his personal unpublished projects include image hash comparison to find duplicate images in a set of directories using Python, a terminal password generator that can be used to convert easy to remember text into secure passwords locally in both Python and Bash, several local website to serve Multimedia  (Reflex) and inventory tracking (ASP.NET), and a local file locker for encrypting and storing files..Currently he is working as a Junior Data Engineer where he can leverage his knowledge of algorithms and data flow, and would either like to progress down the data engineering path or move into either Machine Learning or backend development to solve business problems from the backend.',
         linkedin: 'https://www.linkedin.com/in/nathan-n-weston/', 
         resumerocket: null,
