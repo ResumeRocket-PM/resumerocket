@@ -6,9 +6,9 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import "../../../../styles/HomePage.css";
 
 import TylerImage from '../../../../assets/about/tyler.png';
-import AustinImage from '../../../../assets/About/austin.png';
-import YinghuaImage from '../../../../assets/About/yinghua.png';
-import NathanImage from '../../../../assets/About/nathan.png';
+import AustinImage from '../../../../assets/about/austin.png';
+import YinghuaImage from '../../../../assets/about/yinghua.png';
+import NathanImage from '../../../../assets/about/nathan.png';
 
 const teamMembers = [
     {
