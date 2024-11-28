@@ -62,6 +62,7 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
         }
     }, [messages]);
 
+    
     const handleSendMessage = async () => {
         if (!newMessage.trim()) return;
 
@@ -77,8 +78,12 @@ const Messages = ({ theyId, profilePhotoLink, firstName, lastName, onClose, onMe
                     ...prevMessages,
                     { identity: 'me', msgContent: newMessage.trim() },
                 ]);
+
+                // Re-fetch the latest messages after sending a message
+
                 if (onMessageSent) onMessageSent();
             }
+            fetchMessages(theyId);
             setNewMessage('');
         } catch (error) {
             console.error('Error sending message:', error);
