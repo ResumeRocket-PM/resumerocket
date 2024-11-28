@@ -45,7 +45,7 @@ const About = () => {
                     <h3 className='home-about-smaller-header'>User Networking</h3>
                     <ul>
                         <li>
-                            The networking page shows all users of the site, some details about them, and each user's resume and portfolio if provided. These can be searched for with the search bar.
+                            The networking page shows all users of the site, some details about them, and each user&apos;s resume and portfolio if provided. These can be searched for with the search bar.
                         </li>
                         <li>
                             Users can message and interact with each other via our messaging feature.
