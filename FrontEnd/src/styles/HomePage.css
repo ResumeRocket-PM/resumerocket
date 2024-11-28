@@ -4,29 +4,94 @@ h1 {
     align-items: center;
 }
 
+/* ############# Overall Home Page ############# */
+
 #home-page-root {
+    /* min-height: 100%; Allow the element to grow beyond 100% if needed */
+    /* box-sizing: border-box; Ensure padding is included in the element's total height */
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+
     margin-top: 20px;
+    padding-bottom: 20px;
 }
 
 #home-page-main-content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin-top: 20px;
-    width: 70%;
-    min-width: 70%;                                                                                                                     
+    padding: 20px;
+    width: 60%;
+    min-width: 60%;     
+    /* background-color: #f5f1e7; Very light tan color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow on left and right edges */                                                                                      
 }
 
 .home-page-section {
+    /* width: 100%;
+    height: 100%; */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     /* margin-top: 20px; */
-    width: 100%;
 }
+
+/* transistion stuff */
+/* Fade-in and fade-out animations */
+.fade-enter {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.fade-enter-active {
+    opacity: 1;
+}
+
+.fade-exit {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.fade-exit-active {
+    opacity: 0;
+}
+
+/* ########################################### */
+
+
+/* ############# About Section ############# */
+
+#home-about-main-content {
+                                                                                                                
+}
+
+.home-about-big-header {
+    text-align: center;
+    padding-bottom: 25px;
+    text-decoration: underline;
+}
+
+.home-about-smaller-header {
+    text-align: start;
+    align-self: flex-start;
+}
+
+.home-about-text-section {
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+#home-about-RR-logo {
+    height: 15rem;
+    width: 15rem;
+    margin-bottom: 50px;                                                                    
+
+}
+
+/* ######################################### */
