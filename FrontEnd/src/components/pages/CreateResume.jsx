@@ -10,63 +10,6 @@ import { ClipLoader } from "react-spinners";
 import { debounce, set } from 'lodash';
 import AddVersionToResumeHistoryButton from './ResumePages/AddVersionToResumeHistoryButton.jsx';
 
-// where modified can be longer than original
-// const suggestions = [
-//     {
-//         "explanation": "Rewording 'Built' to 'Developed' aligns with the job's focus on software engineering. Also, 'interfaces' can be considered synonymous with 'GUIs' in a technical context, matching the job's technical requirement.",
-//         "original": "Built simple chat client and server GUIs, in which users can send/receive messages to/from",
-//         "modified": "Developed simple chat client and server interfaces, allowing users to send/receive messages to/from"
-//     },
-//     {
-//         "explanation": "Rephrasing 'using' to 'utilizing' aligns better with professional terminology. Also, emphasizing 'C# language' matches the technical keywords and focus in software engineering.",
-//         "original": "Played a key role in developing a version of the 'Agario' game using C#",
-//         "modified": "Contributed to developing a version of the 'Agario' game utilizing C# language"
-//     },
-//     {
-//         "explanation": "Mentioning 'unit testing' and 'uphold code and quality standards' more explicitly aligns with the job's emphasis on 'debugging/unit testing' and quality standards in software engineering.",
-//         "original": "Debugged and tested code to ensure quality standards",
-//         "modified": "Performed debugging and unit testing to uphold code and quality standards"
-//     },
-//     {
-//         "explanation": "Using 'coordinated and optimized' is more technical and matches the engineering problem-solving aspect of the job description.",
-//         "original": "Assisted in managing routes for 30+ invoices daily",
-//         "modified": "Coordinated and optimized routes for managing 30+ invoices daily"
-//     },
-//     {
-//         "explanation": "Rephrasing to 'Analyzed and addressed' provides a technical approach to problem solving, aligning with the job's focus on solving 'large scale and highly complex technical problems'.",
-//         "original": "Diagnosed lawn and garden issues and recommended targeted solutions",
-//         "modified": "Analyzed and addressed lawn and garden issues with targeted solutions"
-//     }
-//   ];
-
-// const suggestions = [
-//     {
-//         "explanation": "Rewording 'Built' to 'Developed' aligns with the job's focus on software engineering. Also, 'interfaces' can be considered synonymous with 'GUIs' in a technical context, matching the job's technical requirement.",
-//         "original": "Built simple chat client and server GUIs, in which users can send/receive messages to/from",
-//         "modified": "Developed chat client and server GUIs, allowing users to send/receive messages"
-//     },
-//     {
-//         "explanation": "Rephrasing 'using' to 'utilizing' aligns better with professional terminology. Also, emphasizing 'C# language' matches the technical keywords and focus in software engineering.",
-//         "original": "Played a key role in developing a version of the 'Agario' game using C#",
-//         "modified": "Contributed to creating a version of 'Agario' game using C#"
-//     },
-//     {
-//         "explanation": "Mentioning 'unit testing' and 'uphold code and quality standards' more explicitly aligns with the job's emphasis on 'debugging/unit testing' and quality standards in software engineering.",
-//         "original": "Debugged and tested code to ensure quality standards",
-//         "modified": "Performed debugging to ensure quality standards"
-//     },
-//     {
-//         "explanation": "Using 'coordinated and optimized' is more technical and matches the engineering problem-solving aspect of the job description.",
-//         "original": "Assisted in managing routes for 30+ invoices daily",
-//         "modified": "Optimized routes for managing 30+ invoices daily"
-//     },
-//     {
-//         "explanation": "Rephrasing to 'Analyzed and addressed' provides a technical approach to problem solving, aligning with the job's focus on solving 'large scale and highly complex technical problems'.",
-//         "original": "Diagnosed lawn and garden issues and recommended targeted solutions",
-//         "modified": "Analyzed lawn and garden issues and provided solutions"
-//     }
-// ];
-
 function ShareDialog(props) {
 
     const { onClose, open } = props;
@@ -113,13 +56,15 @@ function SuggestionBox({ suggestion, classPairs, calculateTopPosition, applySugg
         }
     };
 
-    console.log('applyButtonState', applyButtonState);
+    // console.log('applyButtonState', applyButtonState);
 
     return (
         <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <Card key={index} className="suggestion-box">
                 <CardContent sx={{ padding: '1rem 1rem 1rem 1rem' }}>
                     <div className="suggestion-box-content">
+                        <p className="weight-bold underline">Original Text:</p>
+                        <div className="suggestion-box-text">{suggestion.originalText}</div>
                         <p className="weight-bold underline">Suggested Text:</p>
                         <div className="suggestion-box-text">{suggestion.modifiedText}</div>
                         {seeExplanation && (
@@ -178,7 +123,8 @@ export default function CreateResume({resumeId=null}) {
     const [suggestionsApplied, setSuggestionsApplied] = useState([]);
     const [resumeDownloading, setResumeDownloading] = useState(false);
 
-    const [suggestionsOGInnerHTML, setSuggestionsOGInnerHTML] = useState([]);
+    // const [suggestionsOGInnerHTML, setSuggestionsOGInnerHTML] = useState([]);
+    const [OGtextOGinnerHTML, setOGtextOGinnerHTML] = useState([]);
 
     const [resumeWithoutPageContainer, setResumeWithoutPageContainer] = useState(null);
 
@@ -426,109 +372,6 @@ export default function CreateResume({resumeId=null}) {
         }
     };
 
-    // Notes: 
-    // the main issue that had to be fixed was that if you get to the end of a div 
-    // and the word is not finished, it just puts the word in the next div... which is bad 
-    // the solution was to keep track of the current word and if we reach the end of a div
-    // and the word is not finished, we reset j (index of the modified text) to the index of the
-    // end of the previous word in the modified text. 
-    //
-    // that way we're only filling out text in the new divs according to the index of the modified text
-    // const applySuggestion = (index) => {
-    //     const suggestion = suggestions[index];
-    //     const classPairs = OGtextClassPairsList[index];
-
-
-    //     const parser = new DOMParser();
-    //     const serializer = new XMLSerializer();
-    //     const doc = parser.parseFromString(resume, 'text/html');
-    //     const divs = doc.querySelectorAll('div');
-    
-    //     // const targetDiv = doc.querySelector('#pf1 > div.pc.pc1.w0.h0 > div.c.xb.y5a.w30.h1 > div');
-    //     let j = 0; // Index for modified text
-    //     let originalText = suggestion.originalText;
-    //     let modifiedText = suggestion.modifiedText;
-    //     let currentWord = '';
-    //     // let wordUnfinished = false;
-    //     for (let pair of classPairs) {
-    //         divs.forEach(div => {
-    //             if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
-    //                 const targetDiv = div;
-        
-    //                 let i = 0; // index for div text (innerHTML)
-
-    //                 let newText = '';
-    //                 let insideTag = false;
-    //                 let insideWord = false;
-        
-    //                 while (i < targetDiv.innerHTML.length) {
-    //                     const nextDivChar = targetDiv.innerHTML[i];
-    //                     const nextOriginalChar = originalText[j];
-    //                     const nextModifiedChar = modifiedText[j];
-    //                     /////////////// Normal Adding Logic //////////////////
-    //                     if (nextDivChar === '<') {
-    //                         // Append HTML tags
-    //                         insideTag = true;
-    //                         newText += nextDivChar;
-    //                     } else if (nextDivChar === '>') {
-    //                         insideTag = false;
-    //                         newText += nextDivChar;
-    //                     } else if (!insideTag && j < originalText.length && j < modifiedText.length) {
-    //                         if (nextModifiedChar === ' ') {
-    //                             insideWord = false;
-    //                             currentWord = '';
-    //                         } else {
-    //                             insideWord = true;
-    //                             currentWord += nextModifiedChar;
-    //                         }
-    //                         // Replace text character by character
-    //                         newText += nextModifiedChar;
-    //                         j++;
-    //                     } 
-    //                     else if (insideTag){ // **** idk if this is necessary
-    //                         newText += nextDivChar;
-    //                     }
-    //                     /////////////////////////////////////////////////
-
-    //                     if (i === targetDiv.innerHTML.length - 1 && insideWord) { // if we are at the end of the div and the word is not finished
-    //                         // wordUnfinished = true;
-    //                         newText = newText.slice(0, -currentWord.length-1); // remove word fragment and previous space end of newText
-    //                         j -= currentWord.length; // go back to the previous character in modified text
-    //                         currentWord = ''; // reset currentWord
-    //                     }
-
-    //                     i++;
-    //                 }
-            
-    //                 targetDiv.innerHTML = newText;
-    //                 const newHtml = serializer.serializeToString(doc);
-    //                 setResume(newHtml);
-    //             }
-    //         });
-    //     }
-    //     // now we should apply some classes to the divs that will highlight them in green then fade them out
-    //     // so the user knows which div was changed
-    //     // we can do this by getting the class names of the divs that contain the original text
-    //     // and then adding a class to them that will highlight them in green
-    //     // then we can remove the class after a few seconds
-
-    //     const originalClasses = findOriginalTextDivClasses(suggestion.original);
-    //     // const parser = new DOMParser();
-    //     // const doc = parser.parseFromString(resume, 'text/html');
-    //     // const divs = doc.querySelectorAll('div');
-
-    //     // divs.forEach(div => {
-    //     //     originalClasses.forEach(pair => {
-    //     //         if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
-    //     //             div.style.backgroundColor = 'green'; // Highlight the div
-    //     //             setTimeout(() => {
-    //     //                 div.style.backgroundColor = 'transparent';
-    //     //             }, 3000);
-    //     //         }
-    //     //     });
-    //     // });
-    // };
-
     // the new one... 
     // the plan: 
     // if we're inside a div we gotta keep matching the text until we reach the end of the div
@@ -557,15 +400,39 @@ export default function CreateResume({resumeId=null}) {
 
 
 
-        const tryMatchRemainingOriginalText = (divText, originalText) => {
+        const tryMatchRemainingOriginalText = (currentI) => {
             let newText = '';
             let insideTag = false;
             let textMatched = '';
-            let i = 0;  
+            let i = currentI;  // index for divText
+            let ogI = 0; // index for OG text 
 
-            while (i < divText.length) {
+            // get the innerhtml of the divs from relevant class pairs
+            let divText = '';
+            try {
+                console.log('Starting to process all divs');
+                // Assuming divs is already defined and contains all the div elements
+                divs.forEach(div => {
+                    classPairs.forEach(pair => {
+                        // Check if the div has the grandparent class
+                        if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
+                            console.log(`Found grandparent div with class: ${pair.grandparentClass}`);
+                            // Find the child div with the parent class within this grandparent div
+                            divText += div.innerHTML;
+                            divText += ' ';
+                        }
+                    });
+                });
+                console.log('Finished processing all divs');
+            } catch (error) {
+                console.error('An error occurred while processing the divs:', error);
+            }
+    
+
+
+            while (ogI < originalText.length) {
                 const nextDivChar = divText[i];
-                const nextOriginalChar = originalText[i];
+                const nextOriginalChar = originalText[ogI];
 
                 /////////////// Normal Adding Logic //////////////////
                 if (nextDivChar === '<') {
@@ -583,6 +450,7 @@ export default function CreateResume({resumeId=null}) {
                         textMatched = ''; // reset matched text
                     }
                     newText += nextDivChar; // add the modified text
+                    ogI++;
                 }
                 else if (insideTag){
                     newText += nextDivChar;
@@ -633,7 +501,7 @@ export default function CreateResume({resumeId=null}) {
 
                             // only get this the first time we successfully match the original text from the current div char
                             if (j < modifiedText.length && !foundStartOfOriginalText && nextDivChar === nextOriginalChar) {
-                                foundStartOfOriginalText = tryMatchRemainingOriginalText(targetDiv.innerHTML.slice(i), originalText.slice(j));
+                                foundStartOfOriginalText = tryMatchRemainingOriginalText(i);
                                 triedStartOfOriginalTextSearch = true;
                             }
 
@@ -641,19 +509,24 @@ export default function CreateResume({resumeId=null}) {
                                 if (j < modifiedText.length) {
                                     // if this is the last char in the modified text 
                                     if (j === modifiedText.length - 1 && targetDiv.innerHTML[i+1] !== ' ') {
-                                        modifiedText += ' ';
+                                        // modifiedText += ' ';
+                                        
                                     }
                                     newText += nextModifiedChar; // add the modified text
                                     nextChar = nextModifiedChar;
                                     j++;
-                                } else { 
+                                } 
+                                // *** this still being used to splice the rest of the text in 
+                                else { 
                                     // if we have reached the end of the modified text, we want to 'delete' the difference
                                     // between the original and modified text from the original text 
                                     // in terms of chars after our current position in the original text
-                                    if(textLenDif <= 1) {
+                                    if(textLenDif < 1) {
+                                    // if(i > originalText.length - 1){
                                         newText += nextDivChar; // add the original text
                                         nextChar = nextDivChar;
-                                    } else {
+                                    } 
+                                    else {
                                         textLenDif--;
                                     }
                                 }
@@ -695,7 +568,8 @@ export default function CreateResume({resumeId=null}) {
                                 // currentWord = ''; // reset currentWord
                                 unfinishedWord = currentWord;
                             }
-                            else { // this is the LAST DIV / pair
+                            else { 
+                                // this is the LAST DIV / pair
                                 // if the newText is greater than 41 characters split it into two text segements 
                                 // so that the last word is not cut off
                                 // if (newText.length > 41) {
@@ -749,73 +623,23 @@ export default function CreateResume({resumeId=null}) {
         const serializer = new XMLSerializer();
         const doc = parser.parseFromString(resume, 'text/html');
         const divs = doc.querySelectorAll('div');
-        const suggestion = suggestions[index];
+        // const suggestion = suggestions[index];
         const classPairs = OGtextClassPairsList[index];
+        const OGhtmlArr = OGtextOGinnerHTML[index];
+        let OGhtmlArrIndex = 0;
 
         for (let pair of classPairs) {
             divs.forEach(div => {
                 if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
                     const targetDiv = div;
-                    targetDiv.innerHTML = suggestion.originalText;
+                    targetDiv.innerHTML = OGhtmlArr[OGhtmlArrIndex];                                                            
                     const newHtml = serializer.serializeToString(doc);
                     setResume(newHtml);
+                    OGhtmlArrIndex++;
                 }
             });
         }
     };
-    
-    // const findOriginalTextDivClasses = (originalText) => {
-    //     const parser = new DOMParser();
-    //     const doc = parser.parseFromString(resume, 'text/html');
-    //     const divs = doc.querySelectorAll('div');
-    //     const classPairs = [];
-    //     let textMatched = '';
-    //     let divIsNotMatch = true;
-    
-    //     for (let div of divs) {
-    //         let combinedText = '';
-    //         divIsNotMatch = true;
-    //         div.childNodes.forEach(node => {
-    //             if (node.nodeType === Node.TEXT_NODE || node.nodeType === Node.ELEMENT_NODE) {
-    //                 combinedText += node.textContent;
-    //             }
-    //         });
-
-    //         // if the class name does not include 't ', then it is not a text div
-    //         if (!div.className.includes('t ')){
-    //             continue;
-    //         }
-    
-    //         for (let char of combinedText) {
-    //             let nextChar = originalText[textMatched.length];
-    //             if (textMatched.length < originalText.length && char === nextChar) {
-    //                 textMatched += char;
-    //                 divIsNotMatch = false;
-    //             }else {
-    //                 divIsNotMatch = true;
-    //                 textMatched = '';
-    //                 break;
-    //             }
-    //         }
-    //         if (!divIsNotMatch) {
-    //             textMatched += ' ';
-    //             const grandparentClass = div.parentElement ? div.parentElement.className : '';
-    //             classPairs.push({
-    //                 grandparentClass: grandparentClass,
-    //                 parentClass: div.className
-    //             });
-    //         }
-    //         if (textMatched.length === originalText.length+1) {
-    //             // remove the last ' ' we added to the end of the textMatched
-    //             textMatched = textMatched.slice(0, -1);
-    //             break;
-    //         }
-    //     }
-    
-    //     return classPairs;
-    // }
-
-    // this version is probably going to have to search way more text... 
     
     
     // NOTES: 
@@ -839,6 +663,8 @@ export default function CreateResume({resumeId=null}) {
         let textMatched = '';
         let divContainsOriginalText = false;
         let entireTextMatched = false;
+
+        let matchedDivsInnerHtml = [];
     
         for (let div of divs) {
             let combinedText = '';
@@ -875,13 +701,14 @@ export default function CreateResume({resumeId=null}) {
                 }
             }
 
-            if (divContainsOriginalText) { // if we reach the end of a div and it does contain the original text, add the class pairs
+            if (divContainsOriginalText && textMatched.length > 1) { // if we reach the end of a div and it does contain the original text, add the class pairs
                 textMatched += ' ';
                 const grandparentClass = div.parentElement ? div.parentElement.className : '';
                 classPairs.push({
                     grandparentClass: grandparentClass,
                     parentClass: div.className
                 });
+                matchedDivsInnerHtml.push(div.innerHTML);
             }
             if (entireTextMatched) {
                 // // remove the last ' ' we added to the end of the textMatched
@@ -889,8 +716,8 @@ export default function CreateResume({resumeId=null}) {
                 break;
             }
         }
-    
-        return classPairs;
+        
+        return [classPairs, matchedDivsInnerHtml];
     }
 
     const highlightClasses = (classPairs, doc, color="yellow") => {
@@ -913,15 +740,18 @@ export default function CreateResume({resumeId=null}) {
     useEffect (() => {
         if(!suggestionsLoading) {
             let classPairs = [];
+            let matchedDivsInnerHtml = [];
             let indicesToRemove = [];
             for (let suggestion of suggestions) {
-                const classPair = findOriginalTextDivClasses(suggestion.originalText);
+                const [classPair, OGinnerHTMLArr] = findOriginalTextDivClasses(suggestion.originalText);
                 classPairs.push(classPair);
+                matchedDivsInnerHtml.push(OGinnerHTMLArr);
                 if (classPair.length === 0) {
                     indicesToRemove.push(suggestions.indexOf(suggestion));
                 }
             }
             setOGtextClassPairsList(classPairs);
+            setOGtextOGinnerHTML(matchedDivsInnerHtml);
 
             // // Filter out the suggestions and classPairs at the indices to remove
             // const filteredSuggestions = suggestions.filter((_, index) => !indicesToRemove.includes(index));
@@ -945,46 +775,6 @@ export default function CreateResume({resumeId=null}) {
             });
         }
     }, [resumeLoading, suggestionsLoading, OGtextClassPairsList]);
-
-    // update suggestionOGInnerHTML if OGtextClassPairsList changes
-    useEffect(() => {
-        if(resume && OGtextClassPairsList.length > 0) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(resume, 'text/html');
-            const divs = doc.querySelectorAll('div');
-            let suggestionsOGInnerHTML = [];
-
-            divs.forEach(div => {
-                OGtextClassPairsList.forEach(classPairs => {
-                    classPairs.forEach(pair => {
-                        if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
-                            suggestionsOGInnerHTML.push(div.innerHTML);
-                        }
-                    });
-                });
-            });
-
-            setSuggestionsOGInnerHTML(suggestionsOGInnerHTML);
-        }
-    }, [OGtextClassPairsList]);
-
-    // highlight the original text using the class pairs list
-    // useEffect(() => {
-    //     if (OGtextClassPairsList.length > 0) {
-    //         const parser = new DOMParser();
-    //         const doc = parser.parseFromString(resume, 'text/html');
-    
-    //         OGtextClassPairsList.forEach(classPairs => {
-    //             highlightClasses(classPairs, doc);
-    //         });
-    
-    //         const serializer = new XMLSerializer();
-    //         const newHtml = serializer.serializeToString(doc);
-    //         setResume(newHtml);
-    
-    //         console.log('OGtextClassPairsList', OGtextClassPairsList);
-    //     }
-    // }, [OGtextClassPairsList]);
 
     const manuallyHighlightOriginalText = (suggestionIndex, color) => {
         const classPairs = OGtextClassPairsList[suggestionIndex];
@@ -1028,7 +818,9 @@ export default function CreateResume({resumeId=null}) {
     console.log('resumeIdToRender', resumeIdToRender);
     console.log('OriginalResumeId', OriginalResumeId);
 
-    console.log('resume', resume);
+    console.log('OGtextOGinnerHTML', OGtextOGinnerHTML);
+
+    // console.log('resume', resume);
 
     return (
         <div id="CreateResume-root">
