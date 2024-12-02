@@ -257,11 +257,37 @@ export default function CreateResume({resumeId=null}) {
 
     const downloadPdf = () => {
         setResumeDownloading(true);
-        // if we have an Aid, we need to get the latest version of the resume
-        // for now we'll only allow them to download if they've saved a verion
         let resumeIdToGet = OriginalResumeId;
+    
+        const fetchPdf = (resumeId) => {
+            console.log('Resume ID to get:', resumeId);
+            api.get(`/resume/${resumeId}/pdf`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('response', response);
+                    return response.blob();
+                })
+                .then(pdfBlob => {
+                    const blobUrl = URL.createObjectURL(pdfBlob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = 'resume.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobUrl);
+                })
+                .catch(error => {
+                    console.error("Error downloading PDF:", error);
+                })
+                .finally(() => {
+                    setResumeDownloading(false);
+                });
+        };
+    
         if (Aid) {
-            // Get the latest version of the resume
             api.get(`/resume/${OriginalResumeId}/history`)
                 .then(response => response.json())
                 .then(data => {
@@ -270,46 +296,19 @@ export default function CreateResume({resumeId=null}) {
                         resumeIdToGet = data.result[data.result.length - 1].resumeId;
                         console.log('Latest Resume ID:', resumeIdToGet);
                     }
+                    fetchPdf(resumeIdToGet);
                 })
                 .catch(error => {
                     console.error('Error fetching resume history:', error);
+                    fetchPdf(resumeIdToGet); // Fallback to original resume ID if there's an error
                 });
+        } else {
+            resumeIdToGet = currentVersionResumeId || OriginalResumeId;
+            fetchPdf(resumeIdToGet);
         }
-        
-        api.get(`/resume/${resumeIdToGet}/pdf`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            console.log('response', response)
-            return response.blob(); 
-        })
-        .then(pdfBlob => {
-            // Create a URL from the Blob
-            const blobUrl = URL.createObjectURL(pdfBlob);
-
-            const link = document.createElement('a');
-            
-            link.href = blobUrl;
-
-            link.download = 'resume.pdf'; 
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            document.body.removeChild(link);
-
-            URL.revokeObjectURL(blobUrl);
-        })
-        .catch(error => {
-            console.error("Error downloading PDF:", error);
-        });
-
-        setResumeDownloading(false);
     };
 
+    
     const removePageContainer = (html) => {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
