@@ -101,6 +101,9 @@ const UserTutorial = () => {
 
                 <h3>Browser Extension</h3>
                 <p>
+                    The Browser Extension is available on the Chrome Extension Store.
+                </p>
+                <p>
                     The browser extension allows you to make applications directly from the job posting page so that you can find jobs you are a fit for quicker.
                 </p>
                 <p>
