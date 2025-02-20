@@ -1,6 +1,8 @@
 const api = (token) => {
 
-  const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:5001/api"; 
+  // const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:5001/api"; 
+  const baseUrl = import.meta.env.VITE_API_URL || "https://37hzewg4ahsanfwhneaszssnwq0deiej.lambda-url.us-west-1.on.aws/api"; 
+
 
     const headers = {
       "Content-Type": "application/json",
