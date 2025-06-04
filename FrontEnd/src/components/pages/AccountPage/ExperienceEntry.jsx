@@ -22,24 +22,38 @@ const ExperienceEntry = ({ company, position, type, description, startDate, endD
     const displayEndDate = endDate ? formatDate(parseDate(endDate)) : 'Present';
 
     return (
-        <>
+        <div className='account-page-experience'>
             <div className='hz-space-btwn'>
-                <h3 style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%', paddingRight: '4em'}}> 
+                <h3 style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%', padding: '0'}}> 
                     <span>
-                        {position}, <span style={{ fontStyle: 'italic', fontSize: '0.9em' }}>{company}</span>
-                    </span>
-                    <span>
-                        {`${formatDate(parseDate(startDate))} - ${displayEndDate}`}
+                        {position}
                     </span>
                 </h3>
                 {onEditClick && <SectionEditButton onClick={onEditClick} />}
             </div>
-            <div className='account-page-experience-entry v-center'>
-                <p style={{ textIndent: '1em' }}>
-                    <strong>{type}</strong> - {description}
+
+            <div className="v-center">
+                <h4 style={{ color: '#888', fontWeight: '400', display: 'inline' }}>{company} • {type}</h4>
+                <h4 style={{ color: '#888', fontWeight: '400', display: 'inline' }}>
+                    {`${formatDate(parseDate(startDate))} - ${displayEndDate}`}
+                </h4>
+            </div>
+
+            <div className='account-page-experience-description v-center'>
+                <p>
+                    {
+                        description
+                            .split('\n')
+                            .map((line, idx) => (
+                                <div key={idx}>
+                                    {line}
+                                    {idx < description.split('\n').length - 1 && <br />}
+                                </div>
+                            ))
+                    }
                 </p>
             </div>
-        </>
+        </div>
     );
 };
 

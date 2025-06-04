@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useApi } from "../../../hooks"; 
 
 const UploadPDFButton = ({ primaryResumeId, onSubmit }) => {
-  const [fileName, setFileName] = useState('Upload');
+  const [fileName, setFileName] = useState('Upload Resume');
   const [file, setFile] = useState(null); // Store the uploaded file
   const [isLoading, setIsLoading] = useState(false);
   const api = useApi(); 

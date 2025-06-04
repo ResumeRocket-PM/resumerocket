@@ -179,17 +179,32 @@ export default function PortfolioPage() {
 
     const [userDetails, setUserDetails] = useState('none');
 
+    const fetchUserDetails = async () => {
+        try {
+            const response = await api.get("/account/details");
+            if (response.ok) {
+                const data = await response.json();
+                setUserDetails(data.result);
+            } else {
+                console.error("Failed to fetch user details:", response);
+            }
+        } catch (error) {
+            console.error("Error fetching user details:", error);
+        }
+    }
+
     useEffect(() => {
         if (userDetails === 'none') {
-            api.get("/account/details").then(response => {
-                if (response.ok) {
-                    response.json().then(data => {
-                        setUserDetails(data.result);
-                    });
-                } else {
-                    console.error("Failed to get account details:", response);
-                }
-            });
+            fetchUserDetails();
+            // api.get("/account/details").then(response => {
+            //     if (response.ok) {
+            //         response.json().then(data => {
+            //             setUserDetails(data.result);
+            //         });
+            //     } else {
+            //         console.error("Failed to get account details:", response);
+            //     }
+            // });
         }
     }, [userDetails]);
 
@@ -295,6 +310,7 @@ export default function PortfolioPage() {
             setUserHasNoPortfolio(false);
 
             await fetchPortfolioContent();
+            await fetchUserDetails();
         } catch (error) {
             console.error("Error:", error);
         }

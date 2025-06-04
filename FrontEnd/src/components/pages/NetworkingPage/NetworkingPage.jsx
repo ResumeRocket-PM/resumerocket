@@ -1,32 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import UserCard from './UserCard'; 
 import ResumeContent from './ResumeContent'; 
 import { useApi } from "../../../hooks.js";
 import { useLocation } from 'react-router-dom'; 
 import FloatingChatButton from '../../../components/FloatChatBox.jsx';
+import '../../../styles/NetworkingPage.css'; // Assuming you have a CSS file for styles
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
+const USERS_PER_PAGE = 20; // Change this to however many users you want per page
 
 const NetworkingPage = () => {
-  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
   const [usersDetails, setUsersDetails] = useState([]);
+  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const [page, setPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const userResultsRef = useRef(null);
+  const networkingPageWrapperRef = useRef(null);
+
 
   const handleUserResultClick = (index) => {
     setSelectedUserIndex(index);
   };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    // window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (userResultsRef.current) {
+      setSelectedUserIndex(0); // Reset selected user index to the first user of the new page
+      userResultsRef.current.scrollTo({ top: 0 });
+    }
+  }, [page]);
 
   const api = useApi();
   const location = useLocation(); 
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const searchTerm = queryParams.get('query') || 'UT'; 
+    const searchTerm = queryParams.get('query') || ''; 
 
     api.postForm('/account/search', {
       searchTerm: searchTerm,
-      resultCount: 15
+      resultCount: 10000
     }).then(response => {
       if (response.ok) {
         response.json().then(data => {
           setUsersDetails(data.result);
+          setPage(1); 
           if (data.result.length > 0) {
             setSelectedUserIndex(0);
           }
@@ -37,64 +61,57 @@ const NetworkingPage = () => {
     });
   }, [location.search]);
 
-  // Get selected user's details
-  const selectedUserDetails = selectedUserIndex !== null ? usersDetails[selectedUserIndex] : {};
-  console.log(usersDetails);
+  // when networkingPageWrapperRef gets to width of 861px, set a state variable "isMobile" to true
+  useEffect(() => {
+    const handleResize = () => {
+      console.log("NetworkingPageWrapper width:", networkingPageWrapperRef.current?.offsetWidth);
+      if (networkingPageWrapperRef.current) {
+        setIsMobile(networkingPageWrapperRef.current.offsetWidth <= 861);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [networkingPageWrapperRef]);
+
+  // Pagination logic
+  const pageCount = Math.ceil(usersDetails.length / USERS_PER_PAGE);
+  const paginatedUsers = usersDetails.slice(
+    (page - 1) * USERS_PER_PAGE,
+    page * USERS_PER_PAGE
+  );
+
+  // Get selected user's details (adjusted for pagination)
+  const selectedUserDetails =
+    selectedUserIndex !== null && paginatedUsers[selectedUserIndex]
+      ? paginatedUsers[selectedUserIndex]
+      : null;
+
+  console.log("Users Details:", usersDetails);
+  console.log("Selected User Index:", selectedUserIndex);
+  console.log("isMobile:", isMobile);
+  console.log("Selected User Details:", selectedUserDetails);
 
   return (
-    <div id="networking-page-wrapper">
-      <style>
-        {`
-          #networking-page-wrapper {
-            width: 70%; /* Limit content width to 70% of the page */
-            margin: 0 auto; /* Center align the content */
-          }
-
-          #networking-page {
-            padding-top: 3rem;
-            display: flex;
-            flex-direction: row; /* Align components side by side */
-            justify-content: flex-start; /* Align items to the start */
-            align-items: flex-start; /* Align items at the start */
-          }
-
-          #networking-page-user-results {
-            flex: 0 0 300px; /* Fixed width for user results */
-            overflow-y: auto; /* Enable vertical scrolling */
-            padding: 20px; /* Padding inside the user results */
-            box-sizing: border-box; /* Include padding in width calculation */
-          }
-
-          #networking-page-user-results-content {
-            display: flex; /* Flex container for user cards */
-            flex-direction: column; /* Stack cards vertically */
-            gap: 20px; /* Space between user cards */
-          }
-
-          .user-card {
-            background-color: #fff; /* Card background color */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 15px; /* Padding inside each user card */
-          }
-
-          #networking-page-content {
-            flex: 1; /* Allow this to grow and take up remaining space */
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px; /* Padding inside the selected user info window */
-            min-height: 400px; /* Minimum height for better visibility */
-            width: calc(1200px * 0.80); /* 80% of 1200px */
-            margin-right: 30px;
-          }
-        `}
-      </style>
-
+    <div id="networking-page-wrapper" ref={networkingPageWrapperRef}>
       <div id="networking-page">
-        <div id="networking-page-user-results">
+
+        <div 
+          id="networking-page-user-results" 
+          className={isMobile ? 'mobile' : ''}
+          ref={userResultsRef} 
+          style={{ display: isMobile && selectedUserIndex !== null ? 'none' : '' }}
+        >
           <div id="networking-page-user-results-content">
-            {usersDetails.map((user, index) => (
+            {paginatedUsers.map((user, index) => (
               <UserCard
                 key={user.accountId} // Use AccountId as the key
                 userDetails={{
@@ -106,14 +123,31 @@ const NetworkingPage = () => {
                 }}
                 onClick={() => handleUserResultClick(index)}
                 isSelected={selectedUserIndex === index}
+                isMobile={isMobile}
               />
             ))}
           </div>
+          <div id='networking-page-pagination' className='hz-center'>
+            <Stack spacing={2}>
+              <Pagination
+                count={pageCount}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Stack>
+          </div>     
         </div>
+
         <ResumeContent 
-          accountId={selectedUserDetails.accountId} // Pass AccountId to ResumeContent
-          selectedUserDetails={selectedUserDetails}
+          selectedUserDetails={selectedUserDetails} 
+          isMobile={isMobile}
+          selectedUserIndex={selectedUserIndex}
         />
+
+
+
+
       </div>
       <FloatingChatButton />
     </div>

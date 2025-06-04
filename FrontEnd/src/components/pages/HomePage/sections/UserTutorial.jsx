@@ -18,7 +18,7 @@ import userChat from './images/userChat.png';
 
 const UserTutorial = () => {
     return (
-        <div>
+        <div id='user-tutorial-page'>
             <div>
                 <h1>Tutorial</h1>
                 <h2>Get Started</h2>

@@ -27,20 +27,17 @@ const EducationEntry = ({ schoolName, degree, major, minor, graduationDate, cour
         <>
             <div className='hz-space-btwn'>
 
-                <h3 style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%', paddingRight: '4em'}}> 
-                    <span>
-                        {degree}, <span style={{ fontStyle: 'italic', fontSize: '0.9em' }}>{schoolName}</span>
-                    </span>
-                    <span>
-                        {displayGraduationDate}
-                    </span>
+                <h3 style={{ display: 'inline-flex', justifyContent: 'space-between', width: '100%', padding: '0'}}> 
+                    <span>{schoolName}</span>
                 </h3>
 
                 {onEditClick && <SectionEditButton onClick={onEditClick} />}
                 
             </div>
             <div className='account-page-education-entry v-center'>
-                <p style={{ textIndent: '1em' }}>
+                {degree} • {displayGraduationDate}
+
+                <p>
                     {major} {minor ? `with a minor in ${minor}` : ''}
                 </p>
             </div>

@@ -1,59 +1,54 @@
-#networking-page-root {
-    background-color: #F1F1F1;
-    display: flex;
-    flex-direction: column; /* Ensure children are stacked vertically */
-    justify-content: start;
-    align-items: center;
-    /* padding-top: 2rem; */
-    /* height: calc(100% - 60px); /* Adjust height for navbar */
-    /* max-height: calc(100% - 60px);  */
-    /* box-sizing: border-box; */
-    /* overflow-y: hidden; */
-}
-
-#networking-page-content {
+#networking-page-wrapper {
+    width: 100%; /* Limit content width to 90% of the page */
+    /* Center align the content */
+    /* margin: 0 auto;  */
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: start;
-    height: 100%;
-    max-height: 100%;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
-/* For screens larger than 1200px */
-@media (min-width: 1200px) {
-    #networking-page-content {
-      width: calc(1200px * 0.80); /* 80% of 1200px */
+@media (min-width: 861px) {
+    #networking-page-wrapper {
+        min-width: 861px;
     }
-  }
-  
-  /* For screens between 768px and 1199px */
-  @media (min-width: 768px) and (max-width: 1199px) {
-    #networking-page-content {
-      width: calc(1000px * 0.75); /* 75% of 1000px, for example */
+}
+
+@media (max-width: 860px) {
+    #networking-page-wrapper {
+        width: 100%;
     }
-  }
-  
-  /* For screens smaller than 768px */
-  @media (max-width: 767px) {
-    #networking-page-content {
-      width: calc(600px * 0.70); /* 70% of 600px, for example */
-    }
-  }
+}
+
+#networking-page {
+    padding: 0rem .5rem 0 .5rem;
+    display: flex;
+    flex-direction: row; /* Align components side by side */
+    overflow: hidden;
+}
+
+#networking-page-content {
+    background-color: white;
+    border-right: solid 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px 20px 20px; /* Padding inside the selected user info window */
+    min-height: 400px; /* Minimum height for better visibility */
+    flex-grow: 1;
+    overflow-y: auto; 
+    scrollbar-gutter: stable;
+    box-sizing: border-box;
+}
 
 #networking-page-user-results {
-    height: 100%;
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    width: 30%;
-    /* padding: 1rem;
-    margin: 1rem; */
     background-color: white;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    box-shadow: -2px 0 2px rgba(0, 0, 0, 0.1);
+    border-left: solid 2px rgba(0, 0, 0, 0.1);
+    border-right: solid 2px rgba(0, 0, 0, 0.1);
+    padding-right: 8px; 
+    overflow-y: auto; 
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .networking-page-user-result-card {
@@ -69,41 +64,6 @@
 .networking-page-user-result-card.selected {
     background-color: lightgreen;
     border-left: 2px solid blue; 
-  }
-
-#networking-page-selected-user-info-window {
-    height: 100%;
-    max-height: 100%;
-    overflow-y: auto;
-    width: 70%;
-    background-color: white;
-    padding: 1rem;
-    box-sizing: border-box;
-}
-
-#networking-page-selected-user-info-window-content {
-    background-color: rgb(235, 227, 206);
-    /* margin: 1rem; */
-    height: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-}
-
-#networking-page-selected-user-info-window-header{
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 3rem;
-}
-
-.user-info-window-profile-photo {
-    width: 10rem;
-    height: 10rem;
-    border-radius: 50%;
-    background-color: lightgray;
-    padding: .25rem;
-    margin-right: 1rem;
 }
 
 .user-info-window-header-photo-and-name{
@@ -112,56 +72,64 @@
     align-items: end;
 }
 
-#networking-page-selected-user-info-window-body {
+#networking-page-user-results-content {
+    padding-top: 15px;
+    gap: 20px; /* Space between user cards */
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: column; /* Stack user cards vertically */
+    align-items: center;
+    overflow-y: auto;
 }
 
-#networking-page-search-bar {
-  /* display: grid;
-  grid-template-columns: 1fr 1fr 1fr; */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: .1rem .25rem .1rem .25rem;
-  width: 100%;
-  background-color:rgb(81, 118, 239);
-  box-sizing: border-box;
+#networking-page-content .account-page-view-resource-button {
+    border-radius: 8px;
+    background-color: var(--columbia-blue);
+    color: var(--oxford-blue);
+    font-weight: 450;
+    letter-spacing: 0.5px;
+    font-size: 14px;
 }
 
-#networking-page-name-search-bar-container {
-  padding: .5rem 1rem .5rem 1rem;
-}
-
-.filters-container {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  justify-content: center;
+#networking-page-content .account-page-view-resource-button:hover {
+    border: 2px solid var(--verdigris);
 }
 
 
-/* Styling for the scrollbar of the user results container */
-#networking-page-user-results {
-  scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1; /* Thumb and track colors */
-}
+/* left section is 400. gap is 1rem (16px), right section starts at 960 */
+@media (min-width: 1416px) {
+    #networking-page-user-results {
+        flex: 0 0 400px; 
+    }
+    #networking-page-content {
+        min-width: 960px; 
+        width: 960px; 
+    }
+  }
+  
+/* make 300px of new space... we'll say 70% of that goes to the right window  */
+/* so right section gets 300 * .70 = 210px, left section gets 300 * .30 = 90px */
+  @media (min-width: 1116px) and (max-width: 1415px) {
+    #networking-page-user-results {
+        flex: 0 0 310px;
+    }
+    #networking-page-content {
+        min-width: 750px; 
+        width: 750px; 
+    }
+  }
+  
+/* make 300px of new space */
+/* 310 - 90 = 220px (left). 750 - 210 = 540px (right) */
+  @media (min-width: 760px) and (max-width: 760px) {
+    #networking-page-user-results {
+        flex: 0 0 220px; 
+    }
+    #networking-page-content {
+        min-width: 540px; 
+        width: 540px;
+    }
+  }
 
-#networking-page-user-results::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-}
-
-#networking-page-user-results::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Background of the track */
-}
-
-#networking-page-user-results::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Rounded corners for the thumb */
-  border: 2px solid #f1f1f1; /* Optional border to give some space */
-}
-
-#networking-page-user-results::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* Darker thumb on hover */
+#networking-page-pagination {
+    margin: 1rem 0 3rem 0;
 }

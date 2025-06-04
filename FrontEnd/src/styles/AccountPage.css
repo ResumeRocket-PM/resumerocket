@@ -43,12 +43,45 @@
 
 }
 
-/* #account-page-profile-picture {
-    width: 10rem;
-    height: 10rem;
+.profile-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.4); /* semi-transparent grey */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.profile-edit-icon {
+    width: 2.5em;
+    height: 2.5em;
+    opacity: 0.85;
+    filter: drop-shadow(0 0 2px #fff);
+}
+
+#account-page-profile-image:hover .profile-image-overlay
+{
+    opacity: 1;
+    pointer-events: auto;
     border-radius: 50%;
-    border: 4px solid rgba(71, 113, 250, 0.5);
-} */
+}
+
+#account-page-background-image:hover .profile-image-overlay {
+    opacity: 1;
+    pointer-events: auto;
+    border-radius: 0;
+}
 
 #account-page-user-header-details {
 
@@ -62,7 +95,7 @@
     margin: 0 auto;
     padding: 1.5rem;
     border-radius: 5px;
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -76,26 +109,45 @@
 }
 
 .account-page-section-modify-button {
-    height: 2rem;
-    width: 2rem;
+    /* height: 2rem;
+    width: 2rem; */
+    /* height: 1.17em;
+    width: 1.17em; */
+}
+
+#account-page-main-header-section .account-page-section-modify-button img {
+    width: 1rem;
+    height: 1rem;
 }
 
 .account-page-section-modify-button img {
-    height: 60%;
-    width: 60%;
+    /* height: 90%;
+    width: 90%; */
 }
 
 .account-page-section-modify-button:hover {
     cursor: pointer;
     background-color: rgba(71, 113, 250, 0.5);
-    border-radius: 50%;
+    /* border-radius: 50%; */
 }
 
-.account-page-experience-entry {
-
+.account-page-experience-description {
+    padding-top: .5rem;
 }
 
 #edit-skills-save-button {
     margin-top: 1rem;
 }
 
+.account-page-experience {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: .5rem;
+    margin-bottom: .5rem;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Remove border from the last experience entry */
+.account-page-experience:last-child {
+    border-bottom: none;
+}

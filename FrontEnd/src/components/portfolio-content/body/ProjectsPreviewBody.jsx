@@ -135,7 +135,7 @@ const ProjectsPreviewBody = ({
                             <div className='hz-center h1' style={{color: portfolioContent.styles.color, textAlign: 'center'}}>
                                 {project.name}
                             </div>                            
-                            <p className='hz-center' style={{color: portfolioContent.styles.color}}>{project.description}</p>
+                            <p className='hz-center' style={{color: portfolioContent.styles.color, textAlign: 'center'}}>{project.description}</p>
                             {/* <a href={project.projectLink}>Link</a> */}
                         </div>
                     </div>

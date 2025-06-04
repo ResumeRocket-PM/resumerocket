@@ -18,6 +18,8 @@ import UploadPDFButton from './UploadPDFButton.jsx';
 import { VisuallyHiddenInput } from '../../../utils/muiHelpers';
 import { inputClasses } from '@mui/material';
 import { ImageContext } from '../../../context/ImageProvider';
+import { Chip } from '@mui/material';
+import editIcon from "../../../assets/pen-to-square-solid.svg";
 
 
 const AccountPage = () => {
@@ -82,7 +84,7 @@ const AccountPage = () => {
         updateAccount();
     }, []);
 
-    const handleChangePicture = (files, photoInput) => {
+    const handleChangeProfilePicture = (files, photoInput) => {
         if (files.length === 0) {
             return;
         }
@@ -105,7 +107,7 @@ const AccountPage = () => {
                         console.log(data);
                         const url = data.imageUrl;
                         if(photoInput === 'background-photo-input') {
-                            updateField('BackgroundImageLink', url)
+                            updateField('BackgroundPhotoLink', url)
                         } else {
                             updateField('ProfilePhotoLink', url)
                         }
@@ -141,10 +143,23 @@ const AccountPage = () => {
         else {
             setProfilePhoto(userSolidOrange);
         }
-    }, [userDetails]);
+
+        if (userDetails?.backgroundPhotoLink) {
+            const imageId = userDetails.backgroundPhotoLink.split('/').pop();
+            showImage(userDetails.backgroundPhotoLink, imageId)
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    setBackgroundPhoto(objectUrl);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+        else {
+            setBackgroundPhoto(accountBanner);
+        }    }, [userDetails]);
 
     console.log('userDetails', userDetails)
-
     console.log('profilePhoto', profilePhoto)
 
     return (
@@ -162,7 +177,8 @@ const AccountPage = () => {
                             {/* Background Image */}
                             <div 
                                 id='account-page-background-image'
-                                onClick={handleImageChangeClick}
+                                className='profile-image-container can-hover'
+                                onClick={() => handleImageChangeClick(backgroundPicInputRef)}
                                 style={{
                                     position: 'relative',
                                     height: '200px', 
@@ -173,7 +189,7 @@ const AccountPage = () => {
                             >
                                 <img 
                                     id="background-image" 
-                                    src={accountBanner} 
+                                    src={backgroundPhoto} 
                                     alt="Background" 
                                     style={{
                                         width: '100%', 
@@ -185,12 +201,15 @@ const AccountPage = () => {
                                         borderTopRightRadius: '5px', 
                                     }}
                                 />
+                                    <div className="profile-image-overlay">
+                                        <img src={editIcon} alt="Edit" className="profile-edit-icon" />
+                                    </div>
                             </div>
 
                             {/* Profile Picture */}
                             <div 
                                 id='account-page-profile-image'
-                                className='can-hover border-glow'
+                                className='can-hover profile-image-container'
                                 onClick={() => handleImageChangeClick(profilePicInputRef)}
                                 style={{
                                     position: 'absolute',
@@ -205,6 +224,7 @@ const AccountPage = () => {
                                 }}
                             >
                                 <img 
+                                    id='account-page-profile-picture'
                                     src={profilePhoto}
                                     alt="profile picture" 
                                     style={{
@@ -213,22 +233,25 @@ const AccountPage = () => {
                                         borderRadius: '50%',
                                     }}
                                 />
+                                    <div className="profile-image-overlay">
+                                        <img src={editIcon} alt="Edit" className="profile-edit-icon" />
+                                    </div>
                             </div>
 
                             <div id="account-page-main-header-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 {/* User details */}
                                 <div id='account-page-user-header-details' className='v-center' style={{ position: 'relative', zIndex: 2 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div style={{ marginTop: '1rem' }}>
                                         <h1>{userDetails.firstName} {userDetails.lastName}</h1>
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <h2>{userDetails.title}</h2>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem'}}>
+                                        <h3 style={{fontWeight: '300'}}>{userDetails.title}</h3>
                                         <SectionEditButton onClick={() => setDialogOpen('editTitle')} />
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <h3>{userDetails.location}</h3>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+                                        <h4 style={{ color: '#888', fontWeight: '300', display: 'inline' }}>{userDetails.location}</h4>
                                         <SectionEditButton onClick={() => setDialogOpen('editLocation')} />
                                     </div>
                                 </div>
@@ -268,11 +291,16 @@ const AccountPage = () => {
                             buttonType={'edit'}    
                             onButtonClick={() => setDialogOpen('Skills')}
                         >
-                            <ul>
                                 {userDetails.skills.map((skill, index) => (
-                                    <li key={index}>{skill.description}</li>
+                                    // <li key={index}>{skill.description}</li>
+                                    <Chip
+                                        key={index}
+                                        label={skill.description} // Access description correctly
+                                        color="primary"
+                                        // variant="outlined"
+                                        style={{ margin: '0.2rem' }}
+                                    />
                                 ))}
-                            </ul>
                         </AccountSectionCard>
                     </div>
 
@@ -333,7 +361,7 @@ const AccountPage = () => {
                     accept='image/*' 
                     multiple={false}
                     ref={profilePicInputRef}
-                    onChange={(event) => handleChangePicture(event.target.files, "profile-photo-input")}
+                    onChange={(event) => handleChangeProfilePicture(event.target.files, "profile-photo-input")}
                 />
                 <VisuallyHiddenInput 
                     id="background-photo-input"
@@ -341,7 +369,7 @@ const AccountPage = () => {
                     accept='image/*' 
                     multiple={false}
                     ref={backgroundPicInputRef}
-                    onChange={(event) => handleChangePicture(event.target.files, "background-photo-input")}
+                    onChange={(event) => handleChangeProfilePicture(event.target.files, "background-photo-input")}
                 />     
         </>
 

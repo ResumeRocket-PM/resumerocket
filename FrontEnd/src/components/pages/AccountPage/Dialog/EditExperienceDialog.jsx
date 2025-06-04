@@ -130,29 +130,30 @@ const EditExperienceDialog = ({ dialogOpen, setDialogOpen, experience, onClose }
                         error={!!formErrors.company}
                         helperText={formErrors.company}
                     />
-                    {/*<TextField*/}
-                    {/*    label='Position'*/}
-                    {/*    name='position'*/}
-                    {/*    value={formData.position}*/}
-                    {/*    onChange={handleChange}*/}
-                    {/*    fullWidth*/}
-                    {/*    margin='normal'*/}
-                    {/*    error={!!formErrors.position}*/}
-                    {/*    helperText={formErrors.position}*/}
-                    {/*/>*/}
-                    <ProfileDropdown
+                    <TextField
+                        label='Position'
+                        name='position'
+                        value={formData.position}
+                        onChange={handleChange}
+                        fullWidth
+                        margin='normal'
+                        error={!!formErrors.position}
+                        helperText={formErrors.position}
+                    />
+                    {/* <ProfileDropdown
                         label='Position'
                         apiUrl="careerName"
                         pxSize='20px'
                         selectedProfile={formData.position}  // Pass current schoolName as selected value
                         onProfileSelect={handleChange} // Handle the university change
-                    />
+                    /> */}
                     <FormControl fullWidth margin='normal' error={!!formErrors.type}>
                         <InputLabel>Type</InputLabel>
                         <Select
                             name='type'
                             value={formData.type}
                             onChange={handleChange}
+                            label='Type'
                         >
                             <MenuItem value="FullTime">FullTime</MenuItem>
                             <MenuItem value="PartTime">PartTime</MenuItem>

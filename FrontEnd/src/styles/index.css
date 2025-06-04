@@ -8,12 +8,25 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-height: 100%;
+  /* max-height: 100%; */
+}
+
+:root {
+  --raspberry-rose: #bd3f65ff;
+  --space-cadet: #2c304aff;
+  --oxford-blue: #01162aff;
+  --antiflash-white: #e9f0f0ff;
+  --oxford-blue-2: #051d33ff;
+  --platinum: #e1e6e8ff;
+  --light-red: #fe6368ff;
+  --paynes-gray: #586c7dff;
+  --columbia-blue: #bdcbd6ff;
+  --verdigris: #43b7beff;  
 }
 
 
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5 {
   margin: 0;
 }
 
@@ -146,3 +159,4 @@ p {
 .clickable {
   cursor: pointer;
 }
+

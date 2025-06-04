@@ -4,11 +4,13 @@ import accountBanner from '../../../assets/account-banner.png';
 import { Link } from 'react-router-dom';
 import { ImageContext } from '../../../context/ImageProvider';
 import ResumeDisplayDialog from '../ResumePages/ResumeDisplayDialog';
+import { Chip } from '@mui/material';
 
 const UserProfileHeader = ({userDetails}) => {
 
   const { showImage } = useContext(ImageContext);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [backgroundPhoto, setBackgroundPhoto] = useState(null);
   const [resumeDisplayDialogOpen, setResumeDisplayDialogOpen] = useState(false);
 
 
@@ -35,12 +37,34 @@ const UserProfileHeader = ({userDetails}) => {
     } else {
         setProfilePhoto(userSolidOrange);
     }
+
+    if (userDetails?.backgroundPhotoLink) {
+        const url = userDetails.backgroundPhotoLink;
+        const regex = /https:\/\/resumerocketimages\.blob\.core\.windows\.net\/images\/[a-f0-9-]+$/;
+        let imageId = '';
+
+        if (regex.test(url)) {
+            imageId = url.split('/').pop();
+            showImage(url, imageId)
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    setBackgroundPhoto(objectUrl);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        } else {
+            setBackgroundPhoto(url);
+        }
+    } else {
+        setBackgroundPhoto(accountBanner);
+    }
 }, [userDetails]);
 
   console.log(userDetails);
 
   return (
-    <div style={{ position: 'relative', margin: 0, padding: 0 }}>
+    <div className='account-page-section-card' style={{ position: 'relative', margin: 0, padding: 0 }}>
       {/* Background Image */}
       <div
         style={{
@@ -53,7 +77,7 @@ const UserProfileHeader = ({userDetails}) => {
       >
         <img
           id="background-image"
-          src={accountBanner} // Add accountBanner to userDetails
+          src={backgroundPhoto}
           alt="Background"
           style={{
             width: '100%',
@@ -85,32 +109,39 @@ const UserProfileHeader = ({userDetails}) => {
       />
 
       <div id="account-page-main-header-section">
-        <div id='account-page-user-header-details' className='v-center' style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h1>{userDetails.firstName} {userDetails.lastName}</h1>
-          </div>
+        <div id='account-page-user-header-details' style={{ position: 'relative', zIndex: 2, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginTop: '1rem' }}>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h2>{userDetails.title}</h2>
-          </div>
+            <div>
+              <h1>{userDetails.firstName} {userDetails.lastName}</h1>
+              <h3 style={{fontWeight: '300'}}>{userDetails.title}</h3>
+              <h4 style={{ color: '#888', fontWeight: '300', display: 'inline' }}>{userDetails.location}</h4>
+            </div>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h3>{userDetails.location}</h3>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
             {/* <Link to={`/create-resume/${userDetails.primaryResumeId}`} style={{ textAlign: 'center' }}>
                 {userDetails.primaryResumeId != null ? 'View Resume' : null }
             </Link> */}
             {userDetails.primaryResumeId && 
-              <div className="clickable" style={{textAlign: 'center', color: 'blue', textDecoration: 'underline', fontSize: '17px'}} onClick={() => setResumeDisplayDialogOpen(true)}>
-                View Resume
-              </div>
+              // <div className="clickable" style={{textAlign: 'center', color: 'blue', textDecoration: 'underline', fontSize: '17px'}} onClick={() => setResumeDisplayDialogOpen(true)}>
+              //   View Resume
+              // </div>
+
+              <Chip   
+                className='account-page-view-resource-button clickable'
+                onClick={() => setResumeDisplayDialogOpen(true)}
+                label="View Resume" 
+              />
             }
 
             {userDetails.portfolioLink &&
-              <Link to={userDetails.portfolioLink} style={{textAlign: 'center'}} target="_blank" rel="noopener noreferrer">
-                  {userDetails.portfolioLink != null ? 'View Portfolio' : null }
+              <Link to={userDetails.portfolioLink} target="_blank" rel="noopener noreferrer">
+                  {userDetails.portfolioLink != null ? 
+                    <Chip 
+                      className='account-page-view-resource-button'
+                      label="View Portfolio" 
+                    />
+                    : null 
+                  }
               </Link>
             }
 
