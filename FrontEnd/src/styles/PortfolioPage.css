@@ -4,14 +4,13 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: #F1F1F1;
+    /* background-color: #F1F1F1; */
     flex-grow: 1; /* Make it expand to fill the available space */
 
 }
 
 #portfolio_left_menu_section {
-    display: flex;
-    flex-direction: row;
+    /* display: flex; */
     height: 100%;
 }
 
@@ -19,10 +18,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100px;
+    /* width: 100px; */
     height: 100%;
     gap: 1rem;
-    background-color: #e2eaeb;
+    /* background-color: #e2eaeb; */
 }
 
 .portfolio-left_button {

@@ -1,24 +1,19 @@
 #CreateResume-root {
-    background-color: gainsboro;
+    /* background-color: gainsboro; */
+    /* background-color: aliceblue; */
+    height: 100%;
+
 }
 
-/* #CreateResume-top-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding-top: 1rem;
-    border-bottom: 2px solid black;
-} */
-
 #CreateResume-main-content {
-    height: 100%;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; /* Three columns of equal width */
     align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    /* max-height: 100%; */
+    box-sizing: border-box;
+    height: 100%;
+
+
 }
 
 #CreateResume_content.versionHistoryOpen {
@@ -33,7 +28,7 @@
     grid-template-columns: 1fr 1.75fr 1fr;
 }
 
-#col3 {
+/* #col3 {
     background-color: gainsboro;
     width : 100%;
     height: 100%;
@@ -42,7 +37,7 @@
     align-items: center;
     justify-content: center;
     gap: .5rem;
-}
+} */
 
 .version_block {
     display: flex;
@@ -71,7 +66,7 @@
 }
 
 
-#left_menu_section {
+#edit-resume-options {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -79,25 +74,28 @@
     gap: 1.5rem;
     width: 100%;
     height: 100%;
-    background-color: gainsboro;
-    margin-left: 20px;
+    /* background-color: gainsboro; */
 }
 
 /* ##### resume and suggestion stlyes ##### */
 
+#resume_section {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 #resume-and-suggestions {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 1rem;
     width: 100%;
     height: 100%;
-}
-
-#resume_section {
-    width: 100%;
-    height: 100%;
+    max-height: 100%;
 }
 
 #left-suggestions {
@@ -136,11 +134,23 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    height: 100%;
     overflow-y: auto;
+    background-color: rgba(255, 255, 255, 0.938);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, .3);
+    /* border: 2px solid #ddd; */
+    box-sizing: border-box;
+}
+
+#resume-html-container.with-suggestions {
+    margin: 0 .5rem 0 .5rem;
+}
+
+#resume-html {
+    max-height: calc(100vh - var(--navbar-height) - 1rem)
 }
 
 .ResumeFull {
-    height: 70rem;
     min-width: 54.09rem;
 }
 

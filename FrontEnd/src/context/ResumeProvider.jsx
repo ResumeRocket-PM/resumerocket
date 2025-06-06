@@ -3,6 +3,7 @@ import { useState, createContext, useEffect, useCallback } from 'react';
 const ResumeContext = createContext();
 
 const ResumeProvider = ({ children }) => {
+    // the 3 sections are: repository, edit, applications
     const [sectionSelected, setSectionSelected] = useState(localStorage.getItem('sectionSelected') || 0);
     const [messages, setMessages] = useState([{ai: "Hello, how can I help you today?"}]);
     

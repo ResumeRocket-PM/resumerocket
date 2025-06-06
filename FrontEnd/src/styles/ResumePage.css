@@ -2,91 +2,34 @@
 
 #resume-page-root {
     display: flex;
-    flex-direction: column;
-    /* justify-content: center;
-    align-items: center; */
-    flex-grow: 1;
-    /* overflow: hidden; */
+    flex-direction: row;
+    height: calc(100vh - var(--navbar-height));
+
 }
 
 #resume-page-main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
-    flex-grow: 1;
     width: 100%;
-    background-color: aliceblue;
-}
-
-#resume-tabs-container {
-    position: sticky;
-    top: 60px;
-    z-index: 999;
-    background-color: white;
+    height: 100%;
+    max-height: 100%;
+    padding: 1rem 0 0 1rem;
+    box-sizing: border-box;
 }
 
 /* ################################## */
 
 /* #### styles for SavedResumesSection.jsx ### */
 
-#resume-rows-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px;
-}
 
-.resume-row {
-    display: flex;
-    width: 100%;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-
-.resume-row.header {
-    background-color: lightgrey;
-    font-weight: bold;
-}
-
-.resume-cell {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.resume-cell.header {
-    min-width: 180px; /* Adjust this value as needed */
-}
-
-.resume-cell.header.version-header {
-    width: 25px; /* Set a specific width */
-    min-width: 25px; /* Ensure the minimum width is the same */
-    flex: none; /* Prevent the cell from growing */
-}
-
-.resume-cell.version-cell {
-    flex: none; /* Prevent the cell from growing */
-    width: 25px; /* Set the same width as the header */
-    min-width: 25px; /* Ensure the minimum width is the same */
-    border: none; /* Remove border */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.version-history-icon:hover {
-    cursor: pointer;
-    background-color: lightgrey;
-}
-
-.resume-name:hover {
-    cursor: pointer;
+.resume-page-resume-name {
     color: blue;
     text-decoration: underline;
+}
+
+.resume-page-resume-name:hover {
+    cursor: pointer;
 }
 
 /* ################################## */
@@ -137,7 +80,31 @@
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    padding: 10px;
 }
 
 /* ################################## */
+
+
+/* table styles: saved resumes and applications */
+
+.resume-page-centered-column-container {
+  /* width: 80%; */
+  min-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.resume-page-full-width-table {
+  width: 100%;
+}
+
+.resume-page-table-header-row {
+  border-bottom: 2px solid #000;
+}
+
+.resume-page-table-header-row .resume-page-filter-icon {
+    padding: 0px;
+    margin: 0px 4px 0px 4px;
+}

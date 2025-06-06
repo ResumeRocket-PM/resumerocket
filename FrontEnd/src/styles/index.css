@@ -22,6 +22,8 @@ body {
   --paynes-gray: #586c7dff;
   --columbia-blue: #bdcbd6ff;
   --verdigris: #43b7beff;  
+
+  --navbar-height: 60px;
 }
 
 
@@ -159,4 +161,3 @@ p {
 .clickable {
   cursor: pointer;
 }
-

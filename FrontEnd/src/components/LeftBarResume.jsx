@@ -6,9 +6,7 @@ export default function LeftBarResume({handleChatOpen}) {
     return (
         <Card
             className='leftBarResume'
-            sx={
-                {marginLeft: '1rem',}
-            }
+            sx={{}}
         >
             <Button
                 variant='text'

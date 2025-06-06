@@ -15,7 +15,6 @@ import AccountPage from './components/pages/AccountPage/AccountPage.jsx';
 import PortfolioContent from './components/PortfolioContent.jsx';
 import { useContext } from 'react';
 import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
-import { ResumeProvider } from './context/ResumeProvider.jsx';
 import ResumePage from './components/pages/ResumePages/ResumePage.jsx';
 import FloatingChatButton from './components/FloatChatBox';
 
@@ -82,9 +81,9 @@ function App() {
                 <Route element={<PrivateRoute><LayoutWithNavbar /></PrivateRoute>}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/about" element={<HomePage />} />
-                    <Route path="/resume" element={<ResumeProvider><ResumePage /></ResumeProvider>} />
-                    <Route path="/create-resume/:_resumeId?" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />
-                    <Route path="/create-resume/:_resumeId/:_applicationId" element={<ResumeProvider><ResumePage page={'edit'} /></ResumeProvider>} />
+                    <Route path="/resume" element={<ResumePage />} />
+                    <Route path="/create-resume/:_resumeId?" element={<ResumePage page={'edit'} />} />
+                    <Route path="/create-resume/:_resumeId/:_applicationId" element={<ResumePage page={'edit'} />} />
                     <Route path="/portfolio" element={<PortfolioEditProvider><PortfolioPage/></PortfolioEditProvider>} />
                     <Route path="/networking" element={<NetworkingPage />} />
                     <Route path="/account" element={<AccountPage />} />

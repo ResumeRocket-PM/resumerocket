@@ -362,7 +362,7 @@ export default function PortfolioPage() {
     
     return (
         <div id='PortfolioPage-root'>
-            <div id='portfolio_left_menu_section'>
+            <div className="left-menu-container">
                 <LeftMenu 
                     handlePortfolioContentChange={handlePortfolioContentChange}
                     handleSavePortfolioContent={handleSavePortfolioContent}

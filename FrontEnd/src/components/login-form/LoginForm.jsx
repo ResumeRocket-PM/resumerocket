@@ -9,11 +9,13 @@ import {useAuth} from '../../hooks.js'
 import { useApiWithoutToken } from '../../hooks.js';
 import { portfolioContentDefault } from '../../example_responses/portfolioContent.js';
 import { ImageContext } from '../../context/ImageProvider.jsx';
+import { ResumeContext } from '../../context/ResumeProvider.jsx';
 
 
 const LoginForm = () => {
   const { login } = useAuth();
   const { fetchNewSASToken } = useContext(ImageContext);
+  const { setSectionSelected } = useContext(ResumeContext);
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const api = useApiWithoutToken();
@@ -74,6 +76,7 @@ const LoginForm = () => {
             {
               console.log('data', data)
               login(data.result.jsonWebToken);
+              setSectionSelected('repository'); 
               navigate('/account', { replace: true });
               fetchNewSASToken();
             }
@@ -111,6 +114,7 @@ const LoginForm = () => {
             {
               setIncorrectPassword(false);
               login(data.result.jsonWebToken);
+              setSectionSelected('repository'); 
               navigate('/account', { replace: true });
             }
             else

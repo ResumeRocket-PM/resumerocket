@@ -69,25 +69,26 @@ const ResumePage = ({page=null}) => {
 
     return (
         <div id='resume-page-root'>
-            <div id='resume-tabs-container'>
-                <Tabs value={sectionSelected} onChange={handleChange} aria-label="icon label tabs example">
-                    <Tab sx={{ fontSize: '12px'}} icon={<FolderIcon />} label="Repository" value="repository" disableRipple />
-                    <Tab sx={{ fontSize: '12px'}} icon={<AccessTimeIcon />} label="Applications" value="applications" disableRipple />
-                    <Tab sx={{ fontSize: '12px'}} icon={<EditOutlinedIcon />} label="Edit" value="edit" disableRipple />
+            <div id='resume-tabs-container' className='left-menu-container'>
+                <Tabs
+                    value={sectionSelected}
+                    onChange={handleChange}
+                    aria-label="resume tabs"
+                    orientation="vertical"
+                >
+                        <Tab sx={{ fontSize: '12px', padding: '5px'}} icon={<FolderIcon />} label="Repository" value="repository" disableRipple />
+                        <Tab sx={{ fontSize: '12px', padding: '5px'}} icon={<AccessTimeIcon />} label="Applications" value="applications" disableRipple />
+                        <Tab sx={{ fontSize: '12px', padding: '5px'}} icon={<EditOutlinedIcon />} label="Edit" value="edit" disableRipple />
                 </Tabs>
             </div>
 
             
             <div id='resume-page-main-content'>
-                {/* {isLoading ? (
-                    <ClipLoader />
-                ) : ( */}
-                    <>
-                        {sectionSelected === 'repository' && <SavedResumesSection showResume={showResume} />}
-                        {sectionSelected === 'applications' && <ApplicationsSection />}
-                        {sectionSelected === 'edit' && <EditResumeSection resumeId={selectedResumeId} setSelectedResumeId={setSelectedResumeId}/>}
-                    </>
-                {/* )} */}
+                <>
+                    {sectionSelected === 'repository' && <SavedResumesSection showResume={showResume} />}
+                    {sectionSelected === 'applications' && <ApplicationsSection />}
+                    {sectionSelected === 'edit' && <EditResumeSection resumeId={selectedResumeId} setSelectedResumeId={setSelectedResumeId}/>}
+                </>
             </div>
         </div>
     );

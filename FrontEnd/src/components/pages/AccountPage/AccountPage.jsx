@@ -173,7 +173,7 @@ const AccountPage = () => {
                 <div id='account-page-root'>
                     <div id='account-page-content'>
 
-                    <div style={{ position: 'relative', margin: 0, padding: 0 }}>
+                    <div className="account-page-header-container" style={{ position: 'relative', margin: 0, padding: 0 }}>
                             {/* Background Image */}
                             <div 
                                 id='account-page-background-image'

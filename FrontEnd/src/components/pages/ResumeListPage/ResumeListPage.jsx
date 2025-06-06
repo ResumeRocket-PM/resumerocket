@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useApi } from "../../../hooks.js";
 import SubmitJobPosting from './SubmitJobPosting.jsx';
+import '../../../styles/ResumePage.css';
 
 const ResumeListPage = () => {
   const [filter, setFilter] = useState({ company: [], position: [], status: [] });
@@ -145,10 +146,10 @@ const ResumeListPage = () => {
   console.log('applications', applications);
 
   return (
-    <div style={{ width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 auto' }}>
-      <Table style={{ width: '100%' }}>
+    <div className="resume-page-centered-column-container">
+      <Table className="resume-page-full-width-table">
         <TableHead>
-          <TableRow style={{ borderBottom: '2px solid #000' }}>
+          <TableRow className="resume-page-table-header-row">
             <TableCell>
               <TableSortLabel
                 active={orderBy === 'applyDate'}
@@ -159,7 +160,6 @@ const ResumeListPage = () => {
               </TableSortLabel>
             </TableCell>
             <TableCell>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TableSortLabel
                   active={orderBy === 'companyName'}
                   direction={orderBy === 'companyName' ? order : 'asc'}
@@ -167,7 +167,7 @@ const ResumeListPage = () => {
                 >
                   Company
                 </TableSortLabel>
-                <IconButton onClick={handleCompanyFilterClick}>
+                <IconButton onClick={handleCompanyFilterClick} className="resume-page-filter-icon">
                   <FilterListIcon />
                 </IconButton>
                 <Menu
@@ -187,10 +187,8 @@ const ResumeListPage = () => {
                     </MenuItem>
                   ))}
                 </Menu>
-              </div>
             </TableCell>
             <TableCell>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TableSortLabel
                   active={orderBy === 'position'}
                   direction={orderBy === 'position' ? order : 'asc'}
@@ -198,7 +196,7 @@ const ResumeListPage = () => {
                 >
                   Position
                 </TableSortLabel>
-                <IconButton onClick={handlePositionFilterClick}>
+                <IconButton onClick={handlePositionFilterClick} className="resume-page-filter-icon">
                   <FilterListIcon />
                 </IconButton>
                 <Menu
@@ -218,12 +216,10 @@ const ResumeListPage = () => {
                     </MenuItem>
                   ))}
                 </Menu>
-              </div>
             </TableCell>
             <TableCell>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
                 Status
-                <IconButton onClick={handleStatusFilterClick}>
+                <IconButton onClick={handleStatusFilterClick} className="resume-page-filter-icon">
                   <FilterListIcon />
                 </IconButton>
                 <Menu
@@ -243,7 +239,6 @@ const ResumeListPage = () => {
                     </MenuItem>
                   ))}
                 </Menu>
-              </div>
             </TableCell>
             <TableCell>Resume</TableCell>
           </TableRow>
@@ -269,11 +264,9 @@ const ResumeListPage = () => {
                   </Select>
                 </FormControl>
               </TableCell>
-
-              
               <TableCell>
-                <Link to={`/create-resume/${row.resumeContentId}/${row.applicationId}`}  align='center'>
-                  { 'View' }
+                <Link to={`/create-resume/${row.resumeContentId}/${row.applicationId}`} align='center'>
+                  {'View'}
                 </Link>
               </TableCell>
             </TableRow>
