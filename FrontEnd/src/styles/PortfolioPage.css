@@ -9,20 +9,17 @@
 
 }
 
-#portfolio_left_menu_section {
-    /* display: flex; */
-    height: 100%;
-}
-
 #portfolio-left_menu_buttons_container {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start; */
     /* width: 100px; */
-    height: 100%;
+    /* height: 100%; */
     gap: 1rem;
     /* background-color: #e2eaeb; */
+    box-sizing: border-box;
 }
+
 
 .portfolio-left_button {
     display: flex;
@@ -31,6 +28,10 @@
     margin-top: .2rem;
     margin-bottom: 2rem;
     width: 100%;
+}
+
+#portfolio-left_menu_buttons_container .portfolio-left-button-selected {
+    color: var(--light-red);
 }
 
 .portfolio-left_button:first-of-type {
@@ -48,8 +49,7 @@
     margin: 0;
 }
 
-
-#portfolio-popout_section {
+.portfolio-popout_section {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -57,8 +57,26 @@
     flex-wrap: wrap;
     width: 200px;
     height: 100%;
-    background-color: lightgray;
+    /* background-color: lightgray; */
+    background-color: aliceblue;
     gap: 0;
+
+    /* padding-right: 4px; */
+    /* z-index: 1; */
+    box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.1);
+
+    /* position: fixed;       */
+    top: 0;
+    left: 100px;            
+    transform: translateX(-100%);
+    transition: transform .2s cubic-bezier(.4,0,.2,1);
+}
+/* this doesn't work becuase of the conditions we have to render the popout 
+sections. the conditions make the popouts invisible/not rendered, 
+it takes little bit to render them so the slide doesn't work. 
+but removing the conditions will cause problems if you navigate away then back */
+.portfolio-popout_section.open {
+    transform: translateX(0);
 }
 
 #portfolio-backdrop {

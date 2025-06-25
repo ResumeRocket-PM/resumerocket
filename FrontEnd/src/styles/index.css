@@ -12,6 +12,7 @@ body {
 }
 
 :root {
+  --purple-heart: #8d2c60ff;
   --raspberry-rose: #bd3f65ff;
   --space-cadet: #2c304aff;
   --oxford-blue: #01162aff;
@@ -160,4 +161,28 @@ p {
 
 .clickable {
   cursor: pointer;
+}
+
+#root .base-button-colors {
+  /* background-color: var(--oxford-blue-2);
+  color: var(--light-red); */
+
+  color: var(--oxford-blue-2);
+  background-color: var(--light-red);
+}
+
+#root .base-button-colors-transparent-w-outline {
+  /* background-color: var(--oxford-blue-2);
+  color: var(--light-red); */
+
+  color: var(--oxford-blue-2);
+  border: 1px solid var(--light-red);
+}
+
+.vertical-warm-text-gradient {
+    background: linear-gradient(0deg, var(--purple-heart)20%, var(--light-red)80%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }

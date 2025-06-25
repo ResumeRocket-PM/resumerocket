@@ -29,6 +29,21 @@
     gap: 1rem;
 }
 
+#pages-button-header {
+    padding: 0 .5rem 0 .5rem;
+    background-color: aliceblue;
+}
+
+#portfolio-lm-pages .portfolio-lm-pages-project {
+    padding: .5rem;
+    background-color: aliceblue;
+}
+
+#portfolio-lm-pages .pages-block {
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+}
+
 /* .portfolio-lm-user-page-container {
     padding-left: '39px';
     background-color: white;
@@ -44,9 +59,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: .5rem 0 .5rem 0;
+    padding: .5rem .5rem .5rem .5rem;
     /* border-radius: 5px; */
-    background-color: white;
+    /* background-color: white; */
 }
 
 .portfolio-lm-user-page:hover {
@@ -63,8 +78,6 @@
     background-color: #d3d3d3;
     cursor: pointer;
 }
-
-
 
 #portfolio-lm-pages-addpage-options {
     display: grid;

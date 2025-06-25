@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // which means it will send another param - OriginalResume = true - with each request
 
 // the resume param is already html for the resume
-const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoading, resumeDoneEditing, afterVersionSave, reloadVersionHistory, saveSuggestionStatuses}) => {
+const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoading, resumeDoneEditing, afterVersionSave, reloadVersionHistory, saveSuggestionStatuses, removeHighlightFromCurrentSuggestion}) => {
 
   const [fileName, setFileName] = useState('Upload');
   const [file, setFile] = useState(null); // Store the uploaded file
@@ -18,7 +18,9 @@ const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoadin
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append("ResumeHtmlString", resume); // Append the ResumeHtmlString to FormData
+    // formData.append("ResumeHtmlString", resume); // Append the ResumeHtmlString to FormData
+    const resumeWithoutHighlights = removeHighlightFromCurrentSuggestion(resume); // Remove highlights from the resume
+    formData.append("ResumeHtmlString", resumeWithoutHighlights); // Append the cleaned resume to FormData
 
     setVersionIsUploading(true); // Show loading indicator
     console.log('formData', formData);
@@ -63,6 +65,7 @@ const AddVersionToResumeHistoryButton = ({resume, originalResumeId, resumeLoadin
         onClick={handleSubmit} 
         disabled={versionIsUploading || resumeLoading || !resumeDoneEditing} 
         style={{ position: 'relative' }} // Make button relative to position the spinner
+        className='base-button-colors'
       >
         {versionIsUploading && (
           <CircularProgress 

@@ -242,16 +242,16 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
             {portfolioPages && Object.keys(portfolioPages).map((page, index) => (
                 <div key={index}>
                     {page === 'projects' ? (
-                        <Accordion expanded={pagesAccordionExpanded} onChange={() => setPagesAccordionExpanded(!pagesAccordionExpanded)}>
+                        <Accordion expanded={pagesAccordionExpanded} onChange={() => setPagesAccordionExpanded(!pagesAccordionExpanded)} className='pages-block'>
                             <AccordionSummary aria-controls="pages-button-content" id="pages-button-header">
                                 <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
                             </AccordionSummary>
-                            <MuiAccordionDetails>
+                            <MuiAccordionDetails className='portfolio-lm-pages-project'>
                                 {portfolioPages[page].projectsData.map((project, idx) => (
                                     <React.Fragment key={idx}>
-                                        <div className='portfolio-lm-pages-project hz-space-btwn'>
+                                        <div className='hz-space-btwn'>
                                             <Typography
-                                                sx={{width: "100%", "&:hover": {cursor: 'pointer', backgroundColor: 'lightblue'}}}
+                                                sx={{width: "100%", "&:hover": {cursor: 'pointer'}}}
                                                 onClick={() => handlePageChange(`project${idx}`)}
                                             >
                                                 {project.name}
@@ -300,18 +300,21 @@ const PagesContent = ({handlePortfolioContentChange, setSelectedPage, portfolioP
                     ) : (
                         page !== 'projectsPreview' && (
                             <React.Fragment key={index}>
-                                <div className='portfolio-lm-user-page' onClick={() => handlePageChange(page)}>
+                                <div className='portfolio-lm-user-page pages-block' onClick={() => handlePageChange(page)}>
                                     <Typography>{page.charAt(0).toUpperCase() + page.slice(1)}</Typography>
-                                    <img 
-                                        className='portfolio-lm-pages-options-icon'
-                                        src={ellipsisIcon} 
-                                        alt="options" 
-                                        onClick={(event) => {
-                                            event.stopPropagation();
-                                            handlePageOptionsClick(event, page);
-                                        }}
-                                        style={{}}
-                                    />
+                                    { page !== 'about' && (
+                                        <img 
+                                            className='portfolio-lm-pages-options-icon'
+                                            src={ellipsisIcon} 
+                                            alt="options" 
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                handlePageOptionsClick(event, page);
+                                            }}
+                                            style={{}}
+                                        />
+                                    )}
+
                                 </div>
 
                                 <Popover

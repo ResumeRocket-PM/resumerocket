@@ -16,9 +16,16 @@
 .left-menu-container {
     height: 100%;
     box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.1);
-    z-index: 1;
+    z-index: 2;
     min-width: 100px;
     background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    border-right: 1px solid lightgray;
+}
 
+.glossy-background {
+      background: linear-gradient(to bottom, #ffffff, #e0e0e0); /* soft gloss effect */
 }
 

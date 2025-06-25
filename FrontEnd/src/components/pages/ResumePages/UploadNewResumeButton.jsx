@@ -58,6 +58,7 @@ const UploadNewResumeButton = ({loadPage}) => {
         onClick={handleUploadClick} 
         disabled={isLoading} 
         style={{ position: 'relative' }} // Make button relative to position the spinner
+        className='base-button-colors'
       >
         {isLoading && (
           <CircularProgress 

@@ -21,8 +21,18 @@ const ResumePage = ({page=null}) => {
     // const [value, setValue] = useState('repository');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {sectionSelected, setSectionSelected } = useContext(ResumeContext);
-    const [selectedResumeId, setSelectedResumeId] = useState(null);
+    const {sectionSelected, setSectionSelected} = useContext(ResumeContext);
+    const {
+        selectedOriginalResumeId, 
+        setSelectedOriginalResumeId,
+        selectedResumeId, 
+        setSelectedResumeId, 
+        selectedApplicationId, 
+        setSelectedApplicationId
+    } = useContext(ResumeContext);
+    
+
+    // const [selectedResumeId, setSelectedResumeId] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -57,15 +67,16 @@ const ResumePage = ({page=null}) => {
     };
 
     const showResume = (resumeId) => {
-        setSelectedResumeId(resumeId);
+        setSelectedApplicationId(null);
+        setSelectedOriginalResumeId(resumeId);
         setSectionSelected('edit');
         console.log('showResume resumeId', resumeId);
     };
 
-    useEffect(() => {
-        console.log('sectionSelected', sectionSelected);
-        console.log('selectedResumeId', selectedResumeId);
-    }, [sectionSelected, selectedResumeId]);
+    // useEffect(() => {
+    //     console.log('sectionSelected', sectionSelected);
+    //     console.log('selectedResumeId', selectedResumeId);
+    // }, [sectionSelected, selectedResumeId]);
 
     return (
         <div id='resume-page-root'>
@@ -87,7 +98,7 @@ const ResumePage = ({page=null}) => {
                 <>
                     {sectionSelected === 'repository' && <SavedResumesSection showResume={showResume} />}
                     {sectionSelected === 'applications' && <ApplicationsSection />}
-                    {sectionSelected === 'edit' && <EditResumeSection resumeId={selectedResumeId} setSelectedResumeId={setSelectedResumeId}/>}
+                    {sectionSelected === 'edit' && <EditResumeSection resumeId={selectedOriginalResumeId} />}
                 </>
             </div>
         </div>

@@ -13,6 +13,9 @@ import ForumIcon from "@mui/icons-material/Forum";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Menu, MenuItem } from "@mui/material";
 import { useAuth } from '../hooks.js';
+// import RR_logo from '../assets/RR_logo1.png';
+import RR_Logo_Simple from '../assets/RR_Logo_Simple.svg';
+
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -48,7 +51,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (location.pathname.includes('/resume-list')) setActiveNavLink('/resume-list');
+    if (location.pathname.includes('/resume')) setActiveNavLink('/resume');
     else if (location.pathname.includes('/portfolio')) setActiveNavLink('/portfolio');
     else if (location.pathname.includes('/networking')) setActiveNavLink('/networking');
     else setActiveNavLink(null);
@@ -60,8 +63,9 @@ export default function Navbar() {
     <>
       <nav id="navbar">
         <Link to="/" id="logo_name">
-          <img id="logo" src={rocket} alt="logo" />
-          <h1 id="brand_name">Resume Rocket</h1>
+          <img id="logo" src={RR_Logo_Simple} alt="logo" />
+          <h1 className="brand_name" style={{color: 'black'}}>Resume </h1>
+          <h1 className="brand_name vertical-warm-text-gradient">Rocket</h1>
         </Link>
 
         <div id="nav_links">

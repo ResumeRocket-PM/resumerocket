@@ -82,7 +82,7 @@ const api = (token) => {
           });
       };
   
-    return { get, post, postForm, postFileForm, put };
+    return { get, post, postForm, postFileForm, put, baseUrl };
   };
   
   export default api;

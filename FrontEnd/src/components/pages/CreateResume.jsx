@@ -1,14 +1,18 @@
 import "../../styles/CreateResume.css";
 import PropTypes from 'prop-types';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import LeftBarResume from '../LeftBarResume.jsx';
 import { Card, CardContent, Dialog, Button} from '@mui/material/';
 import Chat from '../Chat.jsx';
 import { useApi } from "../../hooks.js";
 import { ClipLoader } from "react-spinners";
-import { debounce, set } from 'lodash';
+import { debounce, replace, set } from 'lodash';
 import AddVersionToResumeHistoryButton from './ResumePages/AddVersionToResumeHistoryButton.jsx';
+import CardCycler from './ResumePages/CardCycler.jsx';
+import { ResumeContext } from '../../context/ResumeProvider.jsx';
+import { toast, ToastContainer } from 'react-toastify';
+
 
 function ShareDialog(props) {
 
@@ -32,19 +36,9 @@ ShareDialog.propTypes = {
     open: PropTypes.bool.isRequired,
   };
 
-function SuggestionBox({ suggestion, classPairs, calculateTopPosition, applySuggestion, undoSuggestion, manuallyHighlightOriginalText, index }) {
+function SuggestionBox({ suggestion, applySuggestion, undoSuggestion, index }) {
     const [seeExplanation, setSeeExplanation] = useState(false);
     const [applyButtonState, setApplyButtonState] = useState('Apply');
-
-    const handleMouseEnter = () => {
-        console.log('mouse enter');
-        manuallyHighlightOriginalText(index, 'yellow');
-    };
-
-    const handleMouseLeave = () => {
-        console.log('mouse leave');
-        manuallyHighlightOriginalText(index, 'transparent');
-    };
 
     const handleApplyButtonClick = () => {
         if (applyButtonState === 'Apply') {
@@ -59,7 +53,7 @@ function SuggestionBox({ suggestion, classPairs, calculateTopPosition, applySugg
     // console.log('applyButtonState', applyButtonState);
 
     return (
-        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div>
             <Card key={index} className="suggestion-box">
                 <CardContent sx={{ padding: '1rem 1rem 1rem 1rem' }}>
                     <div className="suggestion-box-content">
@@ -67,28 +61,23 @@ function SuggestionBox({ suggestion, classPairs, calculateTopPosition, applySugg
                         <div className="suggestion-box-text">{suggestion.originalText}</div>
                         <p className="weight-bold underline">Suggested Text:</p>
                         <div className="suggestion-box-text">{suggestion.modifiedText}</div>
-                        {seeExplanation && (
-                            <>
-                                <div className="weight-bold underline">Explanation: </div>
-                                <div className="suggestion-box-explanation">{suggestion.explanationString}</div>
-                            </>
-                        )}
                     </div>
                     <div className="hz-space-btwn">
                         <Button
                             sx={{ padding: '0' }}
-                            onClick={() => {
-                                setSeeExplanation(!seeExplanation);
-                                if (seeExplanation) {
-                                    manuallyHighlightOriginalText(index, 'transparent');
-                                }
-                            }}
+                            onClick={() => { setSeeExplanation(!seeExplanation) }}
                         >
                             {!seeExplanation ? 'See Explanation' : 'Hide Explanation'}
                         </Button>
                         <Button sx={{ padding: '0' }} onClick={handleApplyButtonClick}>
                             {applyButtonState}
                         </Button>
+                    </div>
+                    <div
+                        className={`suggestion-explanation-slide ${seeExplanation ? 'open' : ''}`}
+                    >
+                        <div className="weight-bold underline">Explanation: </div>
+                        <div className="suggestion-box-explanation">{suggestion.explanationString}</div>
                     </div>
                 </CardContent>
             </Card>
@@ -103,6 +92,20 @@ export default function CreateResume({resumeId=null}) {
     const OriginalResumeId = resumeId || _resumeId; // use resumeId if provided, otherwise use id from URL
     const Aid = _applicationId; // use applicationId if provided, otherwise null
     const [resumeIdToRender, setResumeIdToRender] = useState(OriginalResumeId);
+    const {selectedResumeId, setSelectedResumeId, selectedApplicationId, setSelectedApplicationId} = useContext(ResumeContext);
+
+    useEffect(() => {
+        setSelectedApplicationId(Aid);
+    },[])
+
+    useEffect(() => {
+        setSelectedResumeId(OriginalResumeId);
+    }, [])
+
+    // useEffect(() => {
+        
+    // })
+
     const [currentVersionResumeId, setCurrentVersionResumeId] = useState(null);
 
     const api = useApi();
@@ -110,6 +113,7 @@ export default function CreateResume({resumeId=null}) {
 
     const [error, setError] = useState(null);
     const [resume, setResume] = useState(null);
+    const [displayResume, setDisplayResume] = useState(null);
     const [chatOpen, setChatOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [targetRect, setTargetRect] = useState(null);
@@ -128,8 +132,6 @@ export default function CreateResume({resumeId=null}) {
 
     const [resumeWithoutPageContainer, setResumeWithoutPageContainer] = useState(null);
 
-    // ################## new stuff ##################
-
     const editorRef = useRef(null);
     const log = () => {
       if (editorRef.current) {
@@ -141,6 +143,22 @@ export default function CreateResume({resumeId=null}) {
 
     // ###############################################
     const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
+
+    const mainContentRef = useRef(null);
+    const [mainContentHeight, setMainContentHeight] = useState(0);
+
+    // useEffect to keep track of chatContainerRef height
+    useEffect(() => {
+        function updateHeight() {
+            if (mainContentRef.current) {
+                setMainContentHeight(mainContentRef.current.offsetHeight);
+            }
+        }
+        updateHeight();
+        window.addEventListener('resize', updateHeight);
+        return () => window.removeEventListener('resize', updateHeight);
+    }, []);
+
 
     const handleResize = () => {
         if (iframeRef.current) {
@@ -155,14 +173,15 @@ export default function CreateResume({resumeId=null}) {
 
         // for now just made another useEffect to apply the applied suggestions 
 
-        if(resumeIdToRender !== undefined)
+        if(selectedResumeId !== undefined)
         {
-            api.get(`/resume/${resumeIdToRender}`)
+            api.get(`/resume/${selectedResumeId}`)
             .then(response => response.json())
             .then(data => {
                 // console.log('data', data);
                 // setResume(removePageContainer(data.result));
                 setResume(data.result);
+                setDisplayResume(data.result);
                 const resumeWithoutPageContainer = removePageContainer(data.result);
                 setResumeWithoutPageContainer(resumeWithoutPageContainer);
 
@@ -185,9 +204,9 @@ export default function CreateResume({resumeId=null}) {
     }
 
     const tryLoadSuggestions = () => {
-        if(Aid) {
+        if(selectedApplicationId) {
             setSuggestionsLoading(true);
-            api.get(`/resume/${Aid}/suggestions`)
+            api.get(`/resume/${selectedApplicationId}/suggestions`)
             .then(response => response.json())
             .then(data => {
                 // console.log('suggestions', data);
@@ -202,7 +221,7 @@ export default function CreateResume({resumeId=null}) {
     }
 
     const loadVersionHistory = () => {
-        if(!Aid) {
+        if(!selectedApplicationId) {
             api.get(`/resume/${OriginalResumeId}/history`)
             .then(response => response.json())
             .then(data => {
@@ -219,8 +238,8 @@ export default function CreateResume({resumeId=null}) {
     };
 
     useEffect(() => {
-        if (!Aid) {
-            setResumeIdToRender(currentVersionResumeId || OriginalResumeId);
+        if (!selectedApplicationId) {
+            setSelectedResumeId(currentVersionResumeId || OriginalResumeId);
         }
     }, [currentVersionResumeId]);
 
@@ -229,25 +248,12 @@ export default function CreateResume({resumeId=null}) {
         loadResume()
         tryLoadSuggestions()
         loadVersionHistory()    
-    }, [resumeIdToRender]);    
-
-    const handleShareDialogOpen = () => {
-        setShareDialogOpen(true);
-    }   
-
-    const handleChatOpen = () => {
-        /* make call to send initial resume and job posting over */
-        setChatOpen(!chatOpen);
-    }
-
-    const handleVersionHistoryOpen = () => {
-        setVersionHistoryOpen(!versionHistoryOpen);
-    }
+    }, [selectedResumeId]);  
 
     const afterVersionSave = (newResumeId) => {
         // update the resumeId in the url
-        if(Aid) {
-            window.history.pushState({}, null, `/create-resume/${newResumeId}/${Aid}`);
+        if(selectedApplicationId) {
+            window.history.pushState({}, null, `/create-resume/${newResumeId}/${selectedApplicationId}`);
         }
     }
 
@@ -281,13 +287,17 @@ export default function CreateResume({resumeId=null}) {
                 })
                 .catch(error => {
                     console.error("Error downloading PDF:", error);
+                    toast.error('problem downloading PDF');
+
                 })
                 .finally(() => {
                     setResumeDownloading(false);
+                    toast.success('successfully downloaded PDF');  
+                    
                 });
         };
     
-        if (Aid) {
+        if (selectedApplicationId) {
             api.get(`/resume/${OriginalResumeId}/history`)
                 .then(response => response.json())
                 .then(data => {
@@ -328,7 +338,8 @@ export default function CreateResume({resumeId=null}) {
 
     const debouncedSetResume = useCallback(
         debounce((newHtml) => {
-            setResume(newHtml);
+            // setResume(newHtml);
+            setDisplayResume(newHtml);
         }, 1000),
         []
     );
@@ -346,7 +357,7 @@ export default function CreateResume({resumeId=null}) {
     }
 
     const saveSuggestionStatuses = () => {
-        if (Aid) {
+        if (selectedApplicationId) {
             // Create an array of SuggestionStatus objects
             const suggestionStatuses = suggestionsApplied.map((suggestionApplied, index) => ({
                 resumeChangeId: suggestions[index].resumeChangeId, // Assuming each suggestion has an 'id' property
@@ -361,7 +372,7 @@ export default function CreateResume({resumeId=null}) {
             console.log("Request Body: ", JSON.stringify(requestBody)); // Log to check body structure
     
             // Send the PUT request with the formatted request body
-            api.put(`/resume/${Aid}/suggestions`, requestBody)
+            api.put(`/resume/${selectedApplicationId}/suggestions`, requestBody)
                 .then(response => {
                     console.log('Response from API:', response);
                 })
@@ -382,7 +393,8 @@ export default function CreateResume({resumeId=null}) {
 
         const parser = new DOMParser();
         const serializer = new XMLSerializer();
-        const doc = parser.parseFromString(resume, 'text/html');
+        // const doc = parser.parseFromString(resume, 'text/html');
+        const doc = parser.parseFromString(displayResume, 'text/html');
         const divs = doc.querySelectorAll('div');
     
         // const targetDiv = doc.querySelector('#pf1 > div.pc.pc1.w0.h0 > div.c.xb.y5a.w30.h1 > div');
@@ -600,7 +612,8 @@ export default function CreateResume({resumeId=null}) {
             
                     targetDiv.innerHTML = newText;
                     const newHtml = serializer.serializeToString(doc);
-                    setResume(newHtml);
+                    // setResume(newHtml);
+                    setDisplayResume(newHtml); // set the display resume to the new html with modified text
                 }
             });
         }
@@ -620,7 +633,9 @@ export default function CreateResume({resumeId=null}) {
         // reset the div using the suggestionOGInnerHTML
         const parser = new DOMParser();
         const serializer = new XMLSerializer();
-        const doc = parser.parseFromString(resume, 'text/html');
+        // const doc = parser.parseFromString(resume, 'text/html');
+        const doc = parser.parseFromString(displayResume, 'text/html');
+
         const divs = doc.querySelectorAll('div');
         // const suggestion = suggestions[index];
         const classPairs = OGtextClassPairsList[index];
@@ -633,7 +648,8 @@ export default function CreateResume({resumeId=null}) {
                     const targetDiv = div;
                     targetDiv.innerHTML = OGhtmlArr[OGhtmlArrIndex];                                                            
                     const newHtml = serializer.serializeToString(doc);
-                    setResume(newHtml);
+                    // setResume(newHtml);
+                    setDisplayResume(newHtml);
                     OGhtmlArrIndex++;
                 }
             });
@@ -720,19 +736,19 @@ export default function CreateResume({resumeId=null}) {
     }
 
     const highlightClasses = (classPairs, doc, color="yellow") => {
-        // const classPairs = findOriginalTextDivClasses(originalText);
-        const divs = doc.querySelectorAll('div');
-    
+        let replacedText = false;
+
+        const divs = doc.querySelectorAll('div');    
         divs.forEach(div => {
             classPairs.forEach(pair => {
                 if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
                     div.style.backgroundColor = color; // Highlight the div
+                    replacedText = true;
                 }
             });
         });
-    
 
-        return(doc);
+        return [doc, replacedText];
     }        
 
     // get the class pairs of the original text
@@ -769,57 +785,71 @@ export default function CreateResume({resumeId=null}) {
         if(!suggestionsLoading && !resumeLoading && OGtextClassPairsList.length > 0) {
             suggestions.forEach((suggestion, index) => {
                 if (suggestion.accepted) {
-                    applySuggestion(index);
+                    // applySuggestion(index);
                 }
             });
         }
     }, [resumeLoading, suggestionsLoading, OGtextClassPairsList]);
 
-    const manuallyHighlightOriginalText = (suggestionIndex, color) => {
-        const classPairs = OGtextClassPairsList[suggestionIndex];
+    const manuallyHighlightOriginalText = (suggestionIndexes) => {
+        let replacedText = false;
         const parser = new DOMParser();
-        const doc = parser.parseFromString(resume, 'text/html');
-        const newDoc = highlightClasses(classPairs, doc, color);
-        const serializer = new XMLSerializer();
-        const newHtml = serializer.serializeToString(newDoc);
-        setResume(newHtml);
-    }
+        let doc = parser.parseFromString(displayResume, 'text/html');
 
-    const calculateTopPosition = (classPairs) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(resume, 'text/html');
-        const divs = doc.querySelectorAll('div');
-    
-        let topPosition = 0;
-    
-        divs.forEach(div => {
-            classPairs.forEach(pair => {
-                if (div.parentElement && div.parentElement.className === pair.grandparentClass && div.className === pair.parentClass) {
-                    const rect = div.getBoundingClientRect();
-                    topPosition = rect.top + window.scrollY;
-                }
-            });
+        suggestionIndexes.forEach((suggestionIndex, i) => {
+            const classPairs = OGtextClassPairsList[suggestionIndex];
+            const color = i === 0 ? 'yellow' : 'transparent'; // alternate colors for each suggestion
+            const [newDoc, didReplace] = highlightClasses(classPairs, doc, color);
+            doc = newDoc; 
+            if (didReplace) replacedText = true;
         });
-    
-        return topPosition;
+
+        const serializer = new XMLSerializer();
+        const newHtml = serializer.serializeToString(doc);
+        // setResume(newHtml);
+        setDisplayResume(newHtml); // set the display resume to the new html with highlighted classes
+
+        return replacedText;
     }
 
     const updateResumeView = (resumeId) => {
         setCurrentVersionResumeId(resumeId);
     };
 
-    console.log('suggestions', suggestions);
+    const removeHighlightFromCurrentSuggestion = () => {
+        // remove the highlight from the current suggestion
+        const parser = new DOMParser();
+        let doc = parser.parseFromString(displayResume, 'text/html');
+        const suggestionIndexes = suggestions.map((_, index) => index);
+        suggestionIndexes.forEach((suggestionIndex, i) => {
+            const classPairs = OGtextClassPairsList[suggestionIndex];
+            const [newDoc, didReplace] = highlightClasses(classPairs, doc, 'transparent');
+            doc = newDoc; 
+        });
+
+        const serializer = new XMLSerializer();
+        const newHtml = serializer.serializeToString(doc);
+        // setResume(newHtml);
+        // setDisplayResume(newHtml); // set the display resume to the new html with highlighted classes
+
+        return newHtml;
+    };
+
+
+    // console.log('suggestions', suggestions);
     // console.log('suggestions.resumeSuggestions', suggestions);
-    console.log('OGtextClassPairsList', OGtextClassPairsList);
+    // console.log('OGtextClassPairsList', OGtextClassPairsList);
     // console.log('suggestionsApplied', suggestionsApplied);
 
-    console.log('currentVersionResumeId', currentVersionResumeId);
-    console.log('resumeIdToRender', resumeIdToRender);
-    console.log('OriginalResumeId', OriginalResumeId);
+    // console.log('currentVersionResumeId', currentVersionResumeId);
+    // console.log('selectedResumeId', selectedResumeId);
+    // console.log('OriginalResumeId', OriginalResumeId);
 
-    console.log('OGtextOGinnerHTML', OGtextOGinnerHTML);
+    // console.log('OGtextOGinnerHTML', OGtextOGinnerHTML);
 
     // console.log('resume', resume);
+
+    console.log('chatOpen', chatOpen);
 
     return (
         <div id="CreateResume-root">
@@ -829,63 +859,36 @@ export default function CreateResume({resumeId=null}) {
                     versionHistoryOpen ? "versionHistoryOpen" :
                     chatOpen ? "chatOpen" : ""
                 }
+                ref={mainContentRef}
             >
-                <div id='edit-resume-options'>
-                    <LeftBarResume
-                        handleChatOpen={handleChatOpen}
-                    />
-    
-                    <Button
-                        variant="contained"
-                        onClick={downloadPdf}
-                        disabled={!resume || resumeDownloading}
-                    >
-                        Download Pdf
-                    </Button>
+                <div id='edit-left-section'>
+                    <div className="hz-center" style={{gap: '1rem', width: '100%'}}>
+                        <Button
+                            variant="contained"
+                            onClick={downloadPdf}
+                            disabled={!resume || resumeDownloading}
+                            className='base-button-colors'
+                        >
+                            Download Pdf
+                        </Button>
                         <AddVersionToResumeHistoryButton
-                            resume={resume}
+                            resume={displayResume}
                             resumeLoading={resumeLoading}
                             resumeDoneEditing={resumeDoneEditing}
                             originalResumeId={OriginalResumeId}
                             afterVersionSave={afterVersionSave}
                             saveSuggestionStatuses={saveSuggestionStatuses}
                             reloadVersionHistory={loadVersionHistory}
+                            removeHighlightFromCurrentSuggestion={removeHighlightFromCurrentSuggestion}
                         />
-
-                    {!Aid && // 
-                        <div>
-                            <div className='v-center'>
-                                <h3 className='hz-center'>Version History</h3>
-                                    <div 
-                                        className={[
-                                            'version_block',
-                                             resumeIdToRender === OriginalResumeId ? 'selected' : 'not-selected'
-                                        ].join(' ')}
-                                        onClick={() => updateResumeView(OriginalResumeId)}
-                                    >
-                                        Original
-                                    </div>
-                                        {versionHistory?.map((version, index) => (
-                                        <div 
-                                            key={index} 
-                                            className={[
-                                                'version_block',
-                                                resumeIdToRender === version.resumeId ? 'selected' : 'not-selected'
-                                            ].join(' ')}
-                                            onClick={() => updateResumeView(version.resumeId)}>
-                                            Version: {index}--{version.resumeId}
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
-                    }
-                    {
-                        chatOpen && 
+                    </div>
+                    <div className="hz-center" style={{width: '100%', height: '100%', alignItems: 'start'}}>
                         <Chat
-                            resumeId={resumeIdToRender}
-                            applicationId={Aid}
+                            resumeId={selectedResumeId}
+                            applicationId={selectedApplicationId}
+                            mainContentHeight={mainContentHeight}
                         />
-                    }
+                    </div>
                 </div>
                 <div id='resume_section'>
                     {resumeLoading ? (
@@ -893,68 +896,68 @@ export default function CreateResume({resumeId=null}) {
                     ) : (
                         !versionHistoryOpen && (
                             <div id='resume-and-suggestions'>
-                                <div id='left-suggestions'>
-                                    {!suggestionsLoading && suggestions.length > 0 &&
-                                        suggestions.map((suggestion, index) => {
-                                            if (
-                                                index < 3 &&
-                                                // suggestion?.modifiedText.length < suggestion?.originalText.length &&
-                                                OGtextClassPairsList[index]?.length > 0 &&
-                                                !suggestion?.accepted
-                                            ) {
-                                                return (
-                                                    <SuggestionBox
-                                                        key={index}
-                                                        suggestion={suggestion}
-                                                        classPairs={OGtextClassPairsList[index]}
-                                                        calculateTopPosition={calculateTopPosition}
-                                                        applySuggestion={applySuggestion}
-                                                        undoSuggestion={undoSuggestion}
-                                                        manuallyHighlightOriginalText={manuallyHighlightOriginalText}
-                                                        index={index}
-                                                    />
-                                                );
-                                            }
-                                            return null;
-                                        })
-                                    }
-                                </div>
                                 <Card 
                                     id='resume-html-container'
-                                    className={`ResumeFull ${suggestions.length > 0 ? " with-suggestions" : ""}`}
+                                    className={'ResumeFull'}
                                 >
                                     <div 
                                         id='resume-html'
                                         contentEditable={true}
-                                        // dangerouslySetInnerHTML={{ __html: resumeIdToRender === OriginalResumeId ? resumeWithoutPageContainer : resume }}
-                                        dangerouslySetInnerHTML={{ __html: removePageContainer(resume) }}
+                                        // dangerouslySetInnerHTML={{ __html: selectedResumeId === OriginalResumeId ? resumeWithoutPageContainer : resume }}
+                                        // dangerouslySetInnerHTML={{ __html: removePageContainer(resume) }}
+                                        // dangerouslySetInnerHTML={{ __html: displayResume || removePageContainer(resume) }}
+                                        dangerouslySetInnerHTML={{ __html: removePageContainer(displayResume) || removePageContainer(resume) }}
+
                                         onInput={handleResumeHtmlContentChange}
                                     />
                                 </Card>
-                                <div id='right-suggestions'>
-                                    {!suggestionsLoading && suggestions.length > 0 &&
-                                        suggestions.map((suggestion, index) => {
-                                            if (
-                                                index > 2 &&
-                                                // suggestion.modifiedText?.length < suggestion.originalText?.length &&
-                                                OGtextClassPairsList[index]?.length > 0 &&
-                                                !suggestion?.accepted
-                                            ) {
-                                                return (
-                                                    <SuggestionBox
-                                                        key={index}
-                                                        suggestion={suggestion}
-                                                        classPairs={OGtextClassPairsList[index]}
-                                                        calculateTopPosition={calculateTopPosition}
-                                                        undoSuggestion={undoSuggestion}
-                                                        applySuggestion={applySuggestion}
-                                                        manuallyHighlightOriginalText={manuallyHighlightOriginalText}
-                                                        index={index}
-                                                    />
-                                                );
-                                            }
-                                            return null;
-                                        })
+                                <div id='edit-right-section' className={`${!selectedApplicationId ? 'version-history-mode' : ''}`}>
+                                    {!suggestionsLoading && suggestions.length > 0 && 
+                                        <CardCycler
+                                            manuallyHighlightOriginalText={manuallyHighlightOriginalText}
+                                            classPairs={OGtextClassPairsList}
+                                            resume={resume}
+                                            displayResume={displayResume}
+                                            cards={suggestions.map((suggestion, index) => (
+                                                <SuggestionBox 
+                                                    key={index} 
+                                                    suggestion={suggestion}
+                                                    undoSuggestion={undoSuggestion}
+                                                    applySuggestion={applySuggestion}
+                                                    index={index}    
+                                                />
+                                            ))}
+                                        />
+                                    }
+
+                                    {!selectedApplicationId && // 
+                                        <div>
+                                            <div className='v-center-center'>
+                                                <h3>Version History</h3>
+                                                    <div style={{display: 'flex', flexDirection: 'column', gap: '2px'}}>
+                                                        <div
+                                                            className={[
+                                                                'version_block',
+                                                                selectedResumeId === OriginalResumeId ? 'selected' : 'not-selected'
+                                                            ].join(' ')}
+                                                            onClick={() => updateResumeView(OriginalResumeId)}
+                                                        >
+                                                            Original
+                                                        </div>
+                                                            {versionHistory?.map((version, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className={[
+                                                                    'version_block',
+                                                                    selectedResumeId === version.resumeId ? 'selected' : 'not-selected'
+                                                                ].join(' ')}
+                                                                onClick={() => updateResumeView(version.resumeId)}>
+                                                                Version: {index}--{version.resumeId}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                            </div>
+                                        </div>
                                     }
                                 </div>
                             </div>

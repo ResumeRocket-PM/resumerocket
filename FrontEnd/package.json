@@ -24,6 +24,7 @@
     "date-fns": "^4.1.0",
     "diff-match-patch": "^1.0.5",
     "lodash": "^4.17.21",
+    "re-resizable": "^6.11.2",
     "react": "^18.2.0",
     "react-color-palette": "^7.3.0",
     "react-dom": "^18.2.0",

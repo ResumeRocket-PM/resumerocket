@@ -26,6 +26,7 @@ import DesignContent from "../portfolio-menu_content/DesignContent";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
+import WebIcon from '@mui/icons-material/Web';
 
 
 
@@ -76,27 +77,37 @@ function LeftMenu({
 
     const buttonStyles = {
         '&:hover': {
-            backgroundColor: 'lightgreen',
+            // backgroundColor: 'lightgreen',
+            backgroundColor: 'transparent',
             // color: '#3c52b2',
         },
     };
 
 
     return (
-        <>
-            <div id="portfolio-left_menu_buttons_container">
+        <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
+            <div 
+                id="portfolio-left_menu_buttons_container" 
+                className='left-menu-container'
+            >
                 <Button 
                     onClick={() => menuButtonClicked("pages")} 
                     id="pages_button" classes={buttonStyles} 
-                    className="portfolio-left_button" 
+                    className={`portfolio-left_button${selectedButton === "pages" ? " portfolio-left-button-selected" : ""}`} 
                     sx={{ ...buttonStyles, color:'black',
                     textTransform:'none', padding: '0',
                     }}
                 >
-                    <img src={siteMapIcon} alt="Pages" />
+                    {/* <img src={siteMapIcon} alt="Pages" /> */}
+                    <WebIcon />
                     <p>Pages</p>
                 </Button>
-                <Button onClick={() => menuButtonClicked("design")} id="layouts_button" className="portfolio-left_button" sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}>
+                <Button 
+                    onClick={() => menuButtonClicked("design")} 
+                    id="layouts_button" 
+                    className={`portfolio-left_button${selectedButton === "design" ? " portfolio-left-button-selected" : ""}`} 
+                    sx={{...buttonStyles, color:'black', textTransform:'none', padding: '0'}}
+                >
                     <PaletteIcon />
                     <p>Design</p>
                 </Button>
@@ -129,7 +140,7 @@ function LeftMenu({
             {showPopout &&
                 <>
                     {selectedButton === "pages" && (
-                        <div id="portfolio-popout_section" >
+                        <div className={`portfolio-popout_section${selectedButton === "pages" ? ' open' : ''}`} >
                             <PagesContent
                                 handlePortfolioContentChange={handlePortfolioContentChange} 
                                 setSelectedPage={setSelectedPage}
@@ -139,7 +150,7 @@ function LeftMenu({
                         </div>
                     )}
                     {selectedButton === "design" && (
-                        <div id="portfolio-popout_section" >
+                        <div className={`portfolio-popout_section${selectedButton === "design" ? ' open' : ''}`} >
                             <DesignContent
                                 portfolioContent={portfolioContent}
                                 setPortfolioContent={setPortfolioContent}
@@ -147,7 +158,7 @@ function LeftMenu({
                         </div>
                     )}                                
                     {selectedButton === "add" && (
-                        <div id="portfolio-popout_section" >
+                        <div className={`portfolio-popout_section${selectedButton === "add" ? ' open' : ''}`} >
                             <AddSectionContent 
                                 handlePortfolioContentChange={handlePortfolioContentChange}
                             />
@@ -155,7 +166,7 @@ function LeftMenu({
                     )}                                                 
                 </>
             }
-        </>
+        </div>
     )
 }
 
@@ -362,17 +373,14 @@ export default function PortfolioPage() {
     
     return (
         <div id='PortfolioPage-root'>
-            <div className="left-menu-container">
-                <LeftMenu 
-                    handlePortfolioContentChange={handlePortfolioContentChange}
-                    handleSavePortfolioContent={handleSavePortfolioContent}
-                    setSelectedPage={setSelectedPage}
-                    portfolioContent={portfolioContent}
-                    setPortfolioContent={setPortfolioContent}
-                    setShowLinkDialog={setShowLinkDialog}
-                />
-            </div>
-
+            <LeftMenu 
+                handlePortfolioContentChange={handlePortfolioContentChange}
+                handleSavePortfolioContent={handleSavePortfolioContent}
+                setSelectedPage={setSelectedPage}
+                portfolioContent={portfolioContent}
+                setPortfolioContent={setPortfolioContent}
+                setShowLinkDialog={setShowLinkDialog}
+            />
             <div id="portfolio-backdrop">
                 <div id='portfolio-top-right-options'>
                     <div id="portfolio-top-right-options-inner" className="hz-center">
@@ -389,6 +397,7 @@ export default function PortfolioPage() {
                             variant="contained"
                             size="small"
                             onClick={handlePreviewClick}
+                            className='base-button-colors'
                         >
                             See Preview
                         </Button>

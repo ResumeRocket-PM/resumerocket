@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { useApi } from "../../../hooks.js";
 import SubmitJobPosting from './SubmitJobPosting.jsx';
 import '../../../styles/ResumePage.css';
+import { ResumeContext } from '../../../context/ResumeProvider.jsx';
 
 const ResumeListPage = () => {
   const [filter, setFilter] = useState({ company: [], position: [], status: [] });
@@ -32,6 +33,8 @@ const ResumeListPage = () => {
   const [orderBy, setOrderBy] = useState('applyDate');
   const [applications, setApplications] = useState([]);
   const [options, setOptions] = useState({ company: [], position: [], status: [] });
+
+  const {setSelectedApplicationId} = useContext(ResumeContext);
 
   const api = useApi();
 
@@ -265,7 +268,7 @@ const ResumeListPage = () => {
                 </FormControl>
               </TableCell>
               <TableCell>
-                <Link to={`/create-resume/${row.resumeContentId}/${row.applicationId}`} align='center'>
+                <Link to={`/create-resume/${row.resumeContentId}/${row.applicationId}`} onClick={() => setSelectedApplicationId(row.applicationId)} align='center'>
                   {'View'}
                 </Link>
               </TableCell>

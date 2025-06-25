@@ -1,7 +1,7 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import styled from "styled-components";
+// import styled from "styled-components";
 import ProjectSectionWrapper from "../ProjectSectionWrapper";
 import KermitPic from '../../../assets/kermit-profile-pic.jpg';
 import { useRef, useEffect, useState, useContext } from 'react';
