@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom';
 import { ImageContext } from '../../../context/ImageProvider';
 import ResumeDisplayDialog from '../ResumePages/ResumeDisplayDialog';
 import { Chip } from '@mui/material';
+import userLightRed from "../../../assets/colored-user-icons/circle-user-light-red.svg";
+import userPink from "../../../assets/colored-user-icons/circle-user-pink.svg";
+import userPurple from "../../../assets/colored-user-icons/circle-user-purple.svg";
+import userRaspberryRose from "../../../assets/colored-user-icons/circle-user-raspberry-rose.svg";
+import userSpaceCadet from "../../../assets/colored-user-icons/circle-user-space-cadet.svg";
+import userVerdigris from "../../../assets/colored-user-icons/circle-user-verdigris.svg";
 
 const UserProfileHeader = ({userDetails}) => {
 
@@ -32,7 +38,29 @@ const UserProfileHeader = ({userDetails}) => {
                     console.error(err);
                 });
         } else {
-            setProfilePhoto(url);
+            // If ProfilePhotoLink is a color string, map it to the correct SVG
+            switch (url) {
+                case "light-red":
+                    setProfilePhoto(userLightRed);
+                    break;
+                case "pink":
+                    setProfilePhoto(userPink);
+                    break;
+                case "purple":
+                    setProfilePhoto(userPurple);
+                    break;
+                case "raspberry-rose":
+                    setProfilePhoto(userRaspberryRose);
+                    break;
+                case "space-cadet":
+                    setProfilePhoto(userSpaceCadet);
+                    break;
+                case "verdigris":
+                    setProfilePhoto(userVerdigris);
+                    break;
+                default:
+                    setProfilePhoto(userSolidOrange);
+            }
         }
     } else {
         setProfilePhoto(userSolidOrange);
@@ -105,6 +133,7 @@ const UserProfileHeader = ({userDetails}) => {
           borderRadius: '50%',
           border: '3px solid white',
           zIndex: 1,
+          backgroundColor: 'white'
         }}
       />
 

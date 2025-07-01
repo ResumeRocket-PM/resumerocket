@@ -60,7 +60,7 @@ const UserCard = ({ userDetails, onClick, isSelected, isMobile }) => {
         }
     }, [userDetails]);
 
-    console.log("profilePhoto:", profilePhoto);
+    // console.log("profilePhoto:", profilePhoto);
 
     return (
         <div
