@@ -3,6 +3,12 @@ import { ClipLoader } from 'react-spinners';
 import { useApi } from "../../../hooks.js";
 
 import userSolidOrange from "../../../assets/user-solid-orange.svg"
+import userLightRed from "../../../assets/colored-user-icons/circle-user-light-red.svg";
+import userPink from "../../../assets/colored-user-icons/circle-user-pink.svg";
+import userPurple from "../../../assets/colored-user-icons/circle-user-purple.svg";
+import userRaspberryRose from "../../../assets/colored-user-icons/circle-user-raspberry-rose.svg";
+import userSpaceCadet from "../../../assets/colored-user-icons/circle-user-space-cadet.svg";
+import userVerdigris from "../../../assets/colored-user-icons/circle-user-verdigris.svg";
 // import userSolidOrange from "../../../assets/RR_logo1.png";
 import "../../../styles/AccountPage.css";
 import accountBanner from '../../../assets/account-banner.png';
@@ -130,17 +136,46 @@ const AccountPage = () => {
     useEffect(() => {
         // if there is an image URL and imageId is not empty
         if (userDetails?.profilePhotoLink) {
-            const imageId = userDetails.profilePhotoLink.split('/').pop();
-            showImage(userDetails.profilePhotoLink, imageId)
-                .then(blob => {
-                    const objectUrl = URL.createObjectURL(blob);
-                    setProfilePhoto(objectUrl);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-        }
-        else {
+            const url = userDetails.profilePhotoLink;
+            const regex = /https:\/\/resumerocketimages\.blob\.core\.windows\.net\/images\/[a-f0-9-]+$/;
+            let imageId = '';
+    
+            if (regex.test(url)) {
+                imageId = url.split('/').pop();
+                showImage(url, imageId)
+                    .then(blob => {
+                        const objectUrl = URL.createObjectURL(blob);
+                        setProfilePhoto(objectUrl);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            } else {
+                // If ProfilePhotoLink is a color string, map it to the correct SVG
+                switch (url) {
+                    case "light-red":
+                        setProfilePhoto(userLightRed);
+                        break;
+                    case "pink":
+                        setProfilePhoto(userPink);
+                        break;
+                    case "purple":
+                        setProfilePhoto(userPurple);
+                        break;
+                    case "raspberry-rose":
+                        setProfilePhoto(userRaspberryRose);
+                        break;
+                    case "space-cadet":
+                        setProfilePhoto(userSpaceCadet);
+                        break;
+                    case "verdigris":
+                        setProfilePhoto(userVerdigris);
+                        break;
+                    default:
+                        setProfilePhoto(userSolidOrange);
+                }
+            }
+        } else {
             setProfilePhoto(userSolidOrange);
         }
 
@@ -231,6 +266,7 @@ const AccountPage = () => {
                                         width: '100%', 
                                         height: '100%',
                                         borderRadius: '50%',
+                                        backgroundColor: 'white'
                                     }}
                                 />
                                     <div className="profile-image-overlay">

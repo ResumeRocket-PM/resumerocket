@@ -27,6 +27,8 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
+                <Route path="/login-demo" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage demo={true} />} />
+
                 <Route path="/about" element={<HomePage />} />
                 <Route
                     path="/portfolio/preview/about"

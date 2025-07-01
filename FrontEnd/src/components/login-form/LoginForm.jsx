@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './LoginForm.css'; // make sure to create a corresponding CSS file
 import { useSpring, animated } from 'react-spring';
 
@@ -11,8 +11,12 @@ import { portfolioContentDefault } from '../../example_responses/portfolioConten
 import { ImageContext } from '../../context/ImageProvider.jsx';
 import { ResumeContext } from '../../context/ResumeProvider.jsx';
 
+const demoLogin = {
+  username: 'JohnDoe@gmail.com',
+  password: 'password123'
+}
 
-const LoginForm = () => {
+const LoginForm = ({demo=false, setLoading}) => {
   const { login } = useAuth();
   const { fetchNewSASToken } = useContext(ImageContext);
   const { setSectionSelected } = useContext(ResumeContext);
@@ -62,7 +66,7 @@ const LoginForm = () => {
   const handleCreateAccount = async (event) => {
     if(showCreateAccount)
     {
-
+      setLoading(true);
       api.postForm('/account', {
         "emailAddress": username,
         "password": values.password,
@@ -95,7 +99,7 @@ const LoginForm = () => {
     }
 
 
-
+    setLoading(false);
     setShowLogin(false); 
     setShowCreateAccount(true); 
   }
@@ -103,7 +107,8 @@ const LoginForm = () => {
   const handleLogin = async (event) => {
 
     if(showLogin)
-    {    
+    {
+
       api.postForm('/authenticate', {
         "emailAddress": username,
         "password": values.password
@@ -145,6 +150,20 @@ const LoginForm = () => {
     opacity: showCreateAccount || showLogin  ? 1 : 0,
     transform: (showCreateAccount || showLogin) ? 'translateY(0)' : 'translateY(-50px)',
   });
+
+  useEffect(() => {
+    if(demo) {
+      setShowLogin(demo);
+      setUsername(demoLogin.username)
+      setValues(
+        {
+          ...values, 
+          password: demoLogin.password
+        }
+      )
+
+    }
+  }, [])
 
   return (
     <div>
@@ -297,7 +316,8 @@ const LoginForm = () => {
 
 
                 </>)}
-                {showLogin && (<>
+                {showLogin && (
+                  <>
                     <h3> 
                     Login
                     </h3>
@@ -364,7 +384,8 @@ const LoginForm = () => {
                       <Button className="button loginButton" onClick={handleLogin}>Login</Button>
                     </div>
 
-                </>)}
+                </>
+              )}
                 </animated.div>
 
                 <div className="form-actions">
