@@ -25,6 +25,15 @@ import { useApi, useAuth } from '../../../hooks';
 import { ImageContext } from '../../../context/ImageProvider';
 import TextAreaAutoSizeCustom from '../TextAreaAutoSizeCustom';
 
+import userLightRed from "../../../assets/colored-user-icons/circle-user-light-red.svg";
+import userPink from "../../../assets/colored-user-icons/circle-user-pink.svg";
+import userPurple from "../../../assets/colored-user-icons/circle-user-purple.svg";
+import userRaspberryRose from "../../../assets/colored-user-icons/circle-user-raspberry-rose.svg";
+import userSpaceCadet from "../../../assets/colored-user-icons/circle-user-space-cadet.svg";
+import userVerdigris from "../../../assets/colored-user-icons/circle-user-verdigris.svg";
+import userSolidOrange from "../../../assets/user-solid-orange.svg"
+
+
 
 
 const addButtonStyles = {   
@@ -235,18 +244,48 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
     useEffect(() => {
         // if there is an image URL and imageId is not empty
         if (userAbout.profilePicture && userAbout.profilePictureId !== "" && profilePic === null) {
-            showImage(userAbout.profilePicture, userAbout.profilePictureId)
-                .then(blob => {
-                    const objectUrl = URL.createObjectURL(blob);
-                    setProfilePic(objectUrl);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+            const url = userAbout.profilePicture;
+            const regex = /https:\/\/resumerocketimages\.blob\.core\.windows\.net\/images\/[a-f0-9-]+$/;
+            let imageId = '';
+    
+            if (regex.test(url)) {
+                imageId = url.split('/').pop();
+                showImage(url, imageId)
+                    .then(blob => {
+                        const objectUrl = URL.createObjectURL(blob);
+                        setProfilePic(objectUrl);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            } else {
+                // If ProfilePhotoLink is a color string, map it to the correct SVG
+                switch (url) {
+                    case "light-red":
+                        setProfilePic(userLightRed);
+                        break;
+                    case "pink":
+                        setProfilePic(userPink);
+                        break;
+                    case "purple":
+                        setProfilePic(userPurple);
+                        break;
+                    case "raspberry-rose":
+                        setProfilePic(userRaspberryRose);
+                        break;
+                    case "space-cadet":
+                        setProfilePic(userSpaceCadet);
+                        break;
+                    case "verdigris":
+                        setProfilePic(userVerdigris);
+                        break;
+                    default:
+                        setProfilePic(userSolidOrange);
+                }
+            }
+        } else {
+            setProfilePic(userSolidOrange);
         }
-        // else {
-        //     setProfilePic(userAbout.profilePicture);
-        // }
     }, [userAbout.profilePicture, userAbout.profilePictureId]);
 
     useEffect(() => {
