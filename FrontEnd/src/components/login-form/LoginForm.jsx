@@ -99,16 +99,16 @@ const LoginForm = ({demo=false, setLoading}) => {
     }
 
 
-    setLoading(false);
+    
     setShowLogin(false); 
     setShowCreateAccount(true); 
+    setLoading(false);
   }
   
   const handleLogin = async (event) => {
 
     if(showLogin)
     {
-
       api.postForm('/authenticate', {
         "emailAddress": username,
         "password": values.password

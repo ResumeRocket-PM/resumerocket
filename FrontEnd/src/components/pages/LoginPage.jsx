@@ -12,36 +12,40 @@ const LoginPage = ({demo=false}) => {
 
     return (
         <div>
-            {/* <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-            integrity="sha384-k6RqeWecC7o1e4e1KjSiXmV9MWwIKK9hv5u6zwWfHK5Dv3CD5jg5T0Rb2hqyf6xs"
-            crossorigin="anonymous"
-            /> */}
-
-
             <div className="login-page">
-                {loading ? (
-                    <CircularProgress/>
-                ) : (
-                    <div className="content-container">
-                        <div className="image-container">
-                        <img src={resumeRocket} alt="Resume Rocket" />
-                        </div>
-
-                        <div className="form-container">
-                            
-                            <h2> 
-                            Resume Rocket
-                            </h2>
-                            <LoginForm demo={demo} setloading={setLoading} />
-                            <Link to={`/about`}  align='center'>
-                                { 'About' }
-                            </Link>
-                        </div>
-
+                {loading && (
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100vw',
+                            height: '100vh',
+                            background: 'rgba(0,0,0,0.4)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 1300
+                        }}
+                    >
+                        <CircularProgress size='10rem'/>
                     </div>
                 )}
+                <div className="content-container">
+                    <div className="image-container">
+                        <img src={resumeRocket} alt="Resume Rocket" />
+                    </div>
+
+                    <div className="form-container">
+                        <h2>
+                            Resume Rocket
+                        </h2>
+                        <LoginForm demo={demo} setloading={setLoading} />
+                        <Link to={`/about`} align='center'>
+                            { 'About' }
+                        </Link>
+                    </div>
+                </div>
             </div>
         </div>
     );
