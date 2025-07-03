@@ -100,7 +100,7 @@ const LayoutWithNavbar = () => (
     <>
         <Navbar />
         <Outlet />
-        <FloatingChatButton /> {/* Add FloatingChatButton here */}
+        {/* <FloatingChatButton />  */}
     </>
 );
 
