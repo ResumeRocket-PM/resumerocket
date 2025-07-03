@@ -12,8 +12,8 @@ import { ImageContext } from '../../context/ImageProvider.jsx';
 import { ResumeContext } from '../../context/ResumeProvider.jsx';
 
 const demoLogin = {
-  username: 'JohnDoe@gmail.com',
-  password: 'password123'
+  username: 'dMifflin@gmail.com',
+  password: 'paper123'
 }
 
 const LoginForm = ({demo=false, setLoading}) => {
@@ -83,6 +83,7 @@ const LoginForm = ({demo=false, setLoading}) => {
               setSectionSelected('repository'); 
               navigate('/account', { replace: true });
               fetchNewSASToken();
+              setLoading(false);
             }
             
           });
@@ -102,13 +103,13 @@ const LoginForm = ({demo=false, setLoading}) => {
     
     setShowLogin(false); 
     setShowCreateAccount(true); 
-    setLoading(false);
   }
   
   const handleLogin = async (event) => {
 
     if(showLogin)
     {
+      setLoading(true);
       api.postForm('/authenticate', {
         "emailAddress": username,
         "password": values.password
@@ -139,6 +140,7 @@ const LoginForm = ({demo=false, setLoading}) => {
         }
       }).then(response => {
         fetchNewSASToken();
+        setLoading(false);
       })
     }
 

@@ -9,6 +9,22 @@ import instagramLogo from '../../../assets/portfolio/instagram-brands-solid.svg'
 import linkedinLogo from '../../../assets/portfolio/linkedin-brands-solid.svg';
 import twitterLogo from '../../../assets/portfolio/x-twitter-brands-solid.svg';
 import facebookLogo from '../../../assets/portfolio/facebook-brands-solid.svg';
+
+// import { ReactComponent as DiscordLogo } from '../../../assets/portfolio/discord-brands-solid.svg';
+// import { ReactComponent as EmailLogo } from '../../../assets/portfolio/envelope-solid.svg';
+// import { ReactComponent as GithubLogo } from '../../../assets/portfolio/github-brands-solid.svg';
+// import { ReactComponent as InstagramLogo } from '../../../assets/portfolio/instagram-brands-solid.svg';
+// import { ReactComponent as LinkedinLogo } from '../../../assets/portfolio/linkedin-brands-solid.svg';
+// import { ReactComponent as TwitterLogo } from '../../../assets/portfolio/x-twitter-brands-solid.svg';
+// import { ReactComponent as FacebookLogo } from '../../../assets/portfolio/facebook-brands-solid.svg';
+
+import EmailLogo from '@mui/icons-material/Markunread';
+import GithubLogo from '@mui/icons-material/GitHub';
+import InstagramLogo from '@mui/icons-material/Instagram';
+import LinkedinLogo from '@mui/icons-material/LinkedIn';
+import TwitterLogo from '@mui/icons-material/X';
+import FacebookLogo from '@mui/icons-material/Facebook';
+
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
@@ -49,7 +65,7 @@ const ContactMethodIcons = {
     github: githubLogo,
     twitter: twitterLogo,
     facebook: facebookLogo,
-    discord: discordLogo,
+    // discord: discordLogo,
 }
 
 const AddContactMethodFields = ({ contactMethod, newContactMethodValue, setNewContactMethodValue }) => {
@@ -397,6 +413,7 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
     // console.log('backgroundPictureId', about.backgroundPictureId);  
     // console.log('about.personalSummary', about.personalSummary);
     // console.log('profilePic', profilePic);
+    console.log('portfolioContent', portfolioContent);
 
     return (
         <>
@@ -498,11 +515,12 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('email')}/>}
                             >
                                 <a href={`mailto:${about.contactInfo.email}`}>
-                                    <img 
+                                    {/* <img 
                                         src={emailLogo}
                                         alt="email" 
-                                        style={about.styles.contactLogos}
-                                    />
+                                        style={{...about.styles.contactLogos, }}
+                                    /> */}
+                                    <EmailLogo style={{ ...about.styles.contactLogos, color: portfolioContent.styles.color }} aria-label="email" />
                                 </a>
                             </PortfolioItemWithPopupWrapper>
                         )}
@@ -512,11 +530,12 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('instagram')}/>}
                             >
                                 <a href={about.contactInfo.instagram}>
-                                    <img 
+                                    {/* <img 
                                         src={instagramLogo} 
                                         alt="instagram" 
                                         style={about.styles.contactLogos} 
-                                    />
+                                    /> */}
+                                    <InstagramLogo style={{ ...about.styles.contactLogos, color: portfolioContent.styles.color }} aria-label="instagram" role="img" />
                                 </a>                            
                             </PortfolioItemWithPopupWrapper>    
                         )}
@@ -526,11 +545,12 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('linkedin')}/>}
                             >
                                 <a href={about.contactInfo.linkedin}>
-                                    <img 
+                                    {/* <img 
                                         src={linkedinLogo} 
                                         alt="linkedin" 
                                         style={about.styles.contactLogos} 
-                                    />
+                                    /> */}
+                                    <LinkedinLogo style={{ ...about.styles.contactLogos, color: portfolioContent.styles.color }} aria-label="linkedin" role="img" />
                                 </a>
                             </PortfolioItemWithPopupWrapper>
                         )}
@@ -540,11 +560,12 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('github')}/>}
                             >
                                 <a href={about.contactInfo.github}>
-                                    <img 
+                                    {/* <img 
                                         src={githubLogo} 
                                         alt="github" 
                                         style={about.styles.contactLogos} 
-                                    />
+                                    /> */}
+                                    <GithubLogo style={{ ...about.styles.contactLogos, color: portfolioContent.styles.color }} aria-label="github" role="img" />
                                 </a>
                             </PortfolioItemWithPopupWrapper>
                         )}
@@ -554,11 +575,12 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('twitter')}/>}
                             >
                                 <a href={about.contactInfo.twitter}>
-                                    <img 
+                                    {/* <img 
                                         src={twitterLogo} 
                                         alt="twitter" 
                                         style={about.styles.contactLogos} 
-                                    />
+                                    /> */}
+                                    <TwitterLogo style={{ ...about.styles.contactLogos, color: portfolioContent.styles.color }} aria-label="twitter" role="img" />
                                 </a>
                             </PortfolioItemWithPopupWrapper>
                         )}
@@ -568,15 +590,16 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('facebook')}/>}
                             >
                                 <a href={about.contactInfo.facebook}>
-                                    <img 
+                                    {/* <img 
                                         src={facebookLogo} 
                                         alt="facebook" 
                                         style={about.styles.contactLogos} 
-                                    />
+                                    /> */}
+                                    <FacebookLogo style={{ ...about.styles.contactLogos, color: portfolioContent.styles.color }} aria-label="facebook" role="img" />
                                 </a>
                             </PortfolioItemWithPopupWrapper>
                         )}
-                        {about.contactInfo.discord && (
+                        {/* {about.contactInfo.discord && (
                             <PortfolioItemWithPopupWrapper 
                                 popupContentClasses='no-padding'
                                 popoverContent={<DeleteIcon className='contact-delete-button' onClick={() => deleteContactMethod('discord')}/>}
@@ -587,9 +610,10 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                         alt="discord" 
                                         style={about.styles.contactLogos} 
                                     />
+                                    <DiscordLogo style={{ ...about.styles.contactLogos }} aria-label="discord" role="img" />
                                 </a>
                             </PortfolioItemWithPopupWrapper>
-                        )}
+                        )} */}
                                 {editMode && (
                                     <DialogButton 
                                         id='portfolio-add-contact-button'

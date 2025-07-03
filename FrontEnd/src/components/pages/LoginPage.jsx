@@ -40,7 +40,7 @@ const LoginPage = ({demo=false}) => {
                         <h2>
                             Resume Rocket
                         </h2>
-                        <LoginForm demo={demo} setloading={setLoading} />
+                        <LoginForm demo={demo} setLoading={setLoading} />
                         <Link to={`/about`} align='center'>
                             { 'About' }
                         </Link>

@@ -836,8 +836,8 @@ export default function CreateResume({resumeId=null}) {
     };
 
 
-    // console.log('suggestions', suggestions);
-    // console.log('suggestions.resumeSuggestions', suggestions);
+    console.log('suggestions', suggestions);
+    console.log('suggestions.resumeSuggestions', suggestions);
     // console.log('OGtextClassPairsList', OGtextClassPairsList);
     // console.log('suggestionsApplied', suggestionsApplied);
 

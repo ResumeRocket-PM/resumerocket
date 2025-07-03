@@ -97,7 +97,15 @@ const AccountPage = () => {
 
         let imageId = '';
         if (photoInput === 'profile-photo-input') {
-            imageId = userDetails.profilePhotoLink ? userDetails.profilePhotoLink.split('/').pop() : '';
+            // imageId = userDetails.profilePhotoLink ? userDetails.profilePhotoLink.split('/').pop() : '';
+            if (
+                userDetails.profilePhotoLink &&
+                userDetails.profilePhotoLink.startsWith('http')
+            ) {
+                imageId = userDetails.profilePhotoLink.split('/').pop();
+            } else {
+                imageId = '';
+            }
         } else if (photoInput === 'background-photo-input') {
             imageId = userDetails.backgroundPhotoLink ? userDetails.backgroundPhotoLink.split('/').pop() : '';
         }

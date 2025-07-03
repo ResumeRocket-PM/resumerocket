@@ -11,7 +11,8 @@ import Tooltip from '@mui/material/Tooltip';
 import '../styles/Chat.css'; // Ensure you have the styles for chat
 
 const Chat = ({ resumeId, applicationId, mainContentHeight }) => {
-    const { messages, setMessages } = useContext(ResumeContext);
+    // const startingMessage = "Hello! How can i help you today?"
+    const { messages, setMessages, startingMessage } = useContext(ResumeContext);
     const [inputText, setInputText] = useState('');
     const api = useApi();
 
@@ -25,9 +26,34 @@ const Chat = ({ resumeId, applicationId, mainContentHeight }) => {
         ? { height: mainContentHeight ? `${Math.round(mainContentHeight * 0.90)}px` : 'auto'}
         : {};
 
+    const messagesEndRef = useRef(null);
+
+
     // for( let i = 0; i < 10; i++) {
     //     messages.push({ ai: bigMessage });
     // }
+
+    const [typingStarted, setTypingStarted] = useState(false);
+    useEffect(() => {
+        const typeMessage = async () => {
+            if (messages.length === 1 && messages[0].ai === "") {
+                let aiMessage = '';
+                for (const char of startingMessage) {
+                    aiMessage += char;
+                    setMessages((prevMessages) => {
+                        const newMessages = [...prevMessages];
+                        const lastMessage = newMessages[newMessages.length - 1];
+                        if (lastMessage?.ai !== undefined) {
+                            lastMessage.ai = aiMessage;
+                        }
+                        return newMessages;
+                    });
+                    await new Promise(res => setTimeout(res, 5));
+                }
+            }
+        };
+        typeMessage();
+    }, [messages, setMessages, startingMessage, typingStarted]);
 
     useEffect(() => {
         const handleMouseUp = () => setIsResizing(false);
@@ -54,6 +80,12 @@ const Chat = ({ resumeId, applicationId, mainContentHeight }) => {
         chatElem.addEventListener('mousedown', handleMouseDown);
         return () => chatElem.removeEventListener('mousedown', handleMouseDown);
     }, []);
+
+    useEffect(() => {
+    if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+}, [messages]);
 
     // const sendMessage = async (message) => {
     //     try {
@@ -99,27 +131,36 @@ const Chat = ({ resumeId, applicationId, mainContentHeight }) => {
             ...prevMessages,
             { ai: '' }
         ]);
+
+        let numChunks = 0;
         while (true) {
             const { done, value } = await reader.read();
+
             if (done) break;
+            numChunks++;
 
             const chunk = decoder.decode(value, { stream: true });
 
             // Parse the SSE format
-            const match = chunk.match(/^data: (.+)$/m);
-            if (match) {
-                aiMessage += match[1];
+            const matches = chunk.match(/^data: (.*)$/gm);
+            if (matches) {
+                for (const line of matches) {
+                    const data = line.replace(/^data: /, '');
+                    aiMessage += data;
 
-                setMessages((prevMessages) => {
-                    const newMessages = [...prevMessages];
-                    const lastMessage = newMessages[newMessages.length - 1];
-                    if (lastMessage?.ai !== undefined) {
-                        lastMessage.ai = aiMessage;
-                    }
-                    return newMessages;
-                });
+                    setMessages((prevMessages) => {
+                        const newMessages = [...prevMessages];
+                        const lastMessage = newMessages[newMessages.length - 1];
+                        if (lastMessage?.ai !== undefined) {
+                            lastMessage.ai = aiMessage;
+                        }
+                        return newMessages;
+                    });
+                }
             }
         }
+
+        console.log('numChunks', numChunks)
     };
 
     const handleKeyPress = (e) => {
@@ -176,6 +217,7 @@ const Chat = ({ resumeId, applicationId, mainContentHeight }) => {
                         )}
                     </React.Fragment>
                 ))}
+                <div ref={messagesEndRef} />
             </div>
             <div id="chat_input_container">
                 <TextField
