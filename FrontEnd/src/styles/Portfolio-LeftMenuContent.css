@@ -114,7 +114,7 @@
     top: 0;
     left: 100%; /* Position to the right of the parent */
     margin-left: 10px; /* Optional: Add some space between the parent and the color picker */
-    z-index: 2;
+    z-index: 10000;
 }
 
 
