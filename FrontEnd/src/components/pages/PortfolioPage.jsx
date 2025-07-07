@@ -364,7 +364,8 @@ export default function PortfolioPage() {
     };
     
     const handlePreviewClick = () => {
-        window.open('/portfolio/preview/about');
+        // window.open('/portfolio/preview/about');
+        window.open(userDetails.portfolioLink)
     };
 
     console.log('portfolioContent', portfolioContent);
