@@ -44,7 +44,22 @@ const NetworkingPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const searchTerm = queryParams.get('query') || ''; 
 
-
+    api.postForm('/account/search', {
+      searchTerm: searchTerm,
+      resultCount: 10000
+    }).then(response => {
+      if (response.ok) {
+        response.json().then(data => {
+          setUsersDetails(data.result);
+          setPage(1); 
+          if (data.result.length > 0) {
+            setSelectedUserIndex(0);
+          }
+        });
+      } else {
+        console.log("Failed to save account");
+      }
+    });
   }, [location.search]);
 
   // when networkingPageWrapperRef gets to width of 861px, set a state variable "isMobile" to true
