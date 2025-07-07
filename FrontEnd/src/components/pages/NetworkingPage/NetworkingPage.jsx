@@ -7,6 +7,7 @@ import FloatingChatButton from '../../../components/FloatChatBox.jsx';
 import '../../../styles/NetworkingPage.css'; // Assuming you have a CSS file for styles
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { ClipLoader } from "react-spinners";
 
 const USERS_PER_PAGE = 20; // Change this to however many users you want per page
 
@@ -43,22 +44,7 @@ const NetworkingPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const searchTerm = queryParams.get('query') || ''; 
 
-    api.postForm('/account/search', {
-      searchTerm: searchTerm,
-      resultCount: 10000
-    }).then(response => {
-      if (response.ok) {
-        response.json().then(data => {
-          setUsersDetails(data.result);
-          setPage(1); 
-          if (data.result.length > 0) {
-            setSelectedUserIndex(0);
-          }
-        });
-      } else {
-        console.log("Failed to save account");
-      }
-    });
+
   }, [location.search]);
 
   // when networkingPageWrapperRef gets to width of 861px, set a state variable "isMobile" to true
@@ -104,47 +90,53 @@ const NetworkingPage = () => {
     <div id="networking-page-wrapper" ref={networkingPageWrapperRef}>
       <div id="networking-page">
 
-        <div 
-          id="networking-page-user-results" 
-          className={isMobile ? 'mobile' : ''}
-          ref={userResultsRef} 
-          style={{ display: isMobile && selectedUserIndex !== null ? 'none' : '' }}
-        >
-          <div id="networking-page-user-results-content">
-            {paginatedUsers.map((user, index) => (
-              <UserCard
-                key={user.accountId} // Use AccountId as the key
-                userDetails={{
-                  FirstName: user.firstName,
-                  LastName: user.lastName,
-                  ProfilePhotoLink: user.profilePhotoLink || "path/to/default/image.png", // Provide a default image if none exists
-                  Title: user.title,
-                  StateLocation: user.stateLocation,
-                }}
-                onClick={() => handleUserResultClick(index)}
-                isSelected={selectedUserIndex === index}
+          {usersDetails.length !== 0 ? (
+            <>
+              <div
+                id="networking-page-user-results"
+                className={isMobile ? 'mobile' : ''}
+                ref={userResultsRef}
+                style={{ display: isMobile && selectedUserIndex !== null ? 'none' : '' }}
+              >
+                <div id="networking-page-user-results-content">
+                  {paginatedUsers.map((user, index) => (
+                    <UserCard
+                      key={user.accountId} // Use AccountId as the key
+                      userDetails={{
+                        FirstName: user.firstName,
+                        LastName: user.lastName,
+                        ProfilePhotoLink: user.profilePhotoLink || "path/to/default/image.png", // Provide a default image if none exists
+                        Title: user.title,
+                        StateLocation: user.stateLocation,
+                      }}
+                      onClick={() => handleUserResultClick(index)}
+                      isSelected={selectedUserIndex === index}
+                      isMobile={isMobile}
+                    />
+                  ))}
+                </div>
+                <div id='networking-page-pagination' className='hz-center'>
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={pageCount}
+                      page={page}
+                      onChange={handlePageChange}
+                      color="primary"
+                    />
+                  </Stack>
+                </div>
+              </div>
+              <ResumeContent
+                selectedUserDetails={selectedUserDetails}
                 isMobile={isMobile}
+                selectedUserIndex={selectedUserIndex}
               />
-            ))}
-          </div>
-          <div id='networking-page-pagination' className='hz-center'>
-            <Stack spacing={2}>
-              <Pagination
-                count={pageCount}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-              />
-            </Stack>
-          </div>     
-        </div>
-
-        <ResumeContent 
-          selectedUserDetails={selectedUserDetails} 
-          isMobile={isMobile}
-          selectedUserIndex={selectedUserIndex}
-        />
-
+            </>
+          ) : (
+            <div style={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+              <ClipLoader size='100px'/>
+            </div>
+          )}
 
 
 
