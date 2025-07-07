@@ -427,24 +427,6 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                 }}
             >
                 <div id='portfolio-about-header-container'>
-                    {editMode && (
-                            <IconButton 
-                                aria-label='add background picture'
-                                component='label'
-                                role={undefined}
-                                tabIndex={-1}
-                                sx={{position: 'absolute', bottom: '10px', right: '10px', ...addButtonStyles}}
-                            >
-                                <img style={{height:'1.5rem', width: '1.5rem' }} src={cameraIcon} alt="add background picture" />
-                                <VisuallyHiddenInput 
-                                    type='file' 
-                                    accept='image/*' 
-                                    multiple={false}
-                                    onChange={(event) => handleChangeBackgroundImage(event.target.files)}
-                                />
-                            </IconButton>                        
-                    )}
-
                     <div 
                         id='portfolio-about-header'
                         className={`${!editMode ? 'hz-center' : ''}`}
@@ -672,6 +654,26 @@ const AboutBody = ({userAbout, editMode, portfolioContent, setPortfolioContent})
                                 )}
                         </div>
                     </div>
+                        <div className='hz-right' style={{width: '100%'}}>
+                            {editMode && (
+                                <IconButton
+                                    aria-label='add background picture'
+                                    component='label'
+                                    role={undefined}
+                                    tabIndex={-1}
+                                    // sx={{position: 'absolute', bottom: '10px', right: '10px', ...addButtonStyles, }}
+                                    sx={{...addButtonStyles, zIndex: 1, top: '-40px'}}
+                                >
+                                    <img style={{height:'1.5rem', width: '1.5rem' }} src={cameraIcon} alt="add background picture" />
+                                    <VisuallyHiddenInput
+                                        type='file'
+                                        accept='image/*'
+                                        multiple={false}
+                                        onChange={(event) => handleChangeBackgroundImage(event.target.files)}
+                                    />
+                                </IconButton>
+                            )}
+                        </div>
                 </div>
                 <div id='portfolio-about-summary'>
                     <TextAreaAutoSizeCustom
