@@ -11,9 +11,14 @@ import { portfolioContentDefault } from '../../example_responses/portfolioConten
 import { ImageContext } from '../../context/ImageProvider.jsx';
 import { ResumeContext } from '../../context/ResumeProvider.jsx';
 
+// const demoLogin = {
+//   username: 'dMifflin@gmail.com',
+//   password: 'paper123'
+// }
+
 const demoLogin = {
-  username: 'dMifflin@gmail.com',
-  password: 'paper123'
+  username: 'rHendricks@gmail.com',
+  password: 'piper123'
 }
 
 const LoginForm = ({demo=false, setLoading}) => {
