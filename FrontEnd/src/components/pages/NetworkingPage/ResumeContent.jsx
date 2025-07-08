@@ -7,27 +7,29 @@ import EducationEntry from '../AccountPage/EducationEntry.jsx';
 import { Chip } from '@mui/material';
 
 
-const ResumeContent = ({ selectedUserDetails, isMobile, selectedUserIndex }) => {
+const ResumeContent = ({ accountId, isMobile, selectedUserIndex }) => {
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
 
-  // const api = useApi();
+  const api = useApi();
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   if (accountId) {
-  //     api.get(`/account/${accountId}`).then(response => {
-  //       if (response.ok) {
-  //         response.json().then(data => {
-  //           setSelectedUserDetails(data.result);
-  //           setLoading(false);
-  //         });
-  //       } else {
-  //         console.log("Failed to fetch account");
-  //         setLoading(false);
-  //       }
-  //     });
-  //   }
-  // }, [accountId]);
+  useEffect(() => {
+    setLoading(true);
+    if (accountId) {
+      api.get(`/account/${accountId}`).then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            setSelectedUserDetails(data.result);
+            setLoading(false);
+          });
+        } else {
+          console.log("Failed to fetch account");
+          setLoading(false);
+        }
+      });
+    }
+  }, [accountId]);
 
   if (error) {
     return <div>Error: {error}</div>;

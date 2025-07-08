@@ -142,7 +142,7 @@ const NetworkingPage = () => {
                 </div>
               </div>
               <ResumeContent
-                selectedUserDetails={selectedUserDetails}
+                accountId={selectedUserDetails.accountId}
                 isMobile={isMobile}
                 selectedUserIndex={selectedUserIndex}
               />
