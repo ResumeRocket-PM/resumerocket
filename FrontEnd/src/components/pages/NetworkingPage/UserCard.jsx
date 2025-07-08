@@ -110,6 +110,8 @@ const styles = {
     profilePicture: {
         width: '85px', // Smaller profile picture
         height: '85px',
+        minWidth: '85px', // Smaller profile picture
+        minHeight: '85px',
         borderRadius: '50%',
         border: '2px solid black',
         zIndex: 1,
