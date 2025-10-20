@@ -171,13 +171,8 @@ export const initializePWA = () => {
       },
       onRegistered(swRegistration) {
         console.log('✅ Service worker registered', swRegistration);
-        if (swRegistration) {
-          // Check for updates every 30 seconds
-          setInterval(() => {
-            console.log('⏰ Checking for updates...');
-            swRegistration.update();
-          }, 30 * 1000);
-        }
+        // No need for polling - the browser will check for updates automatically
+        // when the page loads, navigates, or periodically in the background
       },
       onRegisterError(error) {
         console.error('❌ Service worker registration error:', error);
