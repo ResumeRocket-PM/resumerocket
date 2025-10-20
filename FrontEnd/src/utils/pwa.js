@@ -1,7 +1,16 @@
 import { registerSW } from 'virtual:pwa-register';
 import { toast } from 'react-toastify';
 
+// Prevent duplicate toasts
+let updateToastShown = false;
+
 const showReloadToast = (updateSW) => {
+  if (updateToastShown) {
+    console.log('⚠️ Update toast already shown, skipping duplicate');
+    return;
+  }
+  updateToastShown = true;
+  
   toast.info(
     'New version available!',
     {
@@ -13,11 +22,18 @@ const showReloadToast = (updateSW) => {
       closeOnClick: false,
       autoClose: false,
       position: "bottom-right",
+      toastId: 'pwa-update', // Prevent duplicate toasts with same ID
     }
   );
 };
 
 const showLogoutToast = () => {
+  if (updateToastShown) {
+    console.log('⚠️ Update toast already shown, skipping duplicate');
+    return;
+  }
+  updateToastShown = true;
+  
   toast.warning(
     'A major update requires you to log out. Please save your work and refresh the page.',
     {
@@ -29,11 +45,22 @@ const showLogoutToast = () => {
       closeOnClick: false,
       autoClose: false,
       position: "bottom-right",
+      toastId: 'pwa-major-update', // Prevent duplicate toasts with same ID
     }
   );
 };
 
+// Track if PWA has been initialized to prevent double initialization
+let pwaInitialized = false;
+
 export const initializePWA = () => {
+  // Prevent duplicate initialization (can happen in React StrictMode)
+  if (pwaInitialized) {
+    console.log('⚠️ PWA already initialized, skipping');
+    return;
+  }
+  pwaInitialized = true;
+  
   console.log('🚀 Initializing PWA...');
   
   // Check if service workers are supported
