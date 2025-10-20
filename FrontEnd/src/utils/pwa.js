@@ -18,6 +18,9 @@ const showReloadToast = (updateSW) => {
         console.log('🔄 User clicked update toast');
         toast.dismiss('pwa-update');
         
+        // Mark that user initiated the update
+        userInitiatedUpdate = true;
+        
         // Tell the waiting service worker to skip waiting and activate
         // The controllerchange event will handle the reload
         updateSW(true);
@@ -60,6 +63,10 @@ const showLogoutToast = () => {
       onClick: () => {
         console.log('🔄 User clicked major update toast');
         toast.dismiss('pwa-major-update');
+        
+        // Mark that user initiated the update
+        userInitiatedUpdate = true;
+        
         localStorage.clear();
         window.location.reload();
       },
@@ -90,6 +97,8 @@ const showLogoutToast = () => {
 
 // Track if PWA has been initialized to prevent double initialization
 let pwaInitialized = false;
+// Track if user has initiated the update
+let userInitiatedUpdate = false;
 
 export const initializePWA = () => {
   // Prevent duplicate initialization (can happen in React StrictMode)
@@ -108,9 +117,14 @@ export const initializePWA = () => {
   }
 
   // Listen for when a new service worker takes control
+  // Only reload if the user clicked the update button
   let refreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (refreshing) return;
+    if (!userInitiatedUpdate) {
+      console.log('⚠️ Service worker changed but user did not initiate update, skipping reload');
+      return;
+    }
     console.log('🔄 New service worker took control, refreshing page...');
     refreshing = true;
     window.location.reload();
