@@ -17,14 +17,12 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
+        // Only precache the app-version.json file via globPatterns.
+        // We intentionally do NOT set additionalManifestEntries because
+        // that would generate a dynamic revision (Date.now) and may
+        // conflict with a glob entry for the same file.
         globPatterns: ['app-version.json'],
         globDirectory: 'dist',
-        additionalManifestEntries: [
-          {
-            url: '/app-version.json',
-            revision: Date.now().toString()
-          }
-        ],
         skipWaiting: false,
         clientsClaim: true
       }
