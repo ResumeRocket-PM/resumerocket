@@ -68,7 +68,7 @@ export const initializePWA = () => {
         setInterval(() => {
           console.log('⏰ Checking for updates...');
           swRegistration.update();
-        }, 60 * 1000);  // Check every 60 seconds
+        }, 30 * 1000);  // Check every 60 seconds
       }
     },
     onRegisterError(error) {
