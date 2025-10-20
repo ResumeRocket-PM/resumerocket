@@ -25,21 +25,21 @@ function App() {
     const { isLoggedIn } = useContext(AuthContext);
     const { projectNum } = useParams();
 
-    const updateAvailable = useVersionCheck() 
-    const [open, setOpen] = useState(false)
+    // const updateAvailable = useVersionCheck() 
+    // const [open, setOpen] = useState(false)
 
-    useEffect(() => {
-        if (updateAvailable) setOpen(true)
-    }, [updateAvailable])
+    // useEffect(() => {
+    //     if (updateAvailable) setOpen(true)
+    // }, [updateAvailable])
 
-    const handleReload = () => {
-        window.location.reload(true)
-    }
+    // const handleReload = () => {
+    //     window.location.reload(true)
+    // }
 
 
     return (
       <>
-          <Snackbar
+          {/* <Snackbar
             open={open}
             TransitionComponent={SlideUpTransition}
             message="A new version of the app is available."
@@ -49,7 +49,7 @@ function App() {
               </Button>
             }
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          />
+          /> */}
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />

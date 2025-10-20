@@ -17,18 +17,15 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
-        // Ensure app-version.json is precached
+        globPatterns: ['app-version.json'],
         globDirectory: 'dist',
         additionalManifestEntries: [
           {
             url: '/app-version.json',
-            revision: Date.now().toString() // Force new revision on each build
+            revision: Date.now().toString()
           }
         ],
-        navigateFallback: 'index.html',
-        navigateFallbackAllowlist: [/^(?!\/__).*/],
-        skipWaiting: false, // Important: This ensures the new service worker waits
+        skipWaiting: false,
         clientsClaim: true
       }
     })
