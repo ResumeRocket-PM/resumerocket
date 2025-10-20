@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { treatAsCommonjs } from "vite-plugin-treat-umd-as-commonjs";
-import inject from '@rollup/plugin-inject'; // You don't need to dynamically import anymore
+import { VitePWA } from 'vite-plugin-pwa';
 
 
 
@@ -11,10 +11,47 @@ export default defineConfig({
   plugins: [
     react(),
     treatAsCommonjs(),
-    // inject({
-    //   Buffer: ['buffer', 'Buffer'], // This injects the Buffer polyfill
-    // }),
-//     vitePluginRequire.default(),
+    VitePWA({
+      registerType: 'prompt',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      manifest: {
+        name: 'ResumeRocket',
+        short_name: 'ResumeRocket',
+        description: 'Resume creation and portfolio management app',
+        theme_color: '#ffffff',
+        start_url: '/',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      },
+      devOptions: {
+        enabled: true
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        // Ensure app-version.json is precached
+        globDirectory: 'dist',
+        additionalManifestEntries: [
+          {
+            url: '/app-version.json',
+            revision: Date.now().toString() // Force new revision on each build
+          }
+        ],
+        navigateFallback: 'index.html',
+        navigateFallbackAllowlist: [/^(?!\/__).*/],
+        skipWaiting: false, // Important: This ensures the new service worker waits
+        clientsClaim: true
+      }
+    })
   ],
   server: {
     port: 5174,

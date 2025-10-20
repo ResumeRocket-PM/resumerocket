@@ -25,7 +25,7 @@ function App() {
     const { isLoggedIn } = useContext(AuthContext);
     const { projectNum } = useParams();
 
-    const updateAvailable = useVersionCheck() // check every 3 minutes
+    const updateAvailable = useVersionCheck() 
     const [open, setOpen] = useState(false)
 
     useEffect(() => {

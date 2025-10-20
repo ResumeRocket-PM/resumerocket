@@ -5,8 +5,10 @@ import './styles/index.css'
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ImageProvider } from './context/ImageProvider.jsx';
 import { ResumeProvider } from './context/ResumeProvider.jsx';
+import { initializePWA } from './utils/pwa';
 
-
+// Initialize PWA
+initializePWA();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
