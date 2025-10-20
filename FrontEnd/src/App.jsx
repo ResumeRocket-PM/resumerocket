@@ -18,38 +18,17 @@ import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
 import ResumePage from './components/pages/ResumePages/ResumePage.jsx';
 import FloatingChatButton from './components/FloatChatBox';
 import { Snackbar, Button, Slide } from '@mui/material'
-import { useVersionCheck } from './hooks.js'
 
 
 function App() {
     const { isLoggedIn } = useContext(AuthContext);
     const { projectNum } = useParams();
 
-    // const updateAvailable = useVersionCheck() 
-    // const [open, setOpen] = useState(false)
 
-    // useEffect(() => {
-    //     if (updateAvailable) setOpen(true)
-    // }, [updateAvailable])
-
-    // const handleReload = () => {
-    //     window.location.reload(true)
-    // }
 
 
     return (
       <>
-          {/* <Snackbar
-            open={open}
-            TransitionComponent={SlideUpTransition}
-            message="A new version of the app is available."
-            action={
-              <Button color="secondary" size="small" onClick={handleReload}>
-                Reload
-              </Button>
-            }
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          /> */}
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
