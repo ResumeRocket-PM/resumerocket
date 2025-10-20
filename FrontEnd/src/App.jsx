@@ -17,7 +17,9 @@ import { useContext, useState, useEffect } from 'react';
 import { PortfolioEditProvider } from './context/PortfolioEditProvider.jsx';
 import ResumePage from './components/pages/ResumePages/ResumePage.jsx';
 import FloatingChatButton from './components/FloatChatBox';
-import { Snackbar, Button, Slide } from '@mui/material'
+import { Snackbar, Button, Slide } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
 
     return (
       <>
+            <ToastContainer />
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage />} />
