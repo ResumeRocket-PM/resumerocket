@@ -12,7 +12,7 @@ const showReloadToast = (updateSW) => {
   updateToastShown = true;
   
   toast.info(
-    'New version available! Click to update.',
+    '🚀 New version available! Click here to update.',
     {
       onClick: () => {
         console.log('🔄 User clicked update toast');
@@ -24,9 +24,25 @@ const showReloadToast = (updateSW) => {
       },
       closeButton: true,
       closeOnClick: false,
-      autoClose: false,
-      position: "bottom-right",
-      toastId: 'pwa-update', // Prevent duplicate toasts with same ID
+      autoClose: false, // Toast stays until user interacts
+      position: "top-center",
+      toastId: 'pwa-update',
+      className: 'pwa-update-toast',
+      style: {
+        background: '#4CAF50',
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        padding: '16px 24px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        cursor: 'pointer',
+        minWidth: '320px',
+        textAlign: 'center'
+      },
+      progressStyle: {
+        background: 'rgba(255,255,255,0.7)'
+      }
     }
   );
 };
@@ -39,17 +55,35 @@ const showLogoutToast = () => {
   updateToastShown = true;
   
   toast.warning(
-    'A major update requires you to log out. Please save your work and refresh the page.',
+    '⚠️ Major update available! Please save your work and click here to update. You will be logged out.',
     {
       onClick: () => {
+        console.log('🔄 User clicked major update toast');
+        toast.dismiss('pwa-major-update');
         localStorage.clear();
         window.location.reload();
       },
       closeButton: true,
       closeOnClick: false,
-      autoClose: false,
-      position: "bottom-right",
-      toastId: 'pwa-major-update', // Prevent duplicate toasts with same ID
+      autoClose: false, // Toast stays until user interacts
+      position: "top-center",
+      toastId: 'pwa-major-update',
+      className: 'pwa-major-update-toast',
+      style: {
+        background: '#FF9800',
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        padding: '16px 24px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        cursor: 'pointer',
+        minWidth: '400px',
+        textAlign: 'center'
+      },
+      progressStyle: {
+        background: 'rgba(255,255,255,0.7)'
+      }
     }
   );
 };
