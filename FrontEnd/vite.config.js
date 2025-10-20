@@ -17,14 +17,41 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
-        // Only precache the app-version.json file via globPatterns.
-        // We intentionally do NOT set additionalManifestEntries because
-        // that would generate a dynamic revision (Date.now) and may
-        // conflict with a glob entry for the same file.
-        globPatterns: ['app-version.json'],
+        // Precache all static assets so SW can detect updates
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}', 'app-version.json'],
         globDirectory: 'dist',
-        skipWaiting: false,
-        clientsClaim: true
+        skipWaiting: false,  // Keep false so we can control skip waiting via updateSW()
+        clientsClaim: true,
+        // Check for updates more frequently
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          }
+        ]
+      },
+      manifest: {
+        name: 'ResumeRocket',
+        short_name: 'ResumeRocket',
+        description: 'Your resume and portfolio builder',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: '/iconRR.png',
+            sizes: '192x192',
+            type: 'image/png'
+          }
+        ]
       }
     })
   ],

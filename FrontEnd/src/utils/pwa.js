@@ -37,6 +37,7 @@ export const initializePWA = () => {
   const updateSW = registerSW({
     immediate: true,
     async onNeedRefresh() {
+      console.log('🔄 New service worker available!');
       try {
         const response = await fetch('/app-version.json?v=' + Date.now(), {
           cache: 'no-cache'
@@ -53,17 +54,25 @@ export const initializePWA = () => {
       }
     },
     onOfflineReady() {
+      console.log('✅ App ready for offline use');
       toast.success('App ready for offline use', {
         position: "bottom-right",
         autoClose: 3000
       });
     },
     onRegistered(swRegistration) {
+      console.log('✅ Service worker registered');
       if (swRegistration) {
+        // Check for updates every 60 seconds (increased frequency for testing)
+        // For production, you might want to increase this to 5-10 minutes
         setInterval(() => {
+          console.log('⏰ Checking for updates...');
           swRegistration.update();
-        }, 60 * 60 * 1000);
+        }, 60 * 1000);  // Check every 60 seconds
       }
+    },
+    onRegisterError(error) {
+      console.error('❌ Service worker registration error:', error);
     }
   });
   return updateSW;
