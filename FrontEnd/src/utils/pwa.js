@@ -34,46 +34,59 @@ const showLogoutToast = () => {
 };
 
 export const initializePWA = () => {
-  const updateSW = registerSW({
-    immediate: true,
-    async onNeedRefresh() {
-      console.log('🔄 New service worker available!');
-      try {
-        const response = await fetch('/app-version.json?v=' + Date.now(), {
-          cache: 'no-cache'
-        });
-        const versionData = await response.json();
-        if (versionData.update_type === 'major') {
-          showLogoutToast();
-        } else {
+  console.log('🚀 Initializing PWA...');
+  
+  // Check if service workers are supported
+  if (!('serviceWorker' in navigator)) {
+    console.warn('⚠️ Service workers are not supported in this browser');
+    return;
+  }
+
+  try {
+    const updateSW = registerSW({
+      immediate: true,
+      async onNeedRefresh() {
+        console.log('🔄 New service worker available!');
+        try {
+          const response = await fetch('/app-version.json?v=' + Date.now(), {
+            cache: 'no-cache'
+          });
+          const versionData = await response.json();
+          if (versionData.update_type === 'major') {
+            showLogoutToast();
+          } else {
+            showReloadToast(updateSW);
+          }
+        } catch (error) {
+          console.error('Error checking for updates:', error);
           showReloadToast(updateSW);
         }
-      } catch (error) {
-        console.error('Error checking for updates:', error);
-        showReloadToast(updateSW);
+      },
+      onOfflineReady() {
+        console.log('✅ App ready for offline use');
+        toast.success('App ready for offline use', {
+          position: "bottom-right",
+          autoClose: 3000
+        });
+      },
+      onRegistered(swRegistration) {
+        console.log('✅ Service worker registered', swRegistration);
+        if (swRegistration) {
+          // Check for updates every 30 seconds
+          setInterval(() => {
+            console.log('⏰ Checking for updates...');
+            swRegistration.update();
+          }, 30 * 1000);
+        }
+      },
+      onRegisterError(error) {
+        console.error('❌ Service worker registration error:', error);
       }
-    },
-    onOfflineReady() {
-      console.log('✅ App ready for offline use');
-      toast.success('App ready for offline use', {
-        position: "bottom-right",
-        autoClose: 3000
-      });
-    },
-    onRegistered(swRegistration) {
-      console.log('✅ Service worker registered');
-      if (swRegistration) {
-        // Check for updates every 60 seconds (increased frequency for testing)
-        // For production, you might want to increase this to 5-10 minutes
-        setInterval(() => {
-          console.log('⏰ Checking for updates...');
-          swRegistration.update();
-        }, 30 * 1000);  // Check every 60 seconds
-      }
-    },
-    onRegisterError(error) {
-      console.error('❌ Service worker registration error:', error);
-    }
-  });
-  return updateSW;
+    });
+    
+    console.log('✅ PWA registration complete');
+    return updateSW;
+  } catch (error) {
+    console.error('❌ Error during PWA initialization:', error);
+  }
 };
