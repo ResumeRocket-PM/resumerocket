@@ -12,11 +12,15 @@ const showReloadToast = (updateSW) => {
   updateToastShown = true;
   
   toast.info(
-    'New version available!',
+    'New version available! Click to update.',
     {
       onClick: () => {
+        console.log('🔄 User clicked update toast');
+        toast.dismiss('pwa-update');
+        
+        // Tell the waiting service worker to skip waiting and activate
+        // The controllerchange event will handle the reload
         updateSW(true);
-        window.location.reload();
       },
       closeButton: true,
       closeOnClick: false,
@@ -68,6 +72,15 @@ export const initializePWA = () => {
     console.warn('⚠️ Service workers are not supported in this browser');
     return;
   }
+
+  // Listen for when a new service worker takes control
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    console.log('🔄 New service worker took control, refreshing page...');
+    refreshing = true;
+    window.location.reload();
+  });
 
   try {
     const updateSW = registerSW({
