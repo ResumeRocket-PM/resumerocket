@@ -306,7 +306,7 @@ const AccountPage = () => {
                         </div>
 
                         <AccountSectionCard 
-                            title='Experience is strawberries' 
+                            title='Experience is peaches' 
                             buttonType={'add'}
                             onButtonClick={() => setDialogOpen('Experience')}
                         >
