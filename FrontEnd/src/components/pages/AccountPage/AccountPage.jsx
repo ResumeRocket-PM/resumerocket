@@ -306,19 +306,7 @@ const AccountPage = () => {
                         </div>
 
                         <AccountSectionCard 
-                            title='Education' 
-                            buttonType={'add'}
-                            onButtonClick={() => setDialogOpen('Education')}
-                        >   {userDetails.education
-                                .sort((a, b) => new Date(b.graduationDate) - new Date(a.graduationDate))
-                                .map((entry, index) => (
-                                    <EducationEntry key={index} {...entry} onEditClick={() => {
-                                        setDialogOpen(`Education-${index}`)}}/>
-                                ))}
-                        </AccountSectionCard>
-
-                        <AccountSectionCard 
-                            title='Experience outranks everything' 
+                            title='Experience' 
                             buttonType={'add'}
                             onButtonClick={() => setDialogOpen('Experience')}
                         >
@@ -329,8 +317,18 @@ const AccountPage = () => {
                                     setDialogOpen(`Experience-${index}`);}}/>
                             ))}
                         </AccountSectionCard>
-                 
 
+                        <AccountSectionCard 
+                            title='Education' 
+                            buttonType={'add'}
+                            onButtonClick={() => setDialogOpen('Education')}
+                        >   {userDetails.education
+                                .sort((a, b) => new Date(b.graduationDate) - new Date(a.graduationDate))
+                                .map((entry, index) => (
+                                    <EducationEntry key={index} {...entry} onEditClick={() => {
+                                        setDialogOpen(`Education-${index}`)}}/>
+                                ))}
+                        </AccountSectionCard>
 
                         <AccountSectionCard 
                             title='Skills' 
