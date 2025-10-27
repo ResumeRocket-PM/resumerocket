@@ -1,6 +1,7 @@
 import { registerSW } from 'virtual:pwa-register';
 import { toast } from 'react-toastify';
 
+
 // Prevent duplicate toasts
 let updateToastShown = false;
 
@@ -78,6 +79,8 @@ const showLogoutToast = () => {
         // Mark that user initiated the update
         userInitiatedUpdate = true;
         
+        // For major updates, clear ALL localStorage data (auth, user data, resume selections, etc.)
+        // This ensures a clean slate for the new major version
         localStorage.clear();
         window.location.reload();
       },
